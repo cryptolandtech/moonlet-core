@@ -10,14 +10,29 @@
             "double"
         ],
         "indent": [
-            true
+            true,
+            "spaces"
+        ],
+        "max-line-length": [
+            true,
+            140
         ],
         "interface-name": [
             false
         ],
         "arrow-parens": false,
         // Pending fix for shorthand property names.
-        "object-literal-sort-keys": false
+        "object-literal-sort-keys": false,
+        "no-console": [
+            true,
+            "debug",
+            "info",
+            "time",
+            "timeEnd",
+            "trace"
+        ],
+        "no-var-keyword": true,
+        
     },
     "rulesDirectory": []
 }

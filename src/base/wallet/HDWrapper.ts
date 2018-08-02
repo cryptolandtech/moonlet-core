@@ -1,7 +1,7 @@
 // inspired by https://github.com/ethereumjs/ethereumjs-wallet/blob/master/hdkey.js
 
-const hdkey = require("hdkey");
-import Wallet from "./wallet";
+const reqhdkey = require("hdkey");
+import Wallet from "./Wallet";
 
 class HDWrapper {
 
@@ -12,13 +12,13 @@ class HDWrapper {
     }
 
     public static fromMasterSeed( seedBuffer: Buffer ) {
-        return HDWrapper.fromHDKey( hdkey.fromMasterSeed( seedBuffer ) );
+        return HDWrapper.fromHDKey( reqhdkey.fromMasterSeed( seedBuffer ) );
     }
 
     public internalHdKey: any;
 
     public fromExtendedKey(base58key: any) {
-        return HDWrapper.fromHDKey(hdkey.fromExtendedKey(base58key));
+        return HDWrapper.fromHDKey( reqhdkey.fromExtendedKey(base58key));
     }
 
     public privateExtendedKey() {
@@ -33,11 +33,11 @@ class HDWrapper {
     }
 
     public derivePath( path: any ) {
-        return HDWrapper.fromHDKey(this.internalHdKey.derive(path));
+        return HDWrapper.fromHDKey( this.internalHdKey.derive(path) );
     }
 
     public deriveChild( index: any ) {
-        return HDWrapper.fromHDKey(this.internalHdKey.deriveChild(index));
+        return HDWrapper.fromHDKey( this.internalHdKey.deriveChild(index) );
     }
 
     public getWallet() {

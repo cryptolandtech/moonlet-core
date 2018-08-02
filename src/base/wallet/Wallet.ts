@@ -1,5 +1,4 @@
 // inspired by https://github.com/ethereumjs/ethereumjs-wallet/blob/master/index.js
-
 import Utils from "../utils";
 
 class Wallet {
@@ -11,6 +10,8 @@ class Wallet {
     public static fromPrivateKey(key: any) {
         return new Wallet(key, "");
     }
+
+    public loose: boolean = false;
 
     private privKey: string;
     private pubKey: string;

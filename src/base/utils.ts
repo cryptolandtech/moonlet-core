@@ -3,6 +3,7 @@ const isWebUri = require("valid-url").isWebUri;
 
 class Utils {
 
+    // TODO: implement
     public static normalize( str: any ): any {
         return str;
     }

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const { secp256k1, randomBytes, pbkdf2Sync, sha3, sha256 } = require("bcrypto");
 const isWebUri = require("valid-url").isWebUri;
 class Utils {
+    // TODO: implement
     static normalize(str) {
         return str;
     }

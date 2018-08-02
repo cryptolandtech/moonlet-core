@@ -20,7 +20,7 @@ const zilliqa = new Zilliqa({
 const node = zilliqa.getNode();
 // const wallet = new HDWallet();
 const wallet = new HDWallet_1.default({
-    hdPathString: `m/44'/10018'/0'/0`,
+    coin: "ZIL",
     mnemonic: "between culture long bounce pact oxygen panel fun assist favorite symptom floor",
 });
 const ReceiverAddres = "5FC7409B4B41E06E73BA1AA7F3127D93C76BD557";

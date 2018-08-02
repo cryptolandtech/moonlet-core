@@ -1,16 +1,19 @@
 import BaseStorageDriverAbstract from "./BaseStorageDriverAbstract";
 
+// useful only for devices that have local storage ( desktop / mobile / extension )
+
 class BaseStorageDriverEncrypted extends BaseStorageDriverAbstract {
     public name: string = "encrypted";
     public ready: boolean = false;
     private key: string = "";
 
-    constructor(decriptionKey?: string) {
+    constructor(path: string, decriptionKey: string) {
         super();
         this.data = new Object();
         if ( decriptionKey ) {
             this.key = decriptionKey;
             // load stored data
+
         }
     }
 

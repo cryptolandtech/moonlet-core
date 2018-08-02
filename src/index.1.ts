@@ -16,7 +16,7 @@ const node = zilliqa.getNode();
 
 // const wallet = new HDWallet();
 const wallet = new HDWallet({
-    hdPathString: `m/44'/10018'/0'/0`, // update https://github.com/satoshilabs/slips/blob/master/slip-0044.md once ID is agreed upon
+    coin: "ZIL", // update https://github.com/satoshilabs/slips/blob/master/slip-0044.md once ID is agreed upon
     mnemonic: "between culture long bounce pact oxygen panel fun assist favorite symptom floor",
 });
 

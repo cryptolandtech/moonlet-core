@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseStorageDriverAbstract_1 = require("./BaseStorageDriverAbstract");
+// useful only for devices that have local storage ( desktop / mobile / extension )
 class BaseStorageDriverEncrypted extends BaseStorageDriverAbstract_1.default {
-    constructor(decriptionKey) {
+    constructor(path, decriptionKey) {
         super();
         this.name = "encrypted";
         this.ready = false;

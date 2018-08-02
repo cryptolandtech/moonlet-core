@@ -1,8 +1,8 @@
 "use strict";
 // inspired by https://github.com/ethereumjs/ethereumjs-wallet/blob/master/hdkey.js
 Object.defineProperty(exports, "__esModule", { value: true });
-const hdkey = require("hdkey");
-const wallet_1 = require("./wallet");
+const reqhdkey = require("hdkey");
+const Wallet_1 = require("./Wallet");
 class HDWrapper {
     static fromHDKey(hdkeyP) {
         const ret = new HDWrapper();
@@ -10,10 +10,10 @@ class HDWrapper {
         return ret;
     }
     static fromMasterSeed(seedBuffer) {
-        return HDWrapper.fromHDKey(hdkey.fromMasterSeed(seedBuffer));
+        return HDWrapper.fromHDKey(reqhdkey.fromMasterSeed(seedBuffer));
     }
     fromExtendedKey(base58key) {
-        return HDWrapper.fromHDKey(hdkey.fromExtendedKey(base58key));
+        return HDWrapper.fromHDKey(reqhdkey.fromExtendedKey(base58key));
     }
     privateExtendedKey() {
         if (!this.internalHdKey.privateExtendedKey) {
@@ -32,10 +32,10 @@ class HDWrapper {
     }
     getWallet() {
         if (this.internalHdKey._privateKey) {
-            return wallet_1.default.fromPrivateKey(this.internalHdKey._privateKey);
+            return Wallet_1.default.fromPrivateKey(this.internalHdKey._privateKey);
         }
         else {
-            return wallet_1.default.fromPublicKey(this.internalHdKey._publicKey);
+            return Wallet_1.default.fromPublicKey(this.internalHdKey._publicKey);
         }
     }
 }

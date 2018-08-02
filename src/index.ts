@@ -1,9 +1,12 @@
 
 import Storage from "./base/storage/storage";
+import HDWallet from "./base/wallet/HDWallet";
 
 interface SetupParams {
-    encryptionKey: string;
-    storageDriver?: string;
+    coin: string;
+    mnemonic?: string;
+    encryptionKey?: string;
+    env?: string;
 }
 
 class Core {
@@ -12,6 +15,8 @@ class Core {
     public events: any;
 
     private state: any;
+    private wallets: any = [];
+    private environment: string = "node";
 
     /*
         core stores account data, and loads it if present
@@ -20,21 +25,93 @@ class Core {
     */
     public setup( params: SetupParams, cb: any ): boolean {
 
-        if ( params && params.storageDriver ) {
-            this.storage = new Storage( params.storageDriver );
-        } else {
-            this.storage = new Storage();
+        let wallet: any = {};
+
+        if ( params.env ) {
+            this.environment = params.env;
         }
 
-        if ( params.encryptionKey ) {
+        if ( !params.encryptionKey ) {
+
+            if (!params.coin) {
+                throw new Error("Please specify param.coin type");
+            }
+
+            wallet = new HDWallet({
+                coin: params.coin,
+                mnemonic: params.mnemonic,
+            });
+
+            wallet.addAccounts( 1 );
+
+        } else {
             // load storage, and decrypt using key
+            this.storage = new Storage( params.encryptionKey );
 
-        } else {
-            // just init
+            // load wallet using mnemonic and coin in storage.
+            wallet = {};
         }
 
-        this.callback(cb);
+        // index wallet
+        this.indexWallet(wallet);
+
+        if (cb) {
+            this.callback(cb, wallet);
+        }
         return true;
+    }
+
+    public createAccount( params: {coin: string, mnemonic?: string, privatekey?: string } ): any {
+        if (this.hasWalletType(params.coin)) {
+            const parentWallet =  this.getWalletTypeHD(params.coin);
+
+            if ( params.privatekey ) {
+                return parentWallet.addAccountUsingPrivateKey( params.privatekey );
+            } else {
+                return this.getWalletTypeHD(params.coin).addAccounts(1);
+            }
+
+        } else {
+            // we need a new HDWallet to store this type
+            const wallet: any = new HDWallet({
+                coin: params.coin,
+                mnemonic: params.mnemonic,
+            });
+            wallet.addAccounts( 1 );
+            this.indexWallet(wallet);
+        }
+    }
+
+    public getAddressesGroupedByCoin(): string[] {
+        const addresses: any = {};
+        for ( const wall in this.wallets) {
+            if (wall) {
+                const addrByCoin: string[] = [];
+                const accounts = this.wallets[wall].getAccounts();
+                for (const addr in accounts) {
+                    if (addr) {
+                        addrByCoin.push( accounts[addr] );
+                    }
+                }
+                addresses[this.wallets[wall].coin] = addrByCoin;
+            }
+        }
+        return addresses;
+    }
+
+    public getAllAddresses(): string[] {
+        const addresses: any = [];
+        for ( const wall in this.wallets) {
+            if (wall) {
+                const accounts = this.wallets[wall].getAccounts();
+                for (const addr in accounts) {
+                    if (addr) {
+                        addresses.push( accounts[addr] );
+                    }
+                }
+            }
+        }
+        return addresses;
     }
 
     public saveToStorage(): boolean {
@@ -47,7 +124,30 @@ class Core {
         return true;
     }
 
-    public callback(fn: (error: any, args?: any) => any , args?: any, error?: any) {
+    private hasWalletType(coin: string): boolean {
+        const wallet: any = this.getWalletTypeHD(coin);
+        if (wallet !== false) {
+            return true;
+        }
+        return false;
+    }
+
+    private getWalletTypeHD(coin: string) {
+        for ( const wall in this.wallets) {
+            if (wall) {
+                if (this.wallets[wall].coin === coin ) {
+                    return this.wallets[wall];
+                }
+            }
+        }
+        return false;
+    }
+
+    private indexWallet( wallet: any ) {
+        this.wallets.push( wallet );
+    }
+
+    private callback(fn: (error: any, args?: any) => any , args?: any, error?: any) {
         if ( error ) {
             fn( error );
         }

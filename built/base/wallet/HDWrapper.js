@@ -1,11 +1,12 @@
 "use strict";
+// inspired by https://github.com/ethereumjs/ethereumjs-wallet/blob/master/hdkey.js
 Object.defineProperty(exports, "__esModule", { value: true });
-const hdkey = require('hdkey');
+const hdkey = require("hdkey");
 const wallet_1 = require("./wallet");
 class HDWrapper {
-    static fromHDKey(hdkey) {
-        var ret = new HDWrapper();
-        ret._hdkey = hdkey;
+    static fromHDKey(hdkeyP) {
+        const ret = new HDWrapper();
+        ret.internalHdKey = hdkeyP;
         return ret;
     }
     static fromMasterSeed(seedBuffer) {
@@ -15,26 +16,26 @@ class HDWrapper {
         return HDWrapper.fromHDKey(hdkey.fromExtendedKey(base58key));
     }
     privateExtendedKey() {
-        if (!this._hdkey.privateExtendedKey) {
-            throw new Error('This is a public key only wallet');
+        if (!this.internalHdKey.privateExtendedKey) {
+            throw new Error("This is a public key only wallet");
         }
-        return this._hdkey.privateExtendedKey;
+        return this.internalHdKey.privateExtendedKey;
     }
     publicExtendedKey() {
-        return this._hdkey.publicExtendedKey;
+        return this.internalHdKey.publicExtendedKey;
     }
     derivePath(path) {
-        return HDWrapper.fromHDKey(this._hdkey.derive(path));
+        return HDWrapper.fromHDKey(this.internalHdKey.derive(path));
     }
     deriveChild(index) {
-        return HDWrapper.fromHDKey(this._hdkey.deriveChild(index));
+        return HDWrapper.fromHDKey(this.internalHdKey.deriveChild(index));
     }
     getWallet() {
-        if (this._hdkey._privateKey) {
-            return wallet_1.default.fromPrivateKey(this._hdkey._privateKey);
+        if (this.internalHdKey._privateKey) {
+            return wallet_1.default.fromPrivateKey(this.internalHdKey._privateKey);
         }
         else {
-            return wallet_1.default.fromPublicKey(this._hdkey._publicKey);
+            return wallet_1.default.fromPublicKey(this.internalHdKey._publicKey);
         }
     }
 }

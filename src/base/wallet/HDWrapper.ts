@@ -1,49 +1,50 @@
 // inspired by https://github.com/ethereumjs/ethereumjs-wallet/blob/master/hdkey.js
 
-const hdkey = require('hdkey');
+const hdkey = require("hdkey");
 import Wallet from "./wallet";
 
 class HDWrapper {
-    private _hdkey: any;
 
-    static fromHDKey (hdkey: any) {
-        var ret = new HDWrapper()
-        ret._hdkey = hdkey
-        return ret
+    public static fromHDKey( hdkeyP: any) {
+        const ret = new HDWrapper();
+        ret.internalHdKey = hdkeyP;
+        return ret;
     }
 
-    static fromMasterSeed (seedBuffer: Buffer) {
-        return HDWrapper.fromHDKey(hdkey.fromMasterSeed(seedBuffer));
+    public static fromMasterSeed( seedBuffer: Buffer ) {
+        return HDWrapper.fromHDKey( hdkey.fromMasterSeed( seedBuffer ) );
     }
 
-    public fromExtendedKey (base58key: any) {
-        return HDWrapper.fromHDKey(hdkey.fromExtendedKey(base58key))
+    public internalHdKey: any;
+
+    public fromExtendedKey(base58key: any) {
+        return HDWrapper.fromHDKey(hdkey.fromExtendedKey(base58key));
     }
 
-    public privateExtendedKey () {
-        if (!this._hdkey.privateExtendedKey) {
-            throw new Error('This is a public key only wallet')
+    public privateExtendedKey() {
+        if (!this.internalHdKey.privateExtendedKey) {
+            throw new Error("This is a public key only wallet");
         }
-        return this._hdkey.privateExtendedKey
+        return this.internalHdKey.privateExtendedKey;
     }
 
-    public publicExtendedKey () {
-        return this._hdkey.publicExtendedKey
+    public publicExtendedKey() {
+        return this.internalHdKey.publicExtendedKey;
     }
 
-    public derivePath (path: any) {
-        return HDWrapper.fromHDKey(this._hdkey.derive(path))
+    public derivePath( path: any ) {
+        return HDWrapper.fromHDKey(this.internalHdKey.derive(path));
     }
 
-    public deriveChild (index: any) {
-        return HDWrapper.fromHDKey(this._hdkey.deriveChild(index))
+    public deriveChild( index: any ) {
+        return HDWrapper.fromHDKey(this.internalHdKey.deriveChild(index));
     }
 
-    public getWallet () {
-        if (this._hdkey._privateKey) {
-            return Wallet.fromPrivateKey(this._hdkey._privateKey)
+    public getWallet() {
+        if (this.internalHdKey._privateKey) {
+            return Wallet.fromPrivateKey(this.internalHdKey._privateKey);
         } else {
-            return Wallet.fromPublicKey(this._hdkey._publicKey)
+            return Wallet.fromPublicKey(this.internalHdKey._publicKey);
         }
     }
 

@@ -32,7 +32,8 @@
             "trace"
         ],
         "no-var-keyword": true,
-        
+        "no-var-requires": false,
+        "prefer-for-of": false   
     },
     "rulesDirectory": []
 }

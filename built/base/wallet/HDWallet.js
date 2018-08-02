@@ -1,19 +1,22 @@
 "use strict";
+// inspired by https://github.com/MetaMask/eth-hd-keyring/blob/master/index.js
 Object.defineProperty(exports, "__esModule", { value: true });
-const HDWrapper_1 = require("./HDWrapper");
+const bip39 = require("bip39");
 const utils_1 = require("../utils");
-const bip39 = require('bip39');
+const HDWrapper_1 = require("./HDWrapper");
 class HDWallet {
     constructor(opts) {
         this.hdPathString = `m/44'/10018'/0'/0`;
         this.mnemonic = "";
         this.wallets = [];
         if (opts) {
-            if (opts.hdPathString)
+            if (opts.hdPathString) {
                 this.hdPathString = opts.hdPathString;
+            }
             // init using mnemonic
-            if (opts.mnemonic)
+            if (opts.mnemonic) {
                 this._initFromMnemonic(opts.mnemonic);
+            }
         }
     }
     addAccounts(numberOfAccounts = 1) {
@@ -28,21 +31,20 @@ class HDWallet {
             newWallets.push(wallet);
             this.wallets.push(wallet);
         }
-        // remove this async 
+        // remove this async
         const hexWallets = newWallets.map((w) => {
-            // return sigUtil.normalize(w.getAddress().toString('hex'))
-            return w.getAddress().toString('hex');
+            return utils_1.default.normalize(w.getAddress().toString("hex"));
         });
         return Promise.resolve(hexWallets);
     }
     getAccounts() {
         return Promise.resolve(this.wallets.map((w) => {
-            return w.getAddress().toString('hex');
+            return w.getAddress().toString("hex");
         }));
     }
     signTransaction(address, tx) {
         const wallet = this._getWalletForAccount(address);
-        var privKey = wallet.getPrivateKey();
+        const privKey = wallet.getPrivateKey();
         tx.sign(privKey);
         return Promise.resolve(tx);
     }
@@ -58,7 +60,7 @@ class HDWallet {
     _getWalletForAccount(account) {
         const targetAddress = utils_1.default.normalize(account);
         return this.wallets.find((w) => {
-            const address = utils_1.default.normalize(w.getAddress().toString('hex'));
+            const address = utils_1.default.normalize(w.getAddress().toString("hex"));
             return ((address === targetAddress) || (utils_1.default.normalize(address) === targetAddress));
         });
     }

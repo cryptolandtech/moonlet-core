@@ -5,10 +5,11 @@
   "main": "wws-core.js",
   "types": "wws-core.d.ts",
   "scripts": {
-    "start": "npm run build && node built/index.js",
+    "start": "npm run build && node test/test.js",
     "build": "tsc -p .",
     "test": "mocha test/test.js",
-    "test-ts": "tsc -p . && node test/test.js"
+    "test-ts": "tsc -p . && node test/test.js",
+    "test-node": "npm run build && node test/node.js"
   },
   "repository": {
     "type": "git",

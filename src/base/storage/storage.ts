@@ -9,7 +9,7 @@ class Storage {
     public driver: BaseStorageDriverAbstract;
     public ready: boolean = false;
 
-    constructor(params?: StorageConstructorParams) {
+    constructor(params?: any) {
         if (params && params.driver) {
             this.driver = params.driver;
         } else {

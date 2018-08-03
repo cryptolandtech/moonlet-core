@@ -2,13 +2,6 @@
 import Storage from "./base/storage/storage";
 import HDWallet from "./base/wallet/HDWallet";
 
-interface SetupParams {
-    coin: string;
-    mnemonic?: string;
-    encryptionKey?: string;
-    env?: string;
-}
-
 class Core {
 
     public storage: any;
@@ -23,7 +16,7 @@ class Core {
 
         encryptionKey: string - if provided try to load data from storage and populate objects
     */
-    public setup( params: SetupParams, cb: any ): boolean {
+    public setup( params: CoreSetupParams, cb?: any ): boolean {
 
         let wallet: any = {};
 
@@ -157,4 +150,4 @@ class Core {
     }
 }
 
-module.exports = Core;
+export default Core;

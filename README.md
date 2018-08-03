@@ -3,5 +3,8 @@
 ## Setup
 `npm install`
 
-## Run
-`npm run start`
+## build lib
+`npm run build`
+
+## testing
+`npm run test`

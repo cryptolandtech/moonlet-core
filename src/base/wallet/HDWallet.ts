@@ -15,12 +15,6 @@ const CoinTypes = {
     ZIL: 10018,
 };
 
-interface Options {
-    coin: string;
-    mnemonic?: string;
-    scan?: boolean;
-}
-
 class HDWallet {
     public hdPathString: string = "";
     public mnemonic: string = "";
@@ -29,7 +23,7 @@ class HDWallet {
     public wallets: any;
     public coin: string = "";
 
-    constructor( opts: Options ) {
+    constructor( opts: HDWalletOptions ) {
         this.wallets = [];
 
         if ( opts.coin ) {

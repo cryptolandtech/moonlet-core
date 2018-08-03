@@ -1,15 +1,20 @@
 {
     "compilerOptions": {
+        "baseUrl": "./",
         "outDir": "./built/",
         "sourceMap": true,
         "strict": true,
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es2015",
+        "target": "es6",
         "experimentalDecorators": true,
-        "lib": ["es2015", "dom"],
+        "lib": ["es6", "dom"],
         // "allowJs": true,
         "allowSyntheticDefaultImports": true,
+        "types": [
+            // add node as an option
+            "node"
+         ]
     },
     "include": [
         "./src/**/*"
@@ -17,5 +22,8 @@
     "exclude": [
         "node_modules",
         "**/*.spec.ts"
+    ],
+    "files": [
+        "src/globals.d.ts"
     ]
 }

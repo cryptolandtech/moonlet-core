@@ -127,5 +127,5 @@ class Core {
         }
     }
 }
-module.exports = Core;
+exports.default = Core;
 //# sourceMappingURL=index.js.map

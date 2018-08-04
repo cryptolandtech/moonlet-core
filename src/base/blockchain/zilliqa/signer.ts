@@ -1,0 +1,4 @@
+class ZilliqaSigner extends BaseSignerGeneric {
+
+    //
+}

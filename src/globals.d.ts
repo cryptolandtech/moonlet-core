@@ -12,3 +12,10 @@ interface HDWalletOptions {
     mnemonic?: string;
     scan?: boolean;
 }
+
+interface StorageConstructorParams {
+    driver: any;
+}
+
+declare module 'zilliqa.js'
+declare module 'zilliqa.js/lib/util'

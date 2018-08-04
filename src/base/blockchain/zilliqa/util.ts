@@ -21,8 +21,8 @@ class Utils {
         return ZilliqaUtil.isPubkey( key.toString("hex") );
     }
 
-    public static publicToAddress( key: string | Buffer ): Buffer {
-        return new Buffer( ZilliqaUtil.getAddressFromPublicKey(key), "hex" );
+    public static publicToAddress( key: string ): Buffer {
+        return new Buffer( ZilliqaUtil.getAddressFromPublicKey(key) );
     }
 
     public static privateToPublic( privateKey: string | Buffer ): Buffer {
@@ -34,7 +34,7 @@ class Utils {
     }
 
     public static bufferToHex = (buf: Buffer) => {
-        return Utils.normalize(buf.toString('hex'));
+        return '0x' + buf.toString('hex').toUpperCase();
     }
 
 }

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "baseUrl": "./",
-        "outDir": "./built/",
+        "outDir": "./lib/",
         "sourceMap": true,
         "strict": true,
         "module": "commonjs",
@@ -22,8 +22,5 @@
     "exclude": [
         "node_modules",
         "**/*.spec.ts"
-    ],
-    "files": [
-        "src/globals.d.ts"
     ]
 }

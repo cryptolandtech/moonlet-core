@@ -53,7 +53,7 @@ class HDWallet {
     }
 
     public addAccountUsingPrivateKey( privateKey: string ) {
-        const wallet = Wallet.fromPrivateKey( privateKey );
+        const wallet = Wallet.fromPrivateKey( new Buffer(privateKey), this.coin );
         this.wallets.push(wallet);
     }
 
@@ -74,7 +74,7 @@ class HDWallet {
         const hexWallets: any = [];
         for (const w in newWallets) {
             if (w) {
-                hexWallets.push( Utils.normalize(newWallets[w].getAddress().toString("hex")) );
+                hexWallets.push( newWallets[w].getAddressString() );
             }
         }
         return hexWallets;
@@ -84,7 +84,7 @@ class HDWallet {
         const hexWallets: any = [];
         for (const w in this.wallets) {
             if (w) {
-                hexWallets.push( Utils.normalize(this.wallets[w].getAddress().toString("hex")) );
+                hexWallets.push( this.wallets[w].getAddressString() );
             }
         }
         return hexWallets;
@@ -98,7 +98,7 @@ class HDWallet {
     }
 
     public getPrivateKeyForAccount(address: string) {
-        return this._getWalletForAccount(address).getPrivateKey();
+        return this._getWalletForAccount(address).getPrivateKeyString();
     }
 
     private genPathString( coinType: any ): any {
@@ -109,14 +109,14 @@ class HDWallet {
     private _initFromMnemonic(mnemonic: string) {
         this.mnemonic = mnemonic;
         const seed = bip39.mnemonicToSeed(mnemonic);
-        this.hdWallet = HDWrapper.fromMasterSeed(seed);
+        this.hdWallet = HDWrapper.fromMasterSeed(seed, this.coin);
         this.root = this.hdWallet.derivePath(this.hdPathString);
     }
 
     private _getWalletForAccount(account: string) {
         const targetAddress = Utils.normalize(account);
         return this.wallets.find( (w: any) => {
-            const address = Utils.normalize( w.getAddress().toString("hex") );
+            const address = w.getAddressString();
             return ((address === targetAddress) || (Utils.normalize(address) === targetAddress));
         });
     }

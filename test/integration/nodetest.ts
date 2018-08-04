@@ -3,8 +3,8 @@
 // const appStorage = new Storage();
 // appStorage.set("test", "value");
 
-import HDWallet from "./base/wallet/HDWallet";
-const { Zilliqa } = require("zilliqa.js");
+import { Zilliqa } from "zilliqa.js";
+import HDWallet from "../../src/base/wallet/HDWallet";
 
 const APIURL = "https://scillaprod-api.aws.zilliqa.com";
 
@@ -18,6 +18,7 @@ const node = zilliqa.getNode();
 const wallet = new HDWallet({
     coin: "ZIL", // update https://github.com/satoshilabs/slips/blob/master/slip-0044.md once ID is agreed upon
     mnemonic: "between culture long bounce pact oxygen panel fun assist favorite symptom floor",
+    // mnemonic: "awake book subject inch gentle blur grant damage process float month clown",
 });
 
 const ReceiverAddres = "5FC7409B4B41E06E73BA1AA7F3127D93C76BD557";
@@ -27,14 +28,15 @@ const HowManyAccounts = 2; // how many accounts do we want to generate ?
 async function doTest() {
 
     await wallet.addAccounts( HowManyAccounts );
-
     const accounts = await wallet.getAccounts();
-    console.log("accounts: ", accounts);
+    // console.log("getAccounts done", accounts);
 
     const addr = accounts[0];
     const privateKey = wallet.getPrivateKeyForAccount(addr);
 
+    console.log( "privateKey:", privateKey );
     console.log( "Address:", addr );
+
     node.getBalance({ address: addr }, ( err: any, balance: any ) => {
 
         console.log("balance:", balance);
@@ -56,18 +58,15 @@ async function doTest() {
         console.log("genTx:", txn);
 
         // send txn into network
-        /*
 
-        https://explorer-scilla.zilliqa.com/transactions/788603582a1f9f37b4f051e15c08a669774de7a3c9414b46fe73e80532c96330
+        // node.createTransaction(txn, function(err: any, data: any) {
+        //    if (err) {
+        //       console.log("Error", err);
+        //    } else {
+        //        console.log(data);
+        //    }
+        // });
 
-        node.createTransaction(txn, function(err: any, data: any) {
-            if (err) {
-                console.log("Error", err);
-            } else {
-                console.log(data);
-            }
-        });
-        */
     });
 
 }

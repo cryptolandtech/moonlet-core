@@ -1,10 +1,6 @@
 import BaseStorageDriverAbstract from "./drivers/BaseStorageDriverAbstract";
 import BaseStorageDriverGeneric from "./drivers/BaseStorageDriverGeneric";
 
-interface StorageConstructorParams {
-    driver: BaseStorageDriverAbstract;
-}
-
 class Storage {
     public driver: BaseStorageDriverAbstract;
     public ready: boolean = false;

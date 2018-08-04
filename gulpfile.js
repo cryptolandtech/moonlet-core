@@ -10,7 +10,7 @@ const babelify = require('babelify');
 gulp.task('build', function () {
     // set up the browserify instance on a task basis
     const b = browserify({
-        entries: './built/index.js',
+        entries: './lib/index.js',
         debug: true,
         transform: [babelify.configure({
             presets: ['es2015']

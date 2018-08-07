@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import mocha from "mocha";
-import Core from "../src/index";
+import { Core } from "../src/index";
 
 const TestMnemonic = "between culture long bounce pact oxygen panel fun assist favorite symptom floor";
 

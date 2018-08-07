@@ -1,9 +1,16 @@
 // inspired by https://github.com/MetaMask/eth-hd-keyring/blob/master/index.js
 
 const bip39 = require("bip39");
-import Utils from "../utils";
-import HDWrapper from "./HDWrapper";
-import Wallet from "./Wallet";
+
+import { HDKey, Wallet, ZilliqaUtil } from "generichd-wallet";
+// const HDWrapper = require('generichd-wallet/lib/hdkey');
+// const Utils = require('generichd-wallet/lib/sigutil/zilliqa');
+
+// const HDWrapper = GenericWallet.HDKey;
+// const Wallet = GenericWallet.Wallet;
+// const Utils = GenericWallet.Utils;
+// import HDKey from "generichd-wallet";
+// import Wallet from "generichd-wallet";
 
 // complete list at https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 const CoinTypes = {
@@ -109,15 +116,15 @@ class HDWallet {
     private _initFromMnemonic(mnemonic: string) {
         this.mnemonic = mnemonic;
         const seed = bip39.mnemonicToSeed(mnemonic);
-        this.hdWallet = HDWrapper.fromMasterSeed(seed, this.coin);
+        this.hdWallet = HDKey.fromMasterSeed(seed, this.coin);
         this.root = this.hdWallet.derivePath(this.hdPathString);
     }
 
     private _getWalletForAccount(account: string) {
-        const targetAddress = Utils.normalize(account);
+        const targetAddress = ZilliqaUtil.normalize(account);
         return this.wallets.find( (w: any) => {
             const address = w.getAddressString();
-            return ((address === targetAddress) || (Utils.normalize(address) === targetAddress));
+            return ((address === targetAddress) || (ZilliqaUtil.normalize(address) === targetAddress));
         });
     }
 }

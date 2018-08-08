@@ -1,4 +1,5 @@
-import Utils from "../utils";
+import { ZilliqaUtil as Utils } from "generichd-wallet";
+
 // const validateArgs = Utils.validateArgs;
 
 class Node {

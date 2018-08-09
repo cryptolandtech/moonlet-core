@@ -4,12 +4,27 @@ import { Core } from "../src/index";
 
 const TestMnemonic = "between culture long bounce pact oxygen panel fun assist favorite symptom floor";
 
-describe("Core Wallet", () => {
+const appCore = new Core();
+
+appCore.setup({
+    coin: "ZIL",
+    mnemonic: TestMnemonic,
+});
+
+console.log(appCore.wallets);
+
+const accountCount = appCore.getAllAddresses().length;
+console.log(accountCount);
+
+// appCore.createAccount( {coin: "ZIL", mnemonic?: string, privatekey?: string } );
+
+/*
+describe("Core", () => {
 
     let appCore: Core;
 
     beforeEach( () => {
-        appCore = new Core();
+
     });
 
     it("Should instantiate with no accounts", () => {
@@ -44,7 +59,7 @@ describe("Core Wallet", () => {
     });
 });
 
-    // console.log(appCore.wallets);
+*/
 
     /*
     let addresses;

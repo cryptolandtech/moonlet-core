@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc -p . && gulp build",
     "build-lib": "tsc -p .",
-    "test": "ts-mocha --paths -p ./ test/*.ts"
+    "test": "ts-mocha --paths -p ./ test/*.ts",
+    "test-single": "ts-mocha --paths -p ./"
   },
   "repository": {
     "type": "git",

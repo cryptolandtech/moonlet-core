@@ -22,13 +22,6 @@ module.exports = {
             "error",
             "always"
         ],
-        "no-console": [
-            true,
-            "debug",
-            "info",
-            "time",
-            "timeEnd",
-            "trace"
-        ],
+        "no-console": 2,
     }
 };

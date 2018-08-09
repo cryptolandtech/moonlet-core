@@ -7,9 +7,11 @@ class Core {
     public storage: any;
     public events: any;
 
+    public wallets: any = [];
     private state: any;
-    private wallets: any = [];
     private environment: string = "node";
+
+    private initialized: boolean = false;
 
     /*
         core stores account data, and loads it if present
@@ -17,41 +19,46 @@ class Core {
         encryptionKey: string - if provided try to load data from storage and populate objects
     */
     public setup( params: CoreSetupParams, cb?: any ): boolean {
+        if (!this.initialized) {
+            this.initialized = true;
+            let wallet: any = {};
 
-        let wallet: any = {};
-
-        if ( params.env ) {
-            this.environment = params.env;
-        }
-
-        if ( !params.encryptionKey ) {
-
-            if (!params.coin) {
-                throw new Error("Please specify param.coin type");
+            if ( params.env ) {
+                this.environment = params.env;
             }
 
-            wallet = new HDWallet({
-                coin: params.coin,
-                mnemonic: params.mnemonic,
-            });
+            if ( !params.encryptionKey ) {
 
-            wallet.addAccounts( 1 );
+                if (!params.coin) {
+                    throw new Error("Please specify param.coin type");
+                }
+
+                wallet = new HDWallet({
+                    coin: params.coin,
+                    mnemonic: params.mnemonic,
+                });
+
+                wallet.addAccounts( 1 );
+
+            } else {
+                // load storage, and decrypt using key
+                this.storage = new Storage( params.encryptionKey );
+
+                // load wallet using mnemonic and coin in storage.
+                wallet = {};
+            }
+
+            // index wallet
+            this.indexWallet(wallet);
+
+            if (cb) {
+                this.callback(cb, wallet);
+            }
+            return true;
 
         } else {
-            // load storage, and decrypt using key
-            this.storage = new Storage( params.encryptionKey );
-
-            // load wallet using mnemonic and coin in storage.
-            wallet = {};
+            throw new Error('Core already initialized. \( setup method \)');
         }
-
-        // index wallet
-        this.indexWallet(wallet);
-
-        if (cb) {
-            this.callback(cb, wallet);
-        }
-        return true;
     }
 
     public createAccount( params: {coin: string, mnemonic?: string, privatekey?: string } ): any {

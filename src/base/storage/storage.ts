@@ -6,12 +6,22 @@ class Storage {
     public ready: boolean = false;
 
     constructor(params?: any) {
-        if (params && params.driver) {
-            this.driver = params.driver;
+        if (!params.path) {
+            throw new Error("Please specify storage path");
         } else {
-            this.driver = new BaseStorageDriverGeneric();
+
+            // WIP do actual path / key checks based on environment
+            if (params.path) {
+                throw new Error("Invalid storage path / key");
+            }
+
+            if (params && params.driver) {
+                this.driver = params.driver;
+            } else {
+                this.driver = new BaseStorageDriverGeneric();
+            }
+            this.ready = true;
         }
-        this.ready = true;
     }
 
     public changeDriver(newDriver: BaseStorageDriverAbstract): void {

@@ -4,6 +4,7 @@ interface CoreSetupParams {
     coin: string;
     mnemonic?: string;
     encryptionKey?: string;
+    path?: string;
     env?: string;
 }
 

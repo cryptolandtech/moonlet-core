@@ -1,4 +1,5 @@
 
+import { Wallet } from "generichd-wallet";
 import Storage from "./base/storage/storage";
 import HDWallet from "./base/wallet/HDWallet";
 
@@ -41,8 +42,15 @@ class Core {
                 wallet.addAccounts( 1 );
 
             } else {
+
+                if (!params.path) {
+                    throw new Error("Please specify storage path");
+                }
                 // load storage, and decrypt using key
-                this.storage = new Storage( params.encryptionKey );
+                this.storage = new Storage({
+                    path: params.path,
+                    encryptionKey: params.encryptionKey,
+                });
 
                 // load wallet using mnemonic and coin in storage.
                 wallet = {};
@@ -82,23 +90,40 @@ class Core {
         }
     }
 
+    public removeAccount( params: {coin: string, idx: number } ): boolean {
+        //
+        return true;
+    }
+
+    public removeCoinAccounts( coin: string ): boolean {
+        //
+        return true;
+    }
+
     public getAddressesGroupedByCoin(): string[] {
         const addresses: any = {};
-        for ( const wall in this.wallets) {
-            if (wall) {
-                const addrByCoin: string[] = [];
-                const accounts = this.wallets[wall].getAccounts();
-                for (const addr in accounts) {
-                    if (addr) {
-                        addrByCoin.push( accounts[addr] );
+        if (this.wallets.length > 0) {
+            for ( const wall in this.wallets) {
+                if (wall) {
+                    const addrByCoin: string[] = [];
+                    const accounts = this.wallets[wall].getAccounts();
+                    for (const addr in accounts) {
+                        if (addr) {
+                            addrByCoin.push( accounts[addr] );
+                        }
                     }
+                    addresses[this.wallets[wall].coin] = addrByCoin;
                 }
-                addresses[this.wallets[wall].coin] = addrByCoin;
             }
+        } else {
+            throw new Error('No wallets present.');
         }
         return addresses;
     }
 
+    /*
+    bad as we need to know coin type for each address
+    */
     public getAllAddresses(): string[] {
         const addresses: any = [];
         for ( const wall in this.wallets) {
@@ -114,6 +139,19 @@ class Core {
         return addresses;
     }
 
+    public getAddressData( address: string | number ) {
+        // load data for this address from the node provider attached to the wallet.
+    }
+
+    public loadNodeData( address: string | number , callback?: () => {} ) {
+        // iterate through wallets and call this.getAddressData()
+    }
+
+    public setEncryptionKey( encryptionKey: string ): boolean {
+        // this.storage = new Storage( encryptionKey );
+        return true;
+    }
+
     public saveToStorage(): boolean {
         // make sure we have an encryption key set before trying to save anything
         // encrypt and save account data to storage
@@ -124,7 +162,7 @@ class Core {
         return true;
     }
 
-    private hasWalletType(coin: string): boolean {
+    public hasWalletType(coin: string): boolean {
         const wallet: any = this.getWalletTypeHD(coin);
         if (wallet !== false) {
             return true;
@@ -132,7 +170,7 @@ class Core {
         return false;
     }
 
-    private getWalletTypeHD(coin: string) {
+    public getWalletTypeHD(coin: string): any {
         for ( const wall in this.wallets) {
             if (wall) {
                 if (this.wallets[wall].coin === coin ) {

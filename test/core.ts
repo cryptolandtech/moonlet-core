@@ -70,6 +70,12 @@ describe("Core", () => {
                 }, /^Invalid storage path \/ key$/);
             });
         });
+
+        // storage tests
+        describe("saveToStorage()", () => {
+            //
+        });
+
     });
 
     describe("createAccount() - same coin as setup", () => {
@@ -184,10 +190,6 @@ describe("Core", () => {
         });
     });
 
-    describe("getAddressesGroupedByCoin()", () => {
-        //
-    });
-
     describe("hasWalletType()", () => {
         //
     });
@@ -203,6 +205,19 @@ describe("Core", () => {
     describe("removeCoinAccounts()", () => {
         //
     });
+
+    describe("getAddressData()", () => {
+        //
+    });
+
+    describe("loadNodeData()", () => {
+        //
+    });
+
+    describe("setEncryptionKey()", () => {
+        //
+    });
+
 });
 
     // console.log(appCore.wallets);

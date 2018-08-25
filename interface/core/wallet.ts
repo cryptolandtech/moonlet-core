@@ -1,6 +1,7 @@
 import { Blockchain } from "./blockchain";
 import { GenericNode } from "./generic-node";
 import { Account } from "./account";
+import { generateMnemonics } from "./mnemonics-generator";
 
 export default class Wallet {
     private mnemonics: string;
@@ -11,7 +12,13 @@ export default class Wallet {
     private accounts: Map<Blockchain, Account[]> = new Map();
 
     constructor(mnemonics?: string) {
-        this.mnemonics = mnemonics;
+        if (mnemonics) {
+            this.mnemonics = mnemonics;
+        } else {
+            this.mnemonics = generateMnemonics("en");
+        }
+
+        // calculate seed and setup derivation
     }
 
     getAccounts(blockchain: Blockchain): Account[] {

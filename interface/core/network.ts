@@ -1,8 +1,8 @@
 import { Blockchain } from "./blockchain";
 
-export type Network = {
+export interface Network {
     blockchain: Blockchain;
-    name: String;
-    url: String;
+    name: string;
+    url: string;
     mainNet: boolean;
-};
+}

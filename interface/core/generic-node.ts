@@ -1,20 +1,20 @@
-import { Network } from "./network";
 import { Account } from "./account";
+import { Network } from "./network";
 
 export abstract class GenericNode {
-    static readonly Account;
-    static readonly networks;
+    public static readonly Account;
+    public static readonly networks;
 
     private network: Network;
 
-    abstract getBalance(account: Account): number;
-    abstract send(rawTransaction);
+    public abstract getBalance(account: Account): number;
+    public abstract send(rawTransaction);
 
-    getNetwork(): Network {
+    public getNetwork(): Network {
         return this.network;
     }
 
-    setNetwork(network: Network) {
+    public setNetwork(network: Network) {
         this.network = network;
     }
 }

@@ -1,6 +1,7 @@
+import { Blockchain } from "./core/blockchain";
+import GenericTransaction from "./core/transaction";
 import Wallet from "./core/wallet";
 import Ethereum from "./ethereum";
-import { Blockchain } from "./core/blockchain";
 
 // create new wallet, without mnemonics
 let wallet = new Wallet();
@@ -15,25 +16,27 @@ let account = wallet.createAccount(Blockchain.ETHEREUM);
 account = wallet.getAccounts(Blockchain.ETHEREUM)[0];
 
 // sign a transaction
-let transaction = account.signTransaction();
+const txnDetails = {
+    to: "0x1",
+    amount: 1,
+};
+const txn: GenericTransaction = account.buildTransaction(txnDetails);
+const signedTxn: string = account.signTransaction(txn);
 
 // post transaction to blockchain
-wallet.getNode(Blockchain.ETHEREUM).send(transaction);
+wallet.getNode(Blockchain.ETHEREUM).send(signedTxn);
 
 // call method on node
 wallet.getNode(Blockchain.ETHEREUM).getBalance(account);
 
 // add a new account in wallet (an account that is not generated from the mnemonics of the wallet)
-let newAccount = new Ethereum.Account("private key...");
+const newAccount = new Ethereum.Account("private key...");
 wallet.import(newAccount);
 
-// a more simple approach, to 
-let eth = wallet.getBlockchain(Blockchain.ETHEREUM);
-let acc = eth.createAccount();
+// a more simple approach, to
+const eth = wallet.getBlockchain(Blockchain.ETHEREUM);
+const acc = eth.createAccount();
 eth.getNode().getBalance(acc);
 
-transaction = acc.signTransaction();
-eth.getNode().send(transaction);
-
-
-
+// transaction = acc.signTransaction();
+// eth.getNode().send(transaction);

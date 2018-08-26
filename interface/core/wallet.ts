@@ -1,9 +1,22 @@
+import { Account } from "./account";
 import { Blockchain } from "./blockchain";
 import { GenericNode } from "./generic-node";
-import { Account } from "./account";
 import { generateMnemonics } from "./mnemonics-generator";
 
 export default class Wallet {
+
+    public static fromJson( json: string ) {
+        const obj = JSON.parse(json);
+        /*
+        let wallet;
+        if (obj.mnemonics !== "undefined") {
+            wallet = new Wallet(obj.mnemonics);
+        } else {
+            wallet = new Wallet();
+        }
+        */
+    }
+
     private mnemonics: string;
     private seed: string;
     private derivation;
@@ -21,29 +34,34 @@ export default class Wallet {
         // calculate seed and setup derivation
     }
 
-    getAccounts(blockchain: Blockchain): Account[] {
+    public getAccounts(blockchain: Blockchain): Account[] {
         return this.accounts.get(blockchain);
     }
 
-    getNode(blockchain: Blockchain): GenericNode {
+    public getNode(blockchain: Blockchain): GenericNode {
         return this.nodes.get(blockchain);
     }
 
-    getBlockchain(blockchain: Blockchain) {
+    public getBlockchain(blockchain: Blockchain) {
         return {
             getNode: () => this.getNode(blockchain),
             getAccounts: () => this.getAccounts(blockchain),
             createAccount: () => this.createAccount(blockchain),
-            importAccount: (account: Account) => this.import(account)
-        }
+            importAccount: (account: Account) => this.import(account),
+        };
     }
 
-    createAccount(blockchain: Blockchain): Account {
+    public createAccount(blockchain: Blockchain): Account {
+        // based on blockchain, instantiate the required class
         return new Account();
     }
 
-    import(account: Account) {}
+    public import(account: Account) {
+        //
+    }
 
-    toJson() {}
-    static fromJson() {}
+    public toJson() {
+        return JSON.stringify(this);
+    }
+
 }

@@ -1,7 +1,9 @@
-import { Account } from "./account";
 import { Blockchain } from "./blockchain";
-import { GenericNode } from "./generic-node";
+import { GenericNode } from "./node";
 import { generateMnemonics } from "./mnemonics-generator";
+import { EthereumAccount } from "../ethereum/account";
+import { EthereumNode } from "../ethereum/node";
+import { GenericAccount, AccountType } from "./account";
 
 export default class Wallet {
 
@@ -22,7 +24,7 @@ export default class Wallet {
     private derivation;
 
     private nodes: Map<Blockchain, GenericNode> = new Map();
-    private accounts: Map<Blockchain, Account[]> = new Map();
+    private accounts: Map<Blockchain, GenericAccount[]> = new Map();
 
     constructor(mnemonics?: string) {
         if (mnemonics) {
@@ -34,7 +36,7 @@ export default class Wallet {
         // calculate seed and setup derivation
     }
 
-    public getAccounts(blockchain: Blockchain): Account[] {
+    getAccounts(blockchain?: Blockchain): GenericAccount[] {
         return this.accounts.get(blockchain);
     }
 
@@ -47,21 +49,14 @@ export default class Wallet {
             getNode: () => this.getNode(blockchain),
             getAccounts: () => this.getAccounts(blockchain),
             createAccount: () => this.createAccount(blockchain),
-            importAccount: (account: Account) => this.import(account),
-        };
+            importAccount: (account: GenericAccount) => this.import(account)
+        }
     }
 
-    public createAccount(blockchain: Blockchain): Account {
-        // based on blockchain, instantiate the required class
-        return new Account();
+    createAccount(blockchain: Blockchain): GenericAccount {
+        return new EthereumAccount(new EthereumNode(EthereumNode.NETWORKS[0]), {type: AccountType.HD});
     }
 
-    public import(account: Account) {
-        //
-    }
-
-    public toJson() {
-        return JSON.stringify(this);
-    }
+    import(account: GenericAccount) {}
 
 }

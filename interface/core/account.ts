@@ -1,44 +1,48 @@
-import { Blockchain } from "./blockchain";
-import GenericTransaction from "./transaction";
+import { GenericTransaction, ITransactionOptions } from './transaction';
+import { GenericNode } from "./node";
 
-export class Account {
-    public blockchain: Blockchain;
-    public address: string;
-    public publicKey: string;
-    public privateKey: string;
+export enum AccountType {
+    HD = "HD", 
+    LOOSE = "LOOSE",
+    HW = "HW"
+}
 
-    constructor(privateKey?: string, address?: string) {
-        if (!(privateKey || address)) {
-            throw new Error("Private key or address is mandatory.");
+interface IAccountInfo {
+    privateKey?: string, 
+    publicKey?: string,
+    address?: string,
+    type: AccountType,
+    // TODO: need to clarify fields for each account type
+}
+
+export abstract class GenericAccount<T extends GenericTransaction = GenericTransaction, TO extends ITransactionOptions = ITransactionOptions> {
+    node: GenericNode;
+    address: string;
+    publicKey: string;
+    privateKey: string;
+
+    private transactions: T[];
+
+    constructor(node: GenericNode, accountInfo: IAccountInfo) {
+        if (!(accountInfo.privateKey || accountInfo.address || accountInfo.publicKey)) {
+            throw new Error("Private key, public key or address is mandatory.");
         }
 
-        this.privateKey = privateKey;
-        this.address = address;
+        this.privateKey = accountInfo.privateKey;
+        this.publicKey = accountInfo.publicKey;
+        this.address = accountInfo.address;
     }
 
-    /*
-    call node and get transaction count for current address
-    - most cases will not provide a callback and just wait for the result.
-    */
-    public async getNonce(callback: () => {}): Promise<number> {
-        if (callback) {
-            // pass request and callback to web3 library
-        } else {
-            // await and return result
-            return 0;
-        }
+    getTransactions(): T[] {
+        return this.transactions;
     }
 
-    public buildTransaction(txn: any): GenericTransaction {
-        const Transaction = new GenericTransaction();
-        return Transaction;
-    }
+    abstract buildTransferTransaction(to: string, amount: number, options?: TO): T;
+    abstract buildCancelTransaction(): T;
+    abstract buildTransaction(): T;
 
-    public signTransaction(txn: GenericTransaction): string {
-        return "";
-    }
+    abstract signTransaction(transaction: T);
+    abstract signMessage(message: string);
 
-    public signMessage(object): string {
-        return "";
-    }
+    abstract send(transaction: T): Promise<string>;
 }

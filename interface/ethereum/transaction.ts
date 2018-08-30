@@ -1,5 +1,11 @@
-import GenericTransaction from "../core/transaction";
+import { IEthereumTransactionOptions } from './transaction';
+import { GenericTransaction, ITransactionOptions } from '../core/transaction';
 
-export default class EthereumTransaction extends GenericTransaction {
-    public value: number;
+export interface IEthereumTransactionOptions extends ITransactionOptions {
+    gasPrice: number,
+    gasLimit: number
+}
+
+export class EthereumTransaction extends GenericTransaction<IEthereumTransactionOptions> {
+
 }

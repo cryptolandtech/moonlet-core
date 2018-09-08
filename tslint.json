@@ -31,7 +31,9 @@
         ],
         "no-var-keyword": true,
         "no-var-requires": false,
-        "prefer-for-of": false   
+        "prefer-for-of": false,
+        "ordered-imports": false,
+        "no-empty-interface": false
     },
     "rulesDirectory": []
 }

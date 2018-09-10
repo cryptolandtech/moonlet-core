@@ -7,7 +7,8 @@ export enum AccountType {
     HARDWARE = "HARDWARE",
 }
 
-export interface IAccountInfo {
+export interface IaccountOptions {
+    node: GenericNode;
     privateKey?: string;
     publicKey?: string;
     address?: string;
@@ -16,7 +17,12 @@ export interface IAccountInfo {
 }
 
 export abstract class GenericAccount<T extends GenericTransaction = GenericTransaction, TO extends ITransactionOptions = ITransactionOptions> {
-    [key: string]: any;
+    // [key: string]: any;
+
+    public static getImplementedClassName(name: string) {
+        name = name.toLowerCase();
+        return name.charAt(0).toUpperCase() + name.slice(1) + "Account";
+    }
 
     public node: GenericNode;
     public address: string;
@@ -25,35 +31,40 @@ export abstract class GenericAccount<T extends GenericTransaction = GenericTrans
 
     private transactions: T[] = [];
 
-    constructor(node: GenericNode, accountInfo: IAccountInfo) {
-        this.node = node;
+    constructor(accountOptions: IaccountOptions) {
+        this.node = accountOptions.node;
 
-        if (!(accountInfo.privateKey && accountInfo.address && accountInfo.publicKey)) {
-            throw new Error("Private key, public key or address is mandatory.");
-        }
-
-        switch (accountInfo.type) {
+        switch (accountOptions.type) {
             case AccountType.HD:
-                this.privateKey = accountInfo.privateKey;
-                this.publicKey = accountInfo.publicKey;
-                this.address = accountInfo.address;
+                if (!accountOptions.privateKey) {
+                    throw new Error("accountOptions.privateKey parameter missing");
+                }
+                this.privateKey = accountOptions.privateKey;
+                this.publicKey = "";
+                this.address = "";
                 // add path
 
                 //
                 break;
             case AccountType.LOOSE:
-                this.privateKey = accountInfo.privateKey;
+                if (!accountOptions.privateKey) {
+                    throw new Error("accountOptions.privateKey parameter missing");
+                }
+                this.privateKey = accountOptions.privateKey;
                 this.publicKey = "";
                 this.address = "";
                 break;
             case AccountType.HARDWARE:
+                if (!accountOptions.address) {
+                    throw new Error("accountOptions.address parameter missing");
+                }
                 this.privateKey = "";
                 this.publicKey = "";
-                this.address = accountInfo.address;
+                this.address = accountOptions.address;
                 break;
 
             default:
-                throw new Error("accountInfo.type" + accountInfo.type + " not found");
+                throw new Error("accountOptions.type '" + accountOptions.type + "' not found");
         }
 
     }

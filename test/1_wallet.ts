@@ -3,15 +3,16 @@ import mocha from "mocha";
 
 // import Wallet from "../src/core/wallet";
 import { Wallet, Blockchains, AccountType, MnemonicUtils } from "../src/index";
+import { EthereumAccount } from "../src/blockchain/ethereum/account";
 
 describe("Core", () => {
 
-    describe("MnemonicUtils", () => {
+    describe("MnemonicUtils class", () => {
 
-        describe("getWordsFromMnemonic", () => {
+        describe("getWordsFromMnemonic()", () => {
 
             it("should properly split 12 words for 'EN' language", async () => {
-                const words = MnemonicUtils.getWordsFromMnemonic( "one two three four five six seven eight nine ten eleven twelve", "EN" );
+                const words = MnemonicUtils.getWordsFromMnemonic( "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about", "EN" );
                 assert.equal( words.length, 12, "Did not return 12 words in an array");
             });
 
@@ -23,7 +24,7 @@ describe("Core", () => {
 
         });
 
-        describe("generateMnemonic", () => {
+        describe("generateMnemonic()", () => {
 
             it("should properly generate a 12 words mnemonic phrase for 'EN' language", async () => {
                 const lang = "EN";
@@ -55,19 +56,27 @@ describe("Core", () => {
 
         });
 
-        describe("mnemonicToSeed", () => {
+        describe("mnemonicToSeed()", () => {
 
             it("should return a 64 byte Buffer", async () => {
-                const seed = MnemonicUtils.mnemonicToSeed( "one two three four five six seven eight nine ten eleven twelve" );
+                const lang = "EN";
+                const seed = MnemonicUtils.mnemonicToSeed( "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about", lang );
                 assert.equal( seed.length, 64, "Did not return a 64 byte buffer");
             });
 
             it("should also accept a password 'salt' parameter", async () => {
                 const password = "salt";
-                const seed = MnemonicUtils.mnemonicToSeed( "one two three four five six seven eight nine ten eleven twelve", password );
+                const lang = "EN";
+                const seed = MnemonicUtils.mnemonicToSeed( "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about", lang, password );
                 assert.equal( seed.length, 64, "Did not return a 64 byte buffer");
             });
 
+            it("should throw if supplied mnemonic is invalid", async () => {
+                const lang = "EN";
+                assert.throws(() => {
+                    MnemonicUtils.mnemonicToSeed("this is an invalid mnemonic", lang);
+                }, /^Invalid Mnemonic.$/);
+            });
         });
 
     });
@@ -88,14 +97,63 @@ describe("Core", () => {
             });
         });
 
-        describe("constructed with no parameters", () => {
+        describe("constructed with parameters ( language = EN )", () => {
 
-            const wallet: Wallet = new Wallet();
+            const wallet: Wallet = new Wallet(undefined, "EN");
 
             it("should generate a new mnemonic phrase of 12 words", async () => {
                 const words = MnemonicUtils.getWordsFromMnemonic( wallet.mnemonics, wallet.mnemonicslang );
-                assert.equal( words.length, 12, "Error: Generated mnemonic does not have 12 words.");
+                assert.equal( words.length, 12, "Generated mnemonic does not have 12 words.");
             });
+
+            it("should generate a 64 byte length seed Buffer", async () => {
+                assert.equal( wallet.seed.length, 64, "Generated seed length is not 64.");
+            });
+        });
+
+        describe("constructed with parameters ( language = JA )", () => {
+
+            const wallet: Wallet = new Wallet(undefined, "JA");
+
+            it("should generate a new mnemonic phrase of 12 words", async () => {
+                const words = MnemonicUtils.getWordsFromMnemonic( wallet.mnemonics, wallet.mnemonicslang );
+                assert.equal( words.length, 12, "Generated mnemonic does not have 12 words.");
+            });
+
+            it("should generate a 64 byte length seed Buffer", async () => {
+                assert.equal( wallet.seed.length, 64, "Generated seed length is not 64.");
+            });
+        });
+
+        describe("createAccount()", () => {
+
+            const wallet: Wallet = new Wallet(undefined, "EN");
+
+            it("should throw if no blockchain is specified", async () => {
+                assert.throws(() => {
+                    // @ts-ignore: shut up! we're testing for this scenario
+                    wallet.createAccount();
+                }, /^createAccount: type 'undefined' does not exist.$/);
+            });
+
+            it("should throw if specified blockchain type does not exist", async () => {
+                assert.throws(() => {
+                    // @ts-ignore: shut up! we're testing for this scenario
+                    wallet.createAccount("UNKNOWN");
+                }, /^createAccount: type 'UNKNOWN' does not exist.$/);
+            });
+
+        });
+
+        describe("createAccount(undefined, 'EN')", () => {
+
+            const defaultWallet: Wallet = new Wallet(undefined, "EN");
+            defaultWallet.createAccount(Blockchains.ETHEREUM);
+
+            it("should create an HD Wallet if blockchain type is supported", async () => {
+                // console.log(defaultWallet.accounts.get(Blockchains.ETHEREUM)[0]);
+            });
+
         });
         /*
         beforeEach(async () => {

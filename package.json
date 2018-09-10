@@ -42,7 +42,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^3.0.8",
-    "hdkey": "^1.0.0",
+    "hdkey": "^1.1.0",
     "https": "^1.0.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",

@@ -1,12 +1,12 @@
 import Wallet from "./core/wallet";
 import { Blockchain } from "./core/blockchain";
 import { AccountType } from "./core/account";
-import { EthereumAccount } from "./ethereum/account";
+import { EthereumAccount } from "./blockchain/ethereum/account";
 
 // create new wallet, without mnemonics
 let wallet = new Wallet();
 
-const x = wallet.getAccountsMap();
+// const x = wallet.getAccountsMap();
 
 // create new wallet from mnemonics
 wallet = new Wallet("word1 word2 ... wordN");
@@ -31,6 +31,7 @@ account.signTransaction(transaction);
 // post transaction to blockchain
 account.send(transaction);
 
+/*
 // call method on node
 wallet.getNode(Blockchain.ETHEREUM).getBalance(account.address);
 
@@ -50,3 +51,5 @@ hwAccount.send(hwTransaction);
 const eth = wallet.getBlockchain(Blockchain.ETHEREUM);
 const acc = eth.createAccount();
 eth.getNode().getBalance(acc.address);
+
+*/

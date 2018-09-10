@@ -1,4 +1,4 @@
-import { GenericAccount, IAccountInfo } from "../core/account";
+import { GenericAccount, IAccountInfo } from "../../core/account";
 import { ZilliqaNode } from "./node";
 import { ZilliqaTransaction, IZilliqaTransactionOptions } from "./transaction";
 

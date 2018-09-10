@@ -1,4 +1,4 @@
-import { GenericAccount, IAccountInfo } from "../core/account";
+import { GenericAccount, IAccountInfo } from "../../core/account";
 import { EthereumNode } from "./node";
 import { EthereumTransaction, IEthereumTransactionOptions } from "./transaction";
 

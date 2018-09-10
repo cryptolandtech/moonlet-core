@@ -1,4 +1,4 @@
-import { GenericTransaction, ITransactionOptions } from '../core/transaction';
+import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;

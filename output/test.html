@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- This file was created with the aha Ansi HTML Adapter. https://github.com/theZiz/aha -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="application/xml+xhtml; charset=UTF-8" />
+<title>output/test.log</title>
+</head>
+<body style="color:white; background-color:black">
+<pre>
+
+&gt; wws-core.js@0.0.1 test /Volumes/Dev/cltech/wws/core
+&gt; ts-mocha --colors --paths -p ./ test/*/*.ts test/*.ts
+
+
+
+  Core
+    MnemonicUtils class
+      getWordsFromMnemonic()
+      <span style="color:lime;">  ✓</span> should properly split 12 words for 'EN' language
+      <span style="color:lime;">  ✓</span> should properly split 12 words for 'JA' language
+      generateMnemonic()
+      <span style="color:lime;">  ✓</span> should properly generate a 12 words mnemonic phrase for 'EN' language
+      <span style="color:lime;">  ✓</span> should properly generate a 12 words mnemonic phrase for 'chinese_simplified' language
+      <span style="color:lime;">  ✓</span> should properly generate a 12 words mnemonic phrase for 'JA' language
+      <span style="color:lime;">  ✓</span> should throw if supplied language does not have a wordlist
+      mnemonicToSeed()
+      <span style="color:lime;">  ✓</span> should return a 64 byte Buffer
+      <span style="color:lime;">  ✓</span> should also accept a password 'salt' parameter
+      <span style="color:lime;">  ✓</span> should throw if supplied mnemonic is invalid
+
+  Ethereum
+    Ethereum Account Utils
+      requireType( target, type, method ): boolean
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter does not match requested type ( string, Buffer )
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter does not match requested type ( number, Buffer )
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter does not match requested type ( boolean, Buffer )
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter does not match requested type ( undefined, Buffer )
+      <span style="color:lime;">  ✓</span> should return true if supplied parameter matches requested type ( string, string )
+      <span style="color:lime;">  ✓</span> should return true if supplied parameter matches requested type ( Buffer, Buffer )
+      <span style="color:lime;">  ✓</span> should return true if supplied parameter matches requested type ( true, boolean )
+      <span style="color:lime;">  ✓</span> should return true if supplied parameter matches requested type ( 5, number )
+      bufferToHex( Buffer ): string
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should return a string prepended with 0x
+      privateToPublic( Buffer ): Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied Buffer length is not 64 bytes
+      <span style="color:lime;">  ✓</span> should return a valid 64 byte Buffer containing a public key
+      <span style="color:lime;">  ✓</span> should return public key that matches in test constant 
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util privateToPublic()
+      privateToAddress( Buffer ): Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied Buffer length is not 64 bytes
+      <span style="color:lime;">  ✓</span> should return a valid 20 byte Buffer containing a public key
+      <span style="color:lime;">  ✓</span> should return public key that matches in test constant 
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util privateToAddress()
+      addressBufferToChecksum( Buffer ): string
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied Buffer length is not 20 or 22 bytes
+      <span style="color:lime;">  ✓</span> should return a valid 42 length string containing a public key
+      <span style="color:lime;">  ✓</span> should return public key that matches in test constant 
+      publicToAddress( Buffer ): Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should throw if supplied Buffer length is not 64 bytes
+      <span style="color:lime;">  ✓</span> should return a valid 20 byte Buffer containing a public key
+      <span style="color:lime;">  ✓</span> should return public key that matches in test constant 
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util publicToAddress()
+      isValidChecksumAddress( string ): boolean
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type string
+      <span style="color:lime;">  ✓</span> should return false if supplied string does not contain a valid checksummed address
+      <span style="color:lime;">  ✓</span> should return true if supplied string contains a valid address
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util isValidChecksumAddress()
+      isValidAddress( Buffer ): boolean
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should return false if supplied Buffer does not contain a valid address
+      <span style="color:lime;">  ✓</span> should return true if supplied Buffer contains a valid address
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util isValidAddress()
+      isValidPrivate( Buffer ): boolean
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should return false if supplied Buffer does not contain a valid private key
+      <span style="color:lime;">  ✓</span> should return true if supplied Buffer contains a valid private key
+      isValidPublic( Buffer ): boolean
+      <span style="color:lime;">  ✓</span> should throw if supplied parameter is not of type Buffer
+      <span style="color:lime;">  ✓</span> should return false if supplied Buffer does not contain a valid public key
+      <span style="color:lime;">  ✓</span> should return true if supplied Buffer contains a valid public key
+      <span style="color:lime;">  ✓</span> should match the return of ethereumjs-util isValidPublic()
+
+  Core
+    Wallet
+    <span style="color:lime;">  ✓</span> test
+      Wallet: constructed with parameters ( language = EN )
+      <span style="color:lime;">  ✓</span> should generate a new mnemonic phrase of 12 words
+      <span style="color:lime;">  ✓</span> should generate a 64 byte length seed Buffer
+      Wallet: constructed with parameters ( language = JA )
+      <span style="color:lime;">  ✓</span> should generate a new mnemonic phrase of 12 words
+      <span style="color:lime;">  ✓</span> should generate a 64 byte length seed Buffer
+      Wallet: constructed with no parameters
+      <span style="color:lime;">  ✓</span> should default to language 'EN'
+      <span style="color:lime;">  ✓</span> should generate a new mnemonic phrase of 12 words
+        createAccount()
+        <span style="color:lime;">  ✓</span> should throw if no blockchain is specified
+        <span style="color:lime;">  ✓</span> should throw if specified blockchain type does not exist
+        createAccount(Blockchains.ETHEREUM)
+        <span style="color:lime;">  ✓</span> should create an account of type 'EthereumAccount'
+        <span style="color:lime;">  ✓</span> should return an object of type 'EthereumAccount'
+        <span style="color:lime;">  ✓</span> should return an object that is equal to the first indexed account in wallet.accounts Map
+          resulting account ( HD Wallet )
+          <span style="color:lime;">  ✓</span> should have the expected node type 'EthereumNode'
+          <span style="color:lime;">  ✓</span> should have a node with an HD root key
+          <span style="color:lime;">  ✓</span> should have account HD derrivation key
+          <span style="color:lime;">  ✓</span> should have a valid private key
+            node HD root key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (4)
+            <span style="color:lime;">  ✓</span> should have the correct index (0)
+            account HD derrivation key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (5)
+            <span style="color:lime;">  ✓</span> should have the correct index (0)
+      Wallet: constructed with parameters ( mnemonic, language = EN )
+        createAccount(Blockchains.ETHEREUM)
+        <span style="color:lime;">  ✓</span> should return an object that is equal to the first indexed account in wallet.accounts Map
+          resulting account ( HD Wallet )
+          <span style="color:lime;">  ✓</span> should have the expected node type 'EthereumNode'
+          <span style="color:lime;">  ✓</span> should have a node with an HD root key
+          <span style="color:lime;">  ✓</span> should have account HD derrivation key
+          <span style="color:lime;">  ✓</span> should have a valid private key
+          <span style="color:lime;">  ✓</span> should have a generated private key that matches in test PrivateKey value constant
+          <span style="color:lime;">  ✓</span> should have a generated public key that matches in test PublicKey value constant
+          <span style="color:lime;">  ✓</span> should have a generated address that matches in test address value constant
+            node HD root key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (4)
+            <span style="color:lime;">  ✓</span> should have the correct index (0)
+            <span style="color:lime;">  ✓</span> should have the correct node HDCoinValue
+            account HD derrivation key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (5)
+            <span style="color:lime;">  ✓</span> should have the correct index (0)
+        2nd call to createAccount(Blockchains.ETHEREUM)
+        <span style="color:lime;">  ✓</span> should return an object that is equal to the second indexed account in wallet.accounts Map
+          resulting account ( HD Wallet )
+          <span style="color:lime;">  ✓</span> should have the expected node type 'EthereumNode'
+          <span style="color:lime;">  ✓</span> should have a node with an HD root key
+          <span style="color:lime;">  ✓</span> should have account HD derrivation key
+          <span style="color:lime;">  ✓</span> should have a valid private key
+          <span style="color:lime;">  ✓</span> should have a generated private key that matches in test PrivateKey value constant
+          <span style="color:lime;">  ✓</span> should have a generated public key that matches in test PublicKey value constant
+          <span style="color:lime;">  ✓</span> should have a generated address that matches in test address value constant
+            node HD root key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (4)
+            <span style="color:lime;">  ✓</span> should have the correct index (0)
+            <span style="color:lime;">  ✓</span> should have the correct node HDCoinValue
+            account HD derrivation key
+            <span style="color:lime;">  ✓</span> should have the correct class
+            <span style="color:lime;">  ✓</span> should have the correct depth (5)
+            <span style="color:lime;">  ✓</span> should have the correct index (1)
+
+
+ <span style="color:lime;"> 105 passing</span> (52ms)
+
+</pre>
+</body>
+</html>

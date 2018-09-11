@@ -1,0 +1,153 @@
+
+> wws-core.js@0.0.1 test /Volumes/Dev/cltech/wws/core
+> ts-mocha --colors --paths -p ./ test/*/*.ts test/*.ts
+
+
+[0m[0m
+[0m  Core[0m
+[0m    MnemonicUtils class[0m
+[0m      getWordsFromMnemonic()[0m
+      [32m  ✓[0m[90m should properly split 12 words for 'EN' language[0m
+      [32m  ✓[0m[90m should properly split 12 words for 'JA' language[0m
+[0m      generateMnemonic()[0m
+      [32m  ✓[0m[90m should properly generate a 12 words mnemonic phrase for 'EN' language[0m
+      [32m  ✓[0m[90m should properly generate a 12 words mnemonic phrase for 'chinese_simplified' language[0m
+      [32m  ✓[0m[90m should properly generate a 12 words mnemonic phrase for 'JA' language[0m
+      [32m  ✓[0m[90m should throw if supplied language does not have a wordlist[0m
+[0m      mnemonicToSeed()[0m
+      [32m  ✓[0m[90m should return a 64 byte Buffer[0m
+      [32m  ✓[0m[90m should also accept a password 'salt' parameter[0m
+      [32m  ✓[0m[90m should throw if supplied mnemonic is invalid[0m
+
+[0m  Ethereum[0m
+[0m    Ethereum Account Utils[0m
+[0m      requireType( target, type, method ): boolean[0m
+      [32m  ✓[0m[90m should throw if supplied parameter does not match requested type ( string, Buffer )[0m
+      [32m  ✓[0m[90m should throw if supplied parameter does not match requested type ( number, Buffer )[0m
+      [32m  ✓[0m[90m should throw if supplied parameter does not match requested type ( boolean, Buffer )[0m
+      [32m  ✓[0m[90m should throw if supplied parameter does not match requested type ( undefined, Buffer )[0m
+      [32m  ✓[0m[90m should return true if supplied parameter matches requested type ( string, string )[0m
+      [32m  ✓[0m[90m should return true if supplied parameter matches requested type ( Buffer, Buffer )[0m
+      [32m  ✓[0m[90m should return true if supplied parameter matches requested type ( true, boolean )[0m
+      [32m  ✓[0m[90m should return true if supplied parameter matches requested type ( 5, number )[0m
+[0m      bufferToHex( Buffer ): string[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should return a string prepended with 0x[0m
+[0m      privateToPublic( Buffer ): Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied Buffer length is not 64 bytes[0m
+      [32m  ✓[0m[90m should return a valid 64 byte Buffer containing a public key[0m
+      [32m  ✓[0m[90m should return public key that matches in test constant [0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util privateToPublic()[0m
+[0m      privateToAddress( Buffer ): Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied Buffer length is not 64 bytes[0m
+      [32m  ✓[0m[90m should return a valid 20 byte Buffer containing a public key[0m
+      [32m  ✓[0m[90m should return public key that matches in test constant [0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util privateToAddress()[0m
+[0m      addressBufferToChecksum( Buffer ): string[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied Buffer length is not 20 or 22 bytes[0m
+      [32m  ✓[0m[90m should return a valid 42 length string containing a public key[0m
+      [32m  ✓[0m[90m should return public key that matches in test constant [0m
+[0m      publicToAddress( Buffer ): Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should throw if supplied Buffer length is not 64 bytes[0m
+      [32m  ✓[0m[90m should return a valid 20 byte Buffer containing a public key[0m
+      [32m  ✓[0m[90m should return public key that matches in test constant [0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util publicToAddress()[0m
+[0m      isValidChecksumAddress( string ): boolean[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type string[0m
+      [32m  ✓[0m[90m should return false if supplied string does not contain a valid checksummed address[0m
+      [32m  ✓[0m[90m should return true if supplied string contains a valid address[0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util isValidChecksumAddress()[0m
+[0m      isValidAddress( Buffer ): boolean[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should return false if supplied Buffer does not contain a valid address[0m
+      [32m  ✓[0m[90m should return true if supplied Buffer contains a valid address[0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util isValidAddress()[0m
+[0m      isValidPrivate( Buffer ): boolean[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should return false if supplied Buffer does not contain a valid private key[0m
+      [32m  ✓[0m[90m should return true if supplied Buffer contains a valid private key[0m
+[0m      isValidPublic( Buffer ): boolean[0m
+      [32m  ✓[0m[90m should throw if supplied parameter is not of type Buffer[0m
+      [32m  ✓[0m[90m should return false if supplied Buffer does not contain a valid public key[0m
+      [32m  ✓[0m[90m should return true if supplied Buffer contains a valid public key[0m
+      [32m  ✓[0m[90m should match the return of ethereumjs-util isValidPublic()[0m
+
+[0m  Core[0m
+[0m    Wallet[0m
+    [32m  ✓[0m[90m test[0m
+[0m      Wallet: constructed with parameters ( language = EN )[0m
+      [32m  ✓[0m[90m should generate a new mnemonic phrase of 12 words[0m
+      [32m  ✓[0m[90m should generate a 64 byte length seed Buffer[0m
+[0m      Wallet: constructed with parameters ( language = JA )[0m
+      [32m  ✓[0m[90m should generate a new mnemonic phrase of 12 words[0m
+      [32m  ✓[0m[90m should generate a 64 byte length seed Buffer[0m
+[0m      Wallet: constructed with no parameters[0m
+      [32m  ✓[0m[90m should default to language 'EN'[0m
+      [32m  ✓[0m[90m should generate a new mnemonic phrase of 12 words[0m
+[0m        createAccount()[0m
+        [32m  ✓[0m[90m should throw if no blockchain is specified[0m
+        [32m  ✓[0m[90m should throw if specified blockchain type does not exist[0m
+[0m        createAccount(Blockchains.ETHEREUM)[0m
+        [32m  ✓[0m[90m should create an account of type 'EthereumAccount'[0m
+        [32m  ✓[0m[90m should return an object of type 'EthereumAccount'[0m
+        [32m  ✓[0m[90m should return an object that is equal to the first indexed account in wallet.accounts Map[0m
+[0m          resulting account ( HD Wallet )[0m
+          [32m  ✓[0m[90m should have the expected node type 'EthereumNode'[0m
+          [32m  ✓[0m[90m should have a node with an HD root key[0m
+          [32m  ✓[0m[90m should have account HD derrivation key[0m
+          [32m  ✓[0m[90m should have a valid private key[0m
+[0m            node HD root key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (4)[0m
+            [32m  ✓[0m[90m should have the correct index (0)[0m
+[0m            account HD derrivation key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (5)[0m
+            [32m  ✓[0m[90m should have the correct index (0)[0m
+[0m      Wallet: constructed with parameters ( mnemonic, language = EN )[0m
+[0m        createAccount(Blockchains.ETHEREUM)[0m
+        [32m  ✓[0m[90m should return an object that is equal to the first indexed account in wallet.accounts Map[0m
+[0m          resulting account ( HD Wallet )[0m
+          [32m  ✓[0m[90m should have the expected node type 'EthereumNode'[0m
+          [32m  ✓[0m[90m should have a node with an HD root key[0m
+          [32m  ✓[0m[90m should have account HD derrivation key[0m
+          [32m  ✓[0m[90m should have a valid private key[0m
+          [32m  ✓[0m[90m should have a generated private key that matches in test PrivateKey value constant[0m
+          [32m  ✓[0m[90m should have a generated public key that matches in test PublicKey value constant[0m
+          [32m  ✓[0m[90m should have a generated address that matches in test address value constant[0m
+[0m            node HD root key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (4)[0m
+            [32m  ✓[0m[90m should have the correct index (0)[0m
+            [32m  ✓[0m[90m should have the correct node HDCoinValue[0m
+[0m            account HD derrivation key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (5)[0m
+            [32m  ✓[0m[90m should have the correct index (0)[0m
+[0m        2nd call to createAccount(Blockchains.ETHEREUM)[0m
+        [32m  ✓[0m[90m should return an object that is equal to the second indexed account in wallet.accounts Map[0m
+[0m          resulting account ( HD Wallet )[0m
+          [32m  ✓[0m[90m should have the expected node type 'EthereumNode'[0m
+          [32m  ✓[0m[90m should have a node with an HD root key[0m
+          [32m  ✓[0m[90m should have account HD derrivation key[0m
+          [32m  ✓[0m[90m should have a valid private key[0m
+          [32m  ✓[0m[90m should have a generated private key that matches in test PrivateKey value constant[0m
+          [32m  ✓[0m[90m should have a generated public key that matches in test PublicKey value constant[0m
+          [32m  ✓[0m[90m should have a generated address that matches in test address value constant[0m
+[0m            node HD root key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (4)[0m
+            [32m  ✓[0m[90m should have the correct index (0)[0m
+            [32m  ✓[0m[90m should have the correct node HDCoinValue[0m
+[0m            account HD derrivation key[0m
+            [32m  ✓[0m[90m should have the correct class[0m
+            [32m  ✓[0m[90m should have the correct depth (5)[0m
+            [32m  ✓[0m[90m should have the correct index (1)[0m
+
+
+[92m [0m[32m 105 passing[0m[90m (52ms)[0m
+

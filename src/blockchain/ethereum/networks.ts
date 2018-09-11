@@ -4,18 +4,34 @@ import { Network } from '../../core/network';
 const networks: Network[] = [
     {
         name: "Main net",
-        networkId: 1,
+        chainId: 1,
         blockchain: Blockchain.ETHEREUM,
         mainNet: true,
-        url: "https://...",
+        url: "https://mainnet.infura.io/",
         HDCoinValue: 60, // 60 = Ethereum Main Network!
     },
     {
-        name: "Test net",
-        networkId: 2,
+        name: "Ropsten",
+        chainId: 3,
         blockchain: Blockchain.ETHEREUM,
         mainNet: false,
-        url: "https://...",
+        url: "https://ropsten.infura.io/",
+        HDCoinValue: 1, // Test Net
+    },
+    {
+        name: "Rinkeby",
+        chainId: 4,
+        blockchain: Blockchain.ETHEREUM,
+        mainNet: false,
+        url: "https://rinkeby.infura.io/",
+        HDCoinValue: 1, // Test Net
+    },
+    {
+        name: "Kovan",
+        chainId: 42,
+        blockchain: Blockchain.ETHEREUM,
+        mainNet: false,
+        url: "https://kovan.infura.io/",
         HDCoinValue: 1, // Test Net
     },
 ];

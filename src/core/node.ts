@@ -1,4 +1,5 @@
 import { Network } from "./network";
+import HDKey from "./utils/hdkey";
 
 export abstract class GenericNode {
     public static readonly NETWORKS: Network[] = [];
@@ -26,23 +27,18 @@ export abstract class GenericNode {
         return this.network;
     }
 
-    public setNetwork(network: Network) {
-        this.customNetworkUrl = false;
-        this.network = Object.assign({}, network);
-    }
-
     public setCustomNetworkUrl(url: string) {
         this.network.url = url;
         this.customNetworkUrl = true;
     }
 
-    public removeCustomNetworkUrl() {
-        // find original url
+    public resetCustomNetworkUrl() {
         for ( const net in this.NETWORKS) {
-            if (this.NETWORKS[net]) {
+            if (this.network.chainId === this.NETWORKS[net].chainId) {
                 this.network.url = this.NETWORKS[net].url;
                 this.customNetworkUrl = false;
             }
         }
     }
+
 }

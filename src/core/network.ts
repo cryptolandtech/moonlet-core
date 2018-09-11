@@ -2,7 +2,7 @@ import { Blockchain } from "./blockchain";
 
 export interface Network {
     blockchain: Blockchain;
-    networkId: number;
+    chainId: number;
     name: string;
     url: string;
     mainNet: boolean;

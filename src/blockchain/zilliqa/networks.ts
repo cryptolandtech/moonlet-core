@@ -4,19 +4,19 @@ import { Network } from '../../core/network';
 const networks: Network[] = [
     {
         name: "Main net",
-        networkId: 1,
+        chainId: 1,
         blockchain: Blockchain.ZILLIQA,
         mainNet: true,
-        url: "https://...",
+        url: "https://api-scilla.zilliqa.com/",
         HDCoinValue: 10018, // 10018 = Proposed as Zilliqa Main Network!
     },
     {
         name: "Test net",
-        networkId: 2,
+        chainId: 2,
         blockchain: Blockchain.ZILLIQA,
         mainNet: false,
-        url: "https://...",
-        HDCoinValue: 1,
+        url: "https://api-scilla.zilliqa.com/",
+        HDCoinValue: 1, // testnet
     },
 ];
 

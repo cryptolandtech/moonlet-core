@@ -102,9 +102,14 @@ export default class Wallet {
                 byNetwork = this.mapper.getInstance( NodeClassName ) as GenericNode;
                 initialisedNodesMap.set( networkId, byNetwork );
 
-                // HDKey.fromMasterSeed(this.seed);
-                // this.root = this.hdWallet.derivePath(this.hdPathString);
+                const hdkey = HDKey.fromMasterSeed(this.seed);
+                byNetwork.HDRootKey = hdkey.derivePath(byNetwork.getCurrentNetworkPathString());
 
+                // this.root = this.hdWallet.derivePath(this.hdPathString);
+                // byNetwork.setCustomNetworkUrl("test");
+                // byNetwork.resetCustomNetworkUrl();
+
+                // getCurrentNetworkPathString
             }
             return byNetwork;
 
@@ -119,27 +124,22 @@ export default class Wallet {
         if (!Blockchain[blockchain]) {
             throw new Error("createAccount: type '" + blockchain + "' does not exist.");
         }
+        const existingAccounts = this.getAccounts( blockchain );
 
-        const hdkey = this.getHdKey();
         const accountNode = this.getNode(blockchain, networkId);
+        const hdkey = accountNode.HDRootKey.deriveChild( existingAccounts.length );
+
         const accountOptions = {
             node: accountNode,
             type: AccountType.HD,
-            privateKey: "64byteprivatekey",
+            hd: hdkey,
         };
         const DynamicClassName = GenericAccount.getImplementedClassName( Blockchain[blockchain] );
-        const account = this.mapper.getInstance( DynamicClassName, accountOptions );
+        const account: GenericAccount = this.mapper.getInstance( DynamicClassName, accountOptions );
 
         this.getAccounts( blockchain ).push( account ) ;
 
         return account;
-    }
-
-    public getHdKey() {
-        // get the last account created for current node
-        // this.root.deriveChild(i);
-        // HDKey
-        return "";
     }
 
     public importAccount(account: GenericAccount) {

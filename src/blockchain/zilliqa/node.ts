@@ -10,7 +10,8 @@ export class ZilliqaNode extends GenericNode {
         super();
         this.NETWORKS = networks;
         network = network || this.NETWORKS[0];
-        this.setNetwork( network );
+        this.customNetworkUrl = false;
+        this.network = Object.assign({}, network);
     }
 
     public getBalance(address: string): number {

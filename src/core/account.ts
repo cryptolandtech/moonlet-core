@@ -1,5 +1,7 @@
 import { GenericTransaction, ITransactionOptions } from './transaction';
 import { GenericNode } from "./node";
+import HDKey from './utils/hdkey';
+import { GenericAccountUtils } from './account-utils';
 
 export enum AccountType {
     HD = "HD",
@@ -13,10 +15,14 @@ export interface IaccountOptions {
     publicKey?: string;
     address?: string;
     type: AccountType;
+    hd?: any;
     // TODO: need to clarify fields for each account type
 }
 
-export abstract class GenericAccount<T extends GenericTransaction = GenericTransaction, TO extends ITransactionOptions = ITransactionOptions> {
+export abstract class GenericAccount<
+        T extends GenericTransaction = GenericTransaction,
+        TO extends ITransactionOptions = ITransactionOptions,
+    > {
     // [key: string]: any;
 
     public static getImplementedClassName(name: string) {
@@ -25,9 +31,12 @@ export abstract class GenericAccount<T extends GenericTransaction = GenericTrans
     }
 
     public node: GenericNode;
-    public address: string;
-    public publicKey: string;
-    public privateKey: string;
+    public address: string = "";
+    public publicKey: string = "";
+    public privateKey: string = "";
+    public type: AccountType;
+    public hd: HDKey | any;
+    public utils: GenericAccountUtils | any;
 
     private transactions: T[] = [];
 
@@ -36,30 +45,21 @@ export abstract class GenericAccount<T extends GenericTransaction = GenericTrans
 
         switch (accountOptions.type) {
             case AccountType.HD:
-                if (!accountOptions.privateKey) {
-                    throw new Error("accountOptions.privateKey parameter missing");
+                if (!accountOptions.hd) {
+                    throw new Error("accountOptions.hd parameter missing");
                 }
-                this.privateKey = accountOptions.privateKey;
-                this.publicKey = "";
-                this.address = "";
-                // add path
-
-                //
+                this.hd = accountOptions.hd;
                 break;
             case AccountType.LOOSE:
                 if (!accountOptions.privateKey) {
                     throw new Error("accountOptions.privateKey parameter missing");
                 }
                 this.privateKey = accountOptions.privateKey;
-                this.publicKey = "";
-                this.address = "";
                 break;
             case AccountType.HARDWARE:
                 if (!accountOptions.address) {
                     throw new Error("accountOptions.address parameter missing");
                 }
-                this.privateKey = "";
-                this.publicKey = "";
                 this.address = accountOptions.address;
                 break;
 
@@ -67,6 +67,15 @@ export abstract class GenericAccount<T extends GenericTransaction = GenericTrans
                 throw new Error("accountOptions.type '" + accountOptions.type + "' not found");
         }
 
+        this.type = accountOptions.type;
+    }
+
+    public tryHdWalletSetup() {
+        if (this.type === AccountType.HD && this.hd !== undefined ) {
+            this.privateKey = this.utils.bufferToHex( this.hd.getPrivateKey() );
+            this.publicKey = this.utils.bufferToHex( this.utils.privateToPublic( this.hd.getPrivateKey() ) );
+            this.address = this.utils.toChecksumAddress( this.utils.privateToAddress( this.hd.getPrivateKey() ).toString("hex") );
+        }
     }
 
     public getTransactions(): T[] {

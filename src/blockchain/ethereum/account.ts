@@ -1,11 +1,14 @@
-import { GenericAccount, IAccountInfo } from "../../core/account";
+import { GenericAccount, IaccountOptions, AccountType } from "../../core/account";
 import { EthereumNode } from "./node";
 import { EthereumTransaction, IEthereumTransactionOptions } from "./transaction";
+import { EthereumAccountUtils } from "./account-utils";
 
 export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthereumTransactionOptions> {
 
-    constructor(node: EthereumNode, accountInfo: IAccountInfo) {
-        super(node, accountInfo);
+    constructor(accountOptions: IaccountOptions) {
+        super(accountOptions);
+        this.utils = new EthereumAccountUtils();
+        this.tryHdWalletSetup();
     }
 
     public signTransaction(transaction: EthereumTransaction): boolean {

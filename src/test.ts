@@ -23,7 +23,7 @@ let transaction  = account.buildTransferTransaction("0x02", 1);
 transaction.options.gasLimit = 50000;
 transaction.options.gasPrice = 1;
 // or
-transaction = account.buildTransferTransaction("0x02", 1, {gasLimit: 50000, gasPrice: 1});
+transaction = account.buildTransferTransaction("0x02", 1, {gasLimit: 50000, gasPrice: 1, chainId: 1});
 
 // sign transaction
 account.signTransaction(transaction);

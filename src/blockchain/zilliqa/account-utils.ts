@@ -3,16 +3,12 @@ const ZilliqaUtil = require('zilliqa.js/lib/util');
 
 export class ZilliqaAccountUtils extends GenericAccountUtils {
 
-    public normalize( str: string ): string {
-        return str.toUpperCase();
-    }
-
     public isValidChecksumAddress( key: string ): boolean {
-        return true;
+        throw new Error("Method not implemented.");
     }
 
     public toChecksumAddress( key: string ): string {
-        return "";
+        throw new Error("Method not implemented.");
     }
 
     public isValidAddress( key: Buffer ): boolean {
@@ -37,6 +33,10 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
 
     public privateToAddress( privateKey: Buffer ): Buffer {
         return ZilliqaUtil.getAddressFromPrivateKey(privateKey);
+    }
+
+    public addressBufferToChecksum( key: Buffer ): string {
+        throw new Error("Method not implemented.");
     }
 
     public bufferToHex = (buf: Buffer) => {

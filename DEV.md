@@ -15,4 +15,4 @@ wordlists: {
     spanish: SPANISH_WORDLIST
 }
 ```
-Note: using externally provided wordlists is not supported at the moment.
+Note: using externally provided wordlists is not supported at the moment and should be PR'ed into upstream BIP39 package.

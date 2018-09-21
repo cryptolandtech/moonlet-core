@@ -65,7 +65,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.bufferToHex("test");
                 }, /bufferToHex: parameter must be a Buffer()./);
             });
@@ -82,7 +82,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.privateToPublic("test");
                 }, /privateToPublic: parameter must be a Buffer()./);
             });
@@ -116,7 +116,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.privateToAddress("test");
                 }, /privateToAddress: parameter must be a Buffer()./);
             });
@@ -151,7 +151,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.addressBufferToChecksum("test");
                 }, /addressBufferToChecksum: parameter must be a Buffer()./);
             });
@@ -178,7 +178,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.publicToAddress("test");
                 }, /publicToAddress: parameter must be a Buffer()./);
             });
@@ -214,7 +214,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type string", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.isValidChecksumAddress( 0x10203 );
                 }, /isValidChecksumAddress: parameter must be of type string./);
             });
@@ -238,7 +238,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.isValidAddress("test");
                 }, /isValidAddress: parameter must be a Buffer()./);
             });
@@ -262,7 +262,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.isValidPrivate("test");
                 }, /isValidPrivate: parameter must be a Buffer()./);
             });
@@ -294,7 +294,7 @@ describe("Ethereum", async () => {
 
             it("should throw if supplied parameter is not of type Buffer", async () => {
                 assert.throws(() => {
-                    // @ts-ignore: shut up! we're testing for this scenario
+                    // @ts-ignore: we're testing for this scenario
                     instance.isValidPublic("test");
                 }, /isValidPublic: parameter must be a Buffer()./);
             });

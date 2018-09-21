@@ -58,14 +58,14 @@ describe("Core", async () => {
 
                 it("should throw if no blockchain is specified", async () => {
                     assert.throws(() => {
-                        // @ts-ignore: shut up! we're testing for this scenario
+                        // @ts-ignore: we're testing for this scenario
                         wallet.createAccount();
                     }, /^createAccount: type 'undefined' does not exist.$/);
                 });
 
                 it("should throw if specified blockchain type does not exist", async () => {
                     assert.throws(() => {
-                        // @ts-ignore: shut up! we're testing for this scenario
+                        // @ts-ignore: we're testing for this scenario
                         wallet.createAccount("UNKNOWN");
                     }, /^createAccount: type 'UNKNOWN' does not exist.$/);
                 });

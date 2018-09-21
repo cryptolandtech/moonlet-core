@@ -3,10 +3,6 @@ const EthereumUtil = require('ethereumjs-util');
 
 export class EthereumAccountUtils extends GenericAccountUtils {
 
-    public normalize( str: string ): string {
-        return str.toUpperCase();
-    }
-
     public isValidChecksumAddress( key: string ): boolean {
         this.requireType(key, "string", "isValidChecksumAddress");
         return EthereumUtil.isValidChecksumAddress(key);

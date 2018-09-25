@@ -7,6 +7,8 @@ import { GenericNode } from "../src/core/node";
 import { GenericTransaction } from "../src/core/transaction";
 import { GenericAccountUtils } from "../src/core/account-utils";
 
+const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
+
 describe("Core", async () => {
 
     describe("Wallet", async () => {
@@ -88,14 +90,12 @@ describe("Core", async () => {
                     assert.equal( account.constructor.name, AccountClassTypeString, "class does not match expected" );
                 });
 
-                /*
                 it("should return an object that is equal to the first indexed account in wallet.accounts Map", async () => {
                     const firstAccount = defaultWallet.getAccounts(blockchain)[0];
                     const firstIndex = defaultWallet.accounts.get(blockchain)[0];
                     assert.equal( account, firstAccount, "Accounts do not match" );
                     assert.equal( account, firstIndex, "Accounts do not match" );
                 });
-                */
 
                 describe("resulting account ( HD Wallet )", async () => {
 
@@ -159,8 +159,6 @@ describe("Core", async () => {
 
         describe("Wallet: constructed with parameters ( mnemonic, language = EN )", async () => {
 
-            const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
-
             const ethereumwallet0Address = "0x9d9216e0a29468bE1eCaCc351ce3887be8a26222";
             const ethereumwallet0PrivateKey = "0xe49c840fcb71fafcaa068c7d45a6b99f8d5b6064effe7d793b6490641e75cca8";
             const ethereumwallet0PublicKey = "0x30bfa6298178e3ab1f4a2e5d5c3c7d79505c0b3ef7958ac0fec319a67d3e47eb01f05a7059311a6d061b7a4c1eff38549909b0782256e22f748cb9e6f3c4c4a4";
@@ -176,14 +174,12 @@ describe("Core", async () => {
                 const blockchain = Blockchains.ETHEREUM;
                 const account = defaultWallet.createAccount(blockchain);
 
-                /*
                 it("should return an object that is equal to the first indexed account in wallet.accounts Map", async () => {
                     const firstAccount = defaultWallet.getAccounts(blockchain)[0];
                     const firstIndex = defaultWallet.accounts.get(blockchain)[0];
                     assert.equal( account, firstAccount, "Accounts do not match" );
                     assert.equal( account, firstIndex, "Accounts do not match" );
                 });
-                */
 
                 describe("resulting account ( HD Wallet )", async () => {
 
@@ -265,14 +261,12 @@ describe("Core", async () => {
                 const blockchain = Blockchains.ETHEREUM;
                 const account = defaultWallet.createAccount(blockchain);
 
-                /*
                 it("should return an object that is equal to the second indexed account in wallet.accounts Map", async () => {
                     const secondAccount = defaultWallet.getAccounts(blockchain)[1];
                     const secondIndex = defaultWallet.accounts.get(blockchain)[1];
                     assert.equal( account, secondAccount, "Accounts do not match" );
                     assert.equal( account, secondIndex, "Accounts do not match" );
                 });
-                */
 
                 describe("resulting account ( HD Wallet )", async () => {
 

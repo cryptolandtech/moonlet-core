@@ -4,6 +4,7 @@
         "outDir": "./lib/",
         "sourceMap": true,
         "strict": true,
+        "strictNullChecks": false,
         "module": "commonjs",
         "moduleResolution": "node",
         "target": "es6",

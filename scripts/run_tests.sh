@@ -12,7 +12,12 @@ fi
 echo "--------------------------------------------------------------------"
 
 if [[ "$1" = "all" ]]; then
-  ./node_modules/.bin/ts-mocha --colors --paths -p ./ test/*/*.ts test/*.ts
+  ./node_modules/.bin/ts-mocha --require source-map-support/register \
+    --full-trace \
+    --colors \
+    --bail \
+    --paths -p ./ test/*/*.ts test/*.ts
+
 else
   ./node_modules/.bin/ts-mocha --colors --paths -p ./ $3
 fi

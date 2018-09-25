@@ -4,11 +4,11 @@
 
 `npm install`
 
-## build lib
+## Build lib
 
 `npm run build`
 
-## testing
+## Testing
 
 Run the whole testing suite
 
@@ -52,7 +52,7 @@ Stop all running test rpcs ( that have pids stored )
 npm run stop-all-rpcs
 ```
 
-## adding support for new blockchains
+## Adding support for new blockchains
 
 Fork this repo.
 
@@ -67,3 +67,7 @@ copy test/ethereum to test/yourblockchain and update the tests
 make sure to add your testrpc setup scripts in the /scripts folder
 
 Once complete, submit a PR.
+
+## License
+
+MIT

@@ -5,3 +5,5 @@ yarn.lock
 coverage/
 mochawesome-report/
 \.DS_Store
+scripts/TestRPCData/*
+!scripts/TestRPCData/.gitkeep 

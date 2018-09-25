@@ -7,9 +7,13 @@
   "scripts": {
     "build": "tsc -p . && gulp build",
     "build-lib": "tsc -p .",
-    "test": "ts-mocha --colors --paths -p ./ test/*/*.ts test/*.ts",
-    "test-single": "ts-mocha --colors --paths -p ./",
-    "testToHtml": "scripts/testOutputToHtml.sh"
+    "test": "scripts/runtests.sh all use-existing",
+    "test-reset": "scripts/runtests.sh all",
+    "test-single": "scripts/runtests.sh single use-existing",
+    "test-single-reset": "scripts/runtests.sh single",
+    "testToHtml": "scripts/testOutputToHtml.sh",
+    "start-all-rpcs": "scripts/rpcs/start_all.sh",
+    "stop-all-rpcs": "scripts/rpcs/stop_all.sh"
   },
   "repository": {
     "type": "git",
@@ -56,7 +60,9 @@
     "@types/node": "^10.5.7",
     "chai": "^4.1.2",
     "compression-webpack-plugin": "^1.1.9",
+    "ganache-cli": "^6.1.8",
     "istanbul": "^0.4.5",
+    "kaya": "git+https://github.com/cryptolandtech/kaya.git",
     "mocha": "^4.1.0",
     "mocha-loader": "^1.1.3",
     "mocha-webpack": "^1.0.1",

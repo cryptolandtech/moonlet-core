@@ -20,22 +20,22 @@ Single test run
 
 ```doc
 npm run test-single test/testfile.ts
-
-    "coverage": "scripts/run_coverage.sh all",
-    "coverage-reuse": "scripts/run_coverage.sh all use-existing",
-    "test": "scripts/run_tests.sh all",
-    "test-reuse": "scripts/run_tests.sh all use-existing",
-    "test-single": "scripts/run_tests.sh single",
-    "test-single-reuse": "scripts/run_tests.sh single use-existing",
-    "testToHtml": "scripts/testOutputToHtml.sh",
-    "start-all-rpcs": "scripts/rpcs/start_all.sh",
-    "stop-all-rpcs": "scripts/rpcs/stop_all.sh"
 ```
 
 Test Coverage
 
 ```doc
 npm run coverage
+```
+
+***All test commands have a -reuse option available, meant to allow developers to keep TestRPC running between multiple invocations.***
+
+Example:
+
+```doc
+npm run test-reuse
+npm run test-single-reuse test/testfile.ts
+npm run coverage-reuse
 ```
 
 ## TestRPC Helpers
@@ -50,12 +50,6 @@ Stop all running test rpcs ( that have pids stored )
 
 ```doc
 npm run stop-all-rpcs
-```
-
-***All test commands have a -reuse option available, meant to allow developers to keep TestRPC running between multiple invocations.***
-
-```doc
-npm run test-reuse
 ```
 
 ## adding support for new blockchains

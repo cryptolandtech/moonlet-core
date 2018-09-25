@@ -39,7 +39,8 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
         throw new Error("Method not implemented.");
     }
 
-    public bufferToHex = (buf: Buffer) => {
-        return '0x' + buf.toString('hex').toUpperCase();
+    public bufferToHex(buf: Buffer): string {
+        this.requireType(buf, "Buffer", "bufferToHex");
+        return '0x' + buf.toString('hex');
     }
 }

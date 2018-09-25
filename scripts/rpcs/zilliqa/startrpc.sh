@@ -15,7 +15,7 @@ testrpc_running() {
 
 start_testrpc() {
 
-  node ./node_modules/kaya/server.js > scripts/TestRPCData/$moduleName.output.log &
+  node ./node_modules/kaya/server.js --accounts scripts/rpcs/account-fixtures.json > scripts/TestRPCData/$moduleName.output.log &
   testrpc_pid=$!
   echo $testrpc_pid > scripts/TestRPCData/$moduleName.process.pid
 }

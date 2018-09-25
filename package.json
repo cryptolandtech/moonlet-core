@@ -7,13 +7,30 @@
   "scripts": {
     "build": "tsc -p . && gulp build",
     "build-lib": "tsc -p .",
-    "test": "scripts/runtests.sh all use-existing",
-    "test-reset": "scripts/runtests.sh all",
-    "test-single": "scripts/runtests.sh single use-existing",
-    "test-single-reset": "scripts/runtests.sh single",
+    "coverage": "scripts/run_coverage.sh all",
+    "coverage-reuse": "scripts/run_coverage.sh all use-existing",
+    "test": "scripts/run_tests.sh all",
+    "test-reuse": "scripts/run_tests.sh all use-existing",
+    "test-single": "scripts/run_tests.sh single",
+    "test-single-reuse": "scripts/run_tests.sh single use-existing",
     "testToHtml": "scripts/testOutputToHtml.sh",
     "start-all-rpcs": "scripts/rpcs/start_all.sh",
     "stop-all-rpcs": "scripts/rpcs/stop_all.sh"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "include": "src",
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "all": true
   },
   "repository": {
     "type": "git",
@@ -67,7 +84,9 @@
     "mocha-loader": "^1.1.3",
     "mocha-webpack": "^1.0.1",
     "mochawesome": "^2.3.1",
+    "nyc": "^13.0.1",
     "safe-buffer": "^5.1.2",
+    "source-map-support": "^0.5.9",
     "ts-mocha": "^1.3.0",
     "typescript": "^2.8.3",
     "webpack": "^3.11.0",

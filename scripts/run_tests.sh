@@ -4,9 +4,9 @@ echo ""
 echo "--------------------------------------------------------------------"
 
 if [[ "$1" = "all" ]]; then
-  echo " Running all tests in test/ folder:"
+  echo " Running all tests in \"test\" folder:"
 else
-  echo " Running tests in file $3"
+  echo " Running tests in file \"$3\""
 fi
 
 echo "--------------------------------------------------------------------"

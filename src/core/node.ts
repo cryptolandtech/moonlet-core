@@ -1,5 +1,6 @@
 import { Network } from "./network";
 import HDKey from "./utils/hdkey";
+import { Blockchain } from "./blockchain";
 
 export abstract class GenericNode {
     public static readonly NETWORKS: Network[] = [];
@@ -13,7 +14,7 @@ export abstract class GenericNode {
     public connected: boolean = false;
     public NETWORKS: Network[] = [];
     public network: Network = this.NETWORKS[0];
-
+    public blockchain: Blockchain;
     public HDRootKey: any = null;
 
     public abstract getBalance(address: string): number;

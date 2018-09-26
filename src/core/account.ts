@@ -23,7 +23,6 @@ export abstract class GenericAccount<
         T extends GenericTransaction = GenericTransaction,
         TO extends ITransactionOptions = ITransactionOptions,
     > {
-    // [key: string]: any;
 
     public static getImplementedClassName(name: string) {
         name = name.toLowerCase();

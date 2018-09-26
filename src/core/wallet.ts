@@ -36,7 +36,7 @@ export default class Wallet {
 
     private mapper: DynamicClassMapper;
 
-    constructor(mnemonics?: string, language?: string) {
+    constructor(mnemonics?: string, language?: string, mnemonicPassword?: string) {
         this.mapper = new DynamicClassMapper();
 
         this.mnemonicslang = language || "EN";
@@ -48,27 +48,22 @@ export default class Wallet {
         }
 
         // setup seed
-        this.seed = Mnemonic.mnemonicToSeed(this.mnemonics, this.mnemonicslang);
+        this.seed = Mnemonic.mnemonicToSeed(this.mnemonics, this.mnemonicslang, mnemonicPassword);
     }
 
-    public initHdRoots() {
-
-        for ( const name in Blockchain ) {
-            // this.hdWallet = HDKey.fromMasterSeed(seed);
-            // this.root = this.hdWallet.derivePath(this.hdPathString);
-        }
+    public getClassMapper(): DynamicClassMapper {
+        return this.mapper;
     }
 
     public getAccounts(blockchain: Blockchain): GenericAccount[] {
-        if (Blockchain[blockchain]) {
-            let Results = this.accounts.get(blockchain);
-            if (!Results) {
-                Results = [];
-                this.accounts.set(blockchain, Results);
-            }
-            return Results;
+        this.requireImplementation(blockchain, "getAccounts");
+
+        let Results = this.accounts.get(blockchain);
+        if (!Results) {
+            Results = [];
+            this.accounts.set(blockchain, Results);
         }
-        throw new Error("Blockchain " + blockchain + " has no initialised accounts.");
+        return Results;
     }
 
     public getAccountsMap(): Map<Blockchain, GenericAccount[]> {
@@ -85,45 +80,40 @@ export default class Wallet {
     }
 
     public getNode(blockchain: Blockchain, networkId?: number) {
+        this.requireImplementation(blockchain, "getNode");
         networkId = networkId || 0;
 
-        // validate that we actually have the requested blockchain type
-        if ( Blockchain[blockchain] ) {
-            let initialisedNodesMap = this.nodes.get( blockchain );
-            if (initialisedNodesMap === undefined) {
-                initialisedNodesMap = new Map();
-                this.nodes.set( blockchain, initialisedNodesMap );
-            }
-
-            let byNetwork = initialisedNodesMap.get( networkId );
-            if (byNetwork === undefined) {
-                // init new node with requested type
-                const NodeClassName = GenericNode.getImplementedClassName( Blockchain[blockchain] );
-                byNetwork = this.mapper.getInstance( NodeClassName ) as GenericNode;
-                initialisedNodesMap.set( networkId, byNetwork );
-
-                const hdkey = HDKey.fromMasterSeed(this.seed);
-                byNetwork.HDRootKey = hdkey.derivePath(byNetwork.getCurrentNetworkPathString());
-
-                // this.root = this.hdWallet.derivePath(this.hdPathString);
-                // byNetwork.setCustomNetworkUrl("test");
-                // byNetwork.resetCustomNetworkUrl();
-
-                // getCurrentNetworkPathString
-            }
-            return byNetwork;
-
-        } else {
-            throw new Error("Node type '" + blockchain + "' not found. Make sure it's indexed in the class store.");
+        let initialisedNodesMap = this.nodes.get( blockchain );
+        if (initialisedNodesMap === undefined) {
+            initialisedNodesMap = new Map();
+            this.nodes.set( blockchain, initialisedNodesMap );
         }
+
+        let byNetwork = initialisedNodesMap.get( networkId );
+        if (byNetwork === undefined) {
+            // init new node with requested type
+            const NodeClassName = GenericNode.getImplementedClassName( Blockchain[blockchain] );
+            byNetwork = this.mapper.getInstance( NodeClassName ) as GenericNode;
+            byNetwork.blockchain = blockchain;
+            initialisedNodesMap.set( networkId, byNetwork );
+
+            const hdkey = HDKey.fromMasterSeed(this.seed);
+            byNetwork.HDRootKey = hdkey.derivePath(byNetwork.getCurrentNetworkPathString());
+
+            // this.root = this.hdWallet.derivePath(this.hdPathString);
+            // byNetwork.setCustomNetworkUrl("test");
+            // byNetwork.resetCustomNetworkUrl();
+
+            // getCurrentNetworkPathString
+        }
+        return byNetwork;
+
     }
 
     public createAccount(blockchain: Blockchain, networkId?: number): GenericAccount {
+        this.requireImplementation(blockchain, "createAccount");
         networkId = networkId || 0;
 
-        if (!Blockchain[blockchain]) {
-            throw new Error("createAccount: type '" + blockchain + "' does not exist.");
-        }
         const existingAccounts = this.getAccounts( blockchain );
 
         const accountNode = this.getNode(blockchain, networkId);
@@ -142,8 +132,18 @@ export default class Wallet {
         return account;
     }
 
+    public requireImplementation( blockchain: Blockchain, method: string ): boolean {
+        if (!Blockchain[blockchain]) {
+            throw new Error(method + ": Blockchain \"" + blockchain + "\" does not have an implementation. Make sure it's indexed in the class store.");
+        }
+        return true;
+    }
+
     public importAccount(account: GenericAccount) {
-        //
+        if (account.type === AccountType.HD) {
+            throw new Error("importAccount: you cannot import HD Wallets.");
+        }
+        this.getAccounts( account.node.blockchain ).push( account ) ;
     }
 
 }

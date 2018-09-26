@@ -22,6 +22,12 @@ Single test run
 npm run test-single test/testfile.ts
 ```
 
+Run tests in specific path
+
+```doc
+npm run test-single "test/1.core/*.ts"
+```
+
 Test Coverage
 
 ```doc

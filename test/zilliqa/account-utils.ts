@@ -13,12 +13,6 @@ describe("Zilliqa", async () => {
 
         const instance = new AccountUtils();
 
-        // micky testnet
-        /*
-        const Wallet0Address = "0x5fc7409b4b41e06e73ba1aa7f3127d93c76bd557";
-        const Wallet0PrivateKey = "0x891e98dbef714f120958405f5cf1fa4f47496d0b287e514c1a7ec02805da3c13";
-        const Wallet0PublicKey = "02ffddf6d3dd4846b7c31ae99098e4613eac0ba310511951ecd0abc6351d4c88a0";
-        */
         const Wallet0Address = "0x7bB3b0E8A59f3f61d9BFf038f4AEB42Cae2eccE8";
         const Wallet0PrivateKey = "0xdb11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3";
         const Wallet0PublicKey = "0x03d8e6450e260f80983bcd4fadb6cbc132ae7feb552dda45f94b48c80b86c6c3be";

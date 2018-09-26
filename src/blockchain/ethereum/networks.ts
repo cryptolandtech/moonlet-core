@@ -34,6 +34,14 @@ const networks: Network[] = [
         url: "https://kovan.infura.io/",
         HDCoinValue: 1, // Test Net
     },
+    {
+        name: "Ganache - TestRPC",
+        chainId: 15,
+        blockchain: Blockchain.ETHEREUM,
+        mainNet: false,
+        url: "http://127.0.0.1:8545/",
+        HDCoinValue: 1, // Test Net
+    },
 ];
 
 export default networks;

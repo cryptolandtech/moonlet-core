@@ -3,8 +3,7 @@ import mocha from "mocha";
 
 import DynamicClassMapper from "../../src/class.store";
 
-import { Wallet, Blockchains } from "../../src/index";
-import { GenericAccount, AccountType } from "../../src/core/account";
+import { Blockchains } from "../../src/index";
 import { GenericNode } from "../../src/core/node";
 
 const mapper = new DynamicClassMapper();
@@ -17,7 +16,7 @@ describe("Core", async () => {
         describe("constructed with no parameters", async () => {
 
             describe("properties", async () => {
-                
+
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
                 const networks = TestNode.NETWORKS;
 
@@ -43,6 +42,21 @@ describe("Core", async () => {
                 });
             });
 
+            describe("getNetwork()", async () => {
+
+                const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                const customUrl = "http://test.com";
+                TestNode.setCustomNetworkUrl(customUrl);
+                const network = TestNode.getNetwork();
+
+                it("should not be a reference of the object in node.NETWORKS[]", async () => {
+                    const originalNetwork = TestNode.NETWORKS[0];
+                    assert.notEqual( JSON.stringify(network), JSON.stringify(originalNetwork), "Networks should not match" );
+                    assert.notEqual( network, originalNetwork, "Networks should not match" );
+                });
+
+            });
+
             describe("getCurrentNetworkPathString()", async () => {
 
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
@@ -58,8 +72,6 @@ describe("Core", async () => {
             describe("setCustomNetworkUrl( http://test.com )", async () => {
 
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
-                const networks = TestNode.NETWORKS;
-
                 const customUrl = "http://test.com";
                 TestNode.setCustomNetworkUrl(customUrl);
                 const network = TestNode.getNetwork();
@@ -77,7 +89,6 @@ describe("Core", async () => {
             describe("resetCustomNetworkUrl()", async () => {
 
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
-                const networks = TestNode.NETWORKS;
                 const initialNetwork = TestNode.getNetwork();
                 const customUrl = "http://test.com";
                 TestNode.setCustomNetworkUrl(customUrl);

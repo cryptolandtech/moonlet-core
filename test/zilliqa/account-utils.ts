@@ -1,10 +1,7 @@
 import { assert } from "chai";
 import mocha from "mocha";
 
-const { Zilliqa } = require('zilliqa-js');
-const zilliqa = new Zilliqa( { nodeUrl: "" } );
-const OfficialUtil = zilliqa.util;
-
+import { util as OfficialUtil } from 'zilliqa-js';
 import { ZilliqaAccountUtils as AccountUtils } from "../../src/blockchain/zilliqa/account-utils";
 
 describe("Zilliqa", async () => {
@@ -207,7 +204,7 @@ describe("Zilliqa", async () => {
             it("should match the return of zilliqa-js.util getAddressFromPublicKey()", async () => {
                 const mine = instance.publicToAddress( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
                 const theirs = OfficialUtil.getAddressFromPublicKey( Wallet0PublicKey.substr(2) );
-                assert.equal( mine.toString("hex") , theirs.toString("hex"), "results do not match");
+                assert.equal( mine.toString("hex") , theirs, "results do not match");
             });
         });
 
@@ -228,16 +225,11 @@ describe("Zilliqa", async () => {
                 assert.isTrue( instance.isValidChecksumAddress( "0x7bB3b0E8A59f3f61d9BFf038f4AEB42Cae2eccE8" ), "Should return true for a valid address string" );
             });
 
-            /*
-
-            Not implemented in upstream yet.
-
             it("should match the return of zilliqa-js.util isValidChecksumAddress()", async () => {
                 const mine = instance.isValidChecksumAddress( Wallet0Address );
                 const theirs = OfficialUtil.isValidChecksumAddress( Wallet0Address );
                 assert.equal( mine, theirs, "results do not match");
             });
-            */
 
         });
 

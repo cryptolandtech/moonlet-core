@@ -2,6 +2,7 @@ import { GenericAccount, IaccountOptions } from "../../core/account";
 import { ZilliqaNode } from "./node";
 import { ZilliqaTransaction, IZilliqaTransactionOptions } from "./transaction";
 import { ZilliqaAccountUtils } from "./account-utils";
+import BN from 'bn.js';
 
 export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaTransactionOptions> {
 
@@ -11,6 +12,14 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         this.tryHdWalletSetup();
     }
 
+    public getBalance(): Promise<BN> {
+        return this.node.getBalance( this.address );
+    }
+
+    public getNonce(): Promise<number> {
+        return this.node.getNonce(this.address);
+    }
+
     public signTransaction(transaction: ZilliqaTransaction): boolean {
         throw new Error("Method not implemented.");
     }
@@ -18,11 +27,11 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         throw new Error("Method not implemented.");
     }
 
-    public buildTransferTransaction(to: string, amount: number, options?: IZilliqaTransactionOptions): ZilliqaTransaction {
+    public buildTransferTransaction(to: string, amount: number, nonce: number, options?: IZilliqaTransactionOptions): ZilliqaTransaction {
         throw new Error("Method not implemented.");
     }
 
-    public buildCancelTransaction(): ZilliqaTransaction {
+    public buildCancelTransaction(nonce: number,  priceInZil?: number): ZilliqaTransaction {
         throw new Error("Method not implemented.");
     }
 

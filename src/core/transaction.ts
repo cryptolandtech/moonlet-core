@@ -12,9 +12,14 @@ export enum TransactionStatus {
 }
 
 export abstract class GenericTransaction<TO extends ITransactionOptions = ITransactionOptions> {
+
+    public static getImplementedClassName(name: string) {
+        name = name.toLowerCase();
+        return name.charAt(0).toUpperCase() + name.slice(1) + "Transaction";
+    }
+
     public from: string;
     public to: string;
-    public amount: number; // switch to BN
     public nonce: number;
     public options: TO;
 
@@ -26,7 +31,6 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
         //
         this.from = from;
         this.to = to;
-        this.amount = amount;
         this.nonce = nonce;
         this.options = options;
     }

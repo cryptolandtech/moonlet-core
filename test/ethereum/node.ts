@@ -8,6 +8,9 @@ import { GenericNode } from "../../src/core/node";
 
 const mapper = new DynamicClassMapper();
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
+import BN from 'bn.js';
+
+const ethereumWallet0Address = "0x9d9216e0a29468bE1eCaCc351ce3887be8a26222";
 
 describe("Core", async () => {
 
@@ -105,6 +108,30 @@ describe("Core", async () => {
 
             });
 
+            describe("getBalance( address )", async () => {
+
+                const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                TestNode.init( TestNode.NETWORKS[0] );
+
+                it("should return a Promise", async () => {
+                    const nonce = TestNode.getBalance( ethereumWallet0Address );
+                    assert.equal( nonce.constructor.name, "Promise", "Returned object should be a Promise" );
+                });
+
+                it("should be a BN once the Promise resolves", async () => {
+                    let balance: BN;
+
+                    try {
+                        // binance_4
+                        balance = await TestNode.getBalance( "0x0681d8db095565fe8a346fa0277bffde9c0edbbfababababa" );
+                    } catch (e) {
+                        console.log( e );
+                    }
+                    console.log(balance.toString());
+                    assert.equal( balance.constructor.name, "BN", "Returned parameter should be a number" );
+                });
+
+            });
         });
     });
 });

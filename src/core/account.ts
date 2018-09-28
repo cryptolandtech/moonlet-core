@@ -2,6 +2,7 @@ import { GenericTransaction, ITransactionOptions } from './transaction';
 import { GenericNode } from "./node";
 import HDKey from './utils/hdkey';
 import { GenericAccountUtils } from './account-utils';
+import BN from 'bn.js';
 
 export enum AccountType {
     HD = "HD",
@@ -81,8 +82,11 @@ export abstract class GenericAccount<
         return this.transactions;
     }
 
-    public abstract buildTransferTransaction(to: string, amount: number, options?: TO): T;
-    public abstract buildCancelTransaction(): T;
+    public abstract getBalance(): Promise<BN>;
+    public abstract getNonce(): Promise<number>;
+
+    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, options?: TO): T;
+    public abstract buildCancelTransaction(nonce: number, priceInGWei: number): T;
     public abstract buildTransaction(): T;
 
     public abstract signTransaction(transaction: T): boolean;

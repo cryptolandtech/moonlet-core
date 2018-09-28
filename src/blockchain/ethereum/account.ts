@@ -2,13 +2,27 @@ import { GenericAccount, IaccountOptions, AccountType } from "../../core/account
 import { EthereumNode } from "./node";
 import { EthereumTransaction, IEthereumTransactionOptions } from "./transaction";
 import { EthereumAccountUtils } from "./account-utils";
+import BN from 'bn.js';
 
 export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthereumTransactionOptions> {
+    public defaultGasPriceInGwei: number = 30;
 
     constructor(accountOptions: IaccountOptions) {
         super(accountOptions);
         this.utils = new EthereumAccountUtils();
         this.tryHdWalletSetup();
+    }
+
+    public getBalance(): Promise<BN> {
+        return this.node.getBalance( this.address );
+    }
+
+    public getNonce(): Promise<number> {
+        return this.node.getNonce(this.address);
+    }
+
+    public GWeiToWei(input: number): number {
+        return input * 10 ** 9; // 10^9
     }
 
     public signTransaction(transaction: EthereumTransaction): boolean {
@@ -18,12 +32,24 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
         throw new Error("Method not implemented.");
     }
 
-    public buildTransferTransaction(to: string, amount: number, options?: IEthereumTransactionOptions): EthereumTransaction {
+    public buildTransferTransaction(to: string, amount: number, nonce: number, options?: IEthereumTransactionOptions): EthereumTransaction {
         throw new Error("Method not implemented.");
     }
 
-    public buildCancelTransaction(): EthereumTransaction {
-        throw new Error("Method not implemented.");
+    public buildCancelTransaction(nonce: number, priceInGWei?: number): EthereumTransaction {
+        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
+
+        return new EthereumTransaction(
+            this.address,               // from me
+            this.address,               // to me
+            0,                          // value zero
+            nonce,                      // account nonce
+            {
+                gasLimit: 21000,                            // default transfer gas limit
+                gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
+                chainId: this.node.network.chainId,         // current network chain id
+            },
+        );
     }
 
     public buildTransaction(): EthereumTransaction {

@@ -38,7 +38,7 @@ export class EthereumNode extends GenericNode {
             ]) as Promise<any>;
 
             return result.then((res) => {
-                const num: BN = new BNReq( res.data.result );
+                const num = new BN( res.data.result );
                 return resolve( num.toNumber() );
             }).catch((error) => {
                 reject(error);

@@ -7,8 +7,6 @@ const laksaUtil = require('laksa-core-crypto');
 
 describe("Zilliqa address checksums", async () => {
 
-    // once neeboo updates repo, enable this.
-    /*
     it("should match 3rd party laksa-core-crypto implementation", async () => {
         for (let i = 0; i < checksummedStore.length; i++) {
             if (checksummedStore[i]) {
@@ -22,5 +20,5 @@ describe("Zilliqa address checksums", async () => {
             }
         }
     });
-    */
+
 });

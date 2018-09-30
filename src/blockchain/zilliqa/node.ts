@@ -1,7 +1,7 @@
 import { GenericNode } from "../../core/node";
 import { Network } from "../../core/network";
 import networks from "./networks";
-import BN from 'bn.js';
+import { BigNumber } from 'bignumber.js';
 
 export class ZilliqaNode extends GenericNode {
 
@@ -13,7 +13,7 @@ export class ZilliqaNode extends GenericNode {
         this.init(network);
     }
 
-    public getBalance(address: string): Promise<BN> {
+    public getBalance(address: string): Promise<BigNumber> {
         throw new Error("Method not implemented.");
     }
 

@@ -1,4 +1,5 @@
 import { GenericAccountUtils } from "../../core/account-utils";
+import { BigNumber } from "bignumber.js";
 const EthereumUtil = require('ethereumjs-util');
 
 export class EthereumAccountUtils extends GenericAccountUtils {
@@ -59,5 +60,12 @@ export class EthereumAccountUtils extends GenericAccountUtils {
     public bufferToHex(buf: Buffer): string {
         this.requireType(buf, "Buffer", "bufferToHex");
         return '0x' + buf.toString('hex');
+    }
+
+    public balanceToStd( input: number | string | BigNumber): string {
+        if ( typeof input === "number" || typeof input === "string" ) {
+            return new BigNumber( input ).div(10 ** 18).toString();
+        }
+        return input.div(10 ** 18).toString();
     }
 }

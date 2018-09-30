@@ -1,8 +1,7 @@
 import { GenericNode } from "../../core/node";
 import { Network } from "../../core/network";
 import networks from "./networks";
-import BN from 'bn.js';
-// const BN = require('bn.js');
+import { BigNumber } from 'bignumber.js';
 
 export class EthereumNode extends GenericNode {
 
@@ -14,7 +13,7 @@ export class EthereumNode extends GenericNode {
         this.init(network);
     }
 
-    public getBalance(caddress: string): Promise<BN> {
+    public getBalance(caddress: string): Promise<BigNumber> {
         return new Promise((resolve: any, reject: any) => {
             const result = this.call("eth_getBalance", [
                 caddress,
@@ -22,7 +21,7 @@ export class EthereumNode extends GenericNode {
             ]) as Promise<any>;
 
             return result.then((res) => {
-                return resolve( new BN( res.data.result ) );
+                return resolve( new BigNumber( res.data.result ) );
             }).catch((error) => {
                 reject(error);
             });
@@ -38,7 +37,7 @@ export class EthereumNode extends GenericNode {
             ]) as Promise<any>;
 
             return result.then((res) => {
-                const num = new BN( res.data.result );
+                const num = new BigNumber( res.data.result );
                 return resolve( num.toNumber() );
             }).catch((error) => {
                 reject(error);

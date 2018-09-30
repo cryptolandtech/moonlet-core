@@ -1,5 +1,9 @@
 import { GenericAccountUtils } from "../../core/account-utils";
-import { util as ZilliqaUtil } from 'zilliqa-js';
+import { BigNumber } from "bignumber.js";
+// import { util as ZilliqaUtil } from 'zilliqa-js';
+const ZilliqaUtil = require('zilliqa-js').util;
+// const ZilliqaUtil = require('zilliqa.js');
+// const ZilliqaUtil = Zilliqa.utilszz;
 
 export class ZilliqaAccountUtils extends GenericAccountUtils {
 
@@ -74,5 +78,12 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
     public bufferToHex(buf: Buffer): string {
         this.requireType(buf, "Buffer", "bufferToHex");
         return '0x' + buf.toString('hex');
+    }
+
+    public balanceToStd( input: number | string | BigNumber): string {
+        if ( typeof input === "number" || typeof input === "string" ) {
+            return new BigNumber( input ).div(10 ** 2).toString();
+        }
+        return input.div(10 ** 2).toString();
     }
 }

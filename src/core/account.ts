@@ -2,7 +2,7 @@ import { GenericTransaction, ITransactionOptions } from './transaction';
 import { GenericNode } from "./node";
 import HDKey from './utils/hdkey';
 import { GenericAccountUtils } from './account-utils';
-import BN from 'bn.js';
+import { BigNumber } from "bignumber.js";
 
 export enum AccountType {
     HD = "HD",
@@ -82,7 +82,7 @@ export abstract class GenericAccount<
         return this.transactions;
     }
 
-    public abstract getBalance(): Promise<BN>;
+    public abstract getBalance(): Promise<BigNumber>;
     public abstract getNonce(): Promise<number>;
 
     public abstract buildTransferTransaction(to: string, amount: number, nonce: number, options?: TO): T;

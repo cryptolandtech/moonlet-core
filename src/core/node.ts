@@ -1,7 +1,5 @@
 import { Network } from "./network";
-import HDKey from "./utils/hdkey";
-import { Blockchain } from "./blockchain";
-import BN from 'bn.js';
+import { BigNumber } from "bignumber.js";
 import axios from 'axios';
 
 export abstract class GenericNode {
@@ -16,7 +14,7 @@ export abstract class GenericNode {
     public connected: boolean = false;
     public NETWORKS: Network[] = [];
     public network: Network = this.NETWORKS[0];
-    public blockchain: Blockchain;
+    public blockchain: any;
     public HDRootKey: any = null;
     public callId: number = 0;
 
@@ -26,7 +24,7 @@ export abstract class GenericNode {
         this.network = Object.assign({}, network);
     }
 
-    public abstract getBalance(address: string): Promise<BN>;
+    public abstract getBalance(address: string): Promise<BigNumber>;
     public abstract getNonce(address: string): Promise<number>;
 
     public abstract send(rawTransaction: Buffer): Promise<string>;

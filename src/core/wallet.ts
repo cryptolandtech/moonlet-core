@@ -15,10 +15,12 @@ import { Network } from "./network";
 
 import DynamicClassMapper from "../class.store";
 
+/*
 interface NodeByNetworkId {
     key: string;
     value: GenericNode;
 }
+*/
 
 export default class Wallet {
 

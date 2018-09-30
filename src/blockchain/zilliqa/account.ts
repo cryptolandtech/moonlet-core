@@ -1,8 +1,8 @@
 import { GenericAccount, IaccountOptions } from "../../core/account";
-import { ZilliqaNode } from "./node";
+// import { ZilliqaNode } from "./node";
 import { ZilliqaTransaction, IZilliqaTransactionOptions } from "./transaction";
 import { ZilliqaAccountUtils } from "./account-utils";
-import BN from 'bn.js';
+import { BigNumber } from "bignumber.js";
 
 export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaTransactionOptions> {
 
@@ -12,7 +12,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         this.tryHdWalletSetup();
     }
 
-    public getBalance(): Promise<BN> {
+    public getBalance(): Promise<BigNumber> {
         return this.node.getBalance( this.address );
     }
 

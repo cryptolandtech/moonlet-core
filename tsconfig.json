@@ -1,27 +1,36 @@
 {
     "compilerOptions": {
+        "esModuleInterop": true,
         "baseUrl": "./",
         "outDir": "./lib/",
         "sourceMap": true,
         "strict": true,
-        "strictNullChecks": false,
-        "module": "commonjs",
+        // "strictNullChecks": false,
+        "resolveJsonModule": true,
         "moduleResolution": "node",
-        "target": "es6",
         "experimentalDecorators": true,
-        "lib": ["es6", "dom"],
-        // "allowJs": true,
+        "lib": ["es5", "es2015", "es2016", "es2017", "dom"],
         "allowSyntheticDefaultImports": true,
         "types": [
             // add node as an option
             "node"
-         ]
+        ],
+        "module": "commonjs",
+        "target": "es6",
+        // "allowJs": true,
+        // "module": "es2015",
+        "allowJs": true,
+        // "target": "es2015"
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": false,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "noUnusedLocals": true
     },
-    "typeRoots": [
-        "./node_modules/@types/"
-    ],
     "include": [
         "./src/**/**/**/*"
+        // ,"node_modules/zilliqa-js/typings/**/*" 
     ],
     "exclude": [
         "node_modules",

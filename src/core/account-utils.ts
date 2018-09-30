@@ -1,3 +1,5 @@
+import { BigNumber } from "bignumber.js";
+
 export abstract class GenericAccountUtils {
 
     public requireType( target: any, expected: string, method: string ): boolean {
@@ -30,4 +32,7 @@ export abstract class GenericAccountUtils {
     public abstract addressBufferToChecksum( key: Buffer ): string;
 
     public abstract bufferToHex( buf: Buffer): string;
+
+    public abstract balanceToStd( input: number | string | BigNumber): string;
+
 }

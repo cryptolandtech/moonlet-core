@@ -6,18 +6,22 @@ const uglify = require('gulp-uglify-es').default;
 const gutil = require('gulp-util');
 const sourcemaps = require('gulp-sourcemaps');
 const babelify = require('babelify');
+const es2015presets = require('babel-preset-es2015');
 
 gulp.task('build', function () {
     // set up the browserify instance on a task basis
-    const b = browserify({
+    
+    const c = browserify({
         entries: './lib/index.js',
         debug: true,
         transform: [babelify.configure({
-            presets: ['es2015']
+            extensions: ['.ts', '.js'], 
+            presets: [ es2015presets ]
         })]
     });
+   
 
-    return b.bundle()
+    return c.bundle()
         .pipe(source('wwscore.min.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))

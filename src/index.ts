@@ -1,6 +1,6 @@
-import Wallet from "../src/core/wallet";
-import { Blockchain as Blockchains } from "../src/core/blockchain";
-import { AccountType } from "../src/core/account";
+import Wallet from "./core/wallet";
+import { Blockchain as Blockchains } from "./core/blockchain";
+import { AccountType } from "./core/account";
 import MnemonicUtils from "./core/utils/mnemonic";
 
 export {
@@ -9,3 +9,13 @@ export {
     AccountType,
     MnemonicUtils,
 };
+
+declare global {
+    interface Window {
+        Wallet: typeof Wallet;
+    }
+}
+
+if (typeof window !== 'undefined' && typeof window.Wallet === 'undefined') {
+    window.Wallet = Wallet;
+}

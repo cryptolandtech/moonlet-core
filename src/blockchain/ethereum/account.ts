@@ -1,8 +1,8 @@
-import { GenericAccount, IaccountOptions, AccountType } from "../../core/account";
-import { EthereumNode } from "./node";
+import { GenericAccount, IaccountOptions } from "../../core/account";
+// import { EthereumNode } from "./node";
 import { EthereumTransaction, IEthereumTransactionOptions } from "./transaction";
 import { EthereumAccountUtils } from "./account-utils";
-import BN from 'bn.js';
+import { BigNumber } from "bignumber.js";
 
 export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthereumTransactionOptions> {
     public defaultGasPriceInGwei: number = 30;
@@ -13,7 +13,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
         this.tryHdWalletSetup();
     }
 
-    public getBalance(): Promise<BN> {
+    public getBalance(): Promise<BigNumber> {
         return this.node.getBalance( this.address );
     }
 

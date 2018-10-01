@@ -14,7 +14,7 @@ testrpc_running() {
 }
 
 start_testrpc() {
-  node_modules/ganache-cli/build/cli.node.js -a 10 -d -n -i 15 -p $testrpc_port -m $seedWords > scripts/TestRPCData/$moduleName.output.log &
+  ganache-cli -a 10 -d -n -i 15 -p $testrpc_port -m $seedWords > scripts/TestRPCData/$moduleName.output.log &
   testrpc_pid=$!
   echo $testrpc_pid > scripts/TestRPCData/$moduleName.process.pid
 }

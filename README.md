@@ -1,5 +1,9 @@
 # Moonlet - Core Package
 
+## Usage
+
+See [moonlet-core-usage repository](https://github.com/cryptolandtech/moonlet-core-usage)
+
 ## Setup
 
 `npm install`

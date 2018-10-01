@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ "$1" == "start" ]]; then
-    sh start_all.sh
+    sh rpcs/start_all.sh
 else
-    sh stop_all.sh
+    sh rpcs/stop_all.sh
 fi

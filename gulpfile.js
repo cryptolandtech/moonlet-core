@@ -12,7 +12,7 @@ gulp.task('build', function () {
     // set up the browserify instance on a task basis
     
     const c = browserify({
-        entries: './lib/index.js',
+        entries: './dist/lib/index.js',
         debug: true,
         transform: [babelify.configure({
             extensions: ['.ts', '.js'], 
@@ -22,13 +22,13 @@ gulp.task('build', function () {
    
 
     return c.bundle()
-        .pipe(source('wwscore.min.js'))
+        .pipe(source('../bundle/wwscore.min.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
         // Add transformation tasks to the pipeline here
         .pipe(uglify())
         .on('error', gutil.log)
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./dist/'));
+        .pipe(gulp.dest('./dist/bundle'));
 });
 

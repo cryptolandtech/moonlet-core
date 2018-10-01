@@ -2,13 +2,13 @@
   "name": "wws-core.js",
   "version": "0.0.1",
   "description": "Wallet Suite - Core Logic Package",
-  "main": "wws-core.js",
-  "types": "types/index.d.ts",
+  "main": "dist/lib/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "gulp": "gulp build",
-    "build": "npm run build-lib && npm run build-dec && npm run gulp",
-    "build-lib": "tsc -p .",
-    "build-dec": "tsc --declaration true --emitDeclarationOnly --declarationDir types",
+    "build": "npm run build:lib && npm run build:dec && npm run build:gulp",
+    "build:gulp": "gulp build",
+    "build:lib": "tsc -p .",
+    "build:dec": "tsc --declaration true --emitDeclarationOnly --declarationDir dist/types",
     "coverage": "scripts/run_coverage.sh all",
     "coverage-reuse": "scripts/run_coverage.sh all use-existing",
     "test": "scripts/run_tests.sh all",
@@ -18,6 +18,9 @@
     "testToHtml": "scripts/testOutputToHtml.sh",
     "start-all-rpcs": "scripts/rpcs/start_all.sh",
     "stop-all-rpcs": "scripts/rpcs/stop_all.sh"
+  },
+  "bin": {
+    "rpcs": "./scripts/rpc.sh"
   },
   "nyc": {
     "extension": [

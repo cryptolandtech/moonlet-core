@@ -1,26 +1,9 @@
 import Mnemonic from "./utils/mnemonic";
 import HDKey from "./utils/hdkey";
-
 import { Blockchain } from "./blockchain";
 import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
-
-/*
-import { EthereumAccount } from "../ethereum/account";
-import { EthereumNode } from "../ethereum/node";
-import { ZilliqaAccount } from "../zilliqa/account";
-import { ZilliqaNode } from "../zilliqa/node";
-import { Network } from "./network";
-*/
-
 import DynamicClassMapper from "../class.store";
-
-/*
-interface NodeByNetworkId {
-    key: string;
-    value: GenericNode;
-}
-*/
 
 export default class Wallet {
 

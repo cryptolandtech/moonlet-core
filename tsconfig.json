@@ -2,7 +2,7 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "baseUrl": "./",
-        "outDir": "./lib/",
+        "outDir": "./dist/lib/",
         "sourceMap": true,
         "strict": true,
         "resolveJsonModule": true,
@@ -16,10 +16,6 @@
         ],
         "module": "commonjs",
         "target": "es6",
-        // "allowJs": true,
-        // "module": "es2015",
-        // "allowJs": true,
-        // "target": "es2015"
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitAny": false,
@@ -29,7 +25,6 @@
     },
     "include": [
         "./src/**/**/**/*"
-        // ,"node_modules/zilliqa-js/typings/**/*" 
     ],
     "exclude": [
         "node_modules",

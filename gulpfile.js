@@ -22,7 +22,7 @@ gulp.task('build', function () {
    
 
     return c.bundle()
-        .pipe(source('../bundle/wwscore.min.js'))
+        .pipe(source('../bundle/moonlet-core.min.js'))
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
         // Add transformation tasks to the pipeline here

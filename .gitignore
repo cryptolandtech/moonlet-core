@@ -8,3 +8,5 @@ mochawesome-report/
 \.nyc_output
 scripts/TestRPCData/*
 !scripts/TestRPCData/.gitkeep 
+tmp/
+data/

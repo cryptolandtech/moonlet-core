@@ -18,9 +18,9 @@ export default class Wallet {
     getAccountsMap(): Map<Blockchain, GenericAccount[]>;
     getBlockchain(blockchain: Blockchain): {
         getNode: () => GenericNode;
-        getAccounts: () => GenericAccount<import("src/core/transaction").GenericTransaction<import("src/core/transaction").ITransactionOptions>, import("src/core/transaction").ITransactionOptions>[];
-        createAccount: () => GenericAccount<import("src/core/transaction").GenericTransaction<import("src/core/transaction").ITransactionOptions>, import("src/core/transaction").ITransactionOptions>;
-        importAccount: (account: GenericAccount<import("src/core/transaction").GenericTransaction<import("src/core/transaction").ITransactionOptions>, import("src/core/transaction").ITransactionOptions>) => void;
+        getAccounts: () => GenericAccount<import("./transaction").GenericTransaction<import("./transaction").ITransactionOptions>, import("./transaction").ITransactionOptions>[];
+        createAccount: () => GenericAccount<import("./transaction").GenericTransaction<import("./transaction").ITransactionOptions>, import("./transaction").ITransactionOptions>;
+        importAccount: (account: GenericAccount<import("./transaction").GenericTransaction<import("./transaction").ITransactionOptions>, import("./transaction").ITransactionOptions>) => void;
     };
     getNode(blockchain: Blockchain, networkId?: number): GenericNode;
     createAccount(blockchain: Blockchain, networkId?: number): GenericAccount;

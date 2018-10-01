@@ -1,14 +1,14 @@
 {
-  "name": "wws-core.js",
+  "name": "moonlet-core",
   "version": "0.0.1",
-  "description": "Wallet Suite - Core Logic Package",
+  "description": "Moonlet - Core Package",
   "main": "dist/lib/index.js",
   "types": "dist/types/index.d.ts",
   "scripts": {
-    "build": "npm run build:lib && npm run build:dec && npm run build:gulp",
+    "build": "npm run build:lib && npm run build:dec",
     "build:gulp": "gulp build",
     "build:lib": "tsc -p .",
-    "build:dec": "tsc --declaration true --emitDeclarationOnly --declarationDir dist/types",
+    "build:dec": "scripts/declarations.sh",
     "coverage": "scripts/run_coverage.sh all",
     "coverage-reuse": "scripts/run_coverage.sh all use-existing",
     "test": "scripts/run_tests.sh all",
@@ -39,19 +39,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cryptolandtech/wws-core"
+    "url": "git+https://github.com/cryptolandtech/moonlet-core"
   },
   "keywords": [
-    "wws-core",
+    "moonlet-core",
     "crypto",
     "wallet"
   ],
   "author": "Micky Socaci <micky@nowlive.ro>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cryptolandtech/wws-core/issues"
+    "url": "https://github.com/cryptolandtech/moonlet-core/issues"
   },
-  "homepage": "https://github.com/cryptolandtech/wws-core#readme",
+  "homepage": "https://github.com/cryptolandtech/moonlet-core#readme",
   "dependencies": {
     "axios": "^0.16.2",
     "bignumber.js": "^7.2.1",

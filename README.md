@@ -1,4 +1,4 @@
-# Wallet Suite - Core Logic Package
+# Moonlet - Core Package
 
 ## Setup
 

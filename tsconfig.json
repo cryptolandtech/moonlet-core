@@ -19,14 +19,14 @@
         "target": "es6",
         // "allowJs": true,
         // "module": "es2015",
-        "allowJs": true,
+        // "allowJs": true,
         // "target": "es2015"
         "noImplicitReturns": true,
         "noImplicitThis": true,
         "noImplicitAny": false,
         "strictNullChecks": true,
         "suppressImplicitAnyIndexErrors": true,
-        "noUnusedLocals": true
+        "noUnusedLocals": true,
     },
     "include": [
         "./src/**/**/**/*"

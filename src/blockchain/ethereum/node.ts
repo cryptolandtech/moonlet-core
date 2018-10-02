@@ -46,7 +46,7 @@ export class EthereumNode extends GenericNode {
     }
 
     public send(rawTransaction: Buffer): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 
 }

@@ -40,6 +40,6 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
     }
 
     public send(transaction: ZilliqaTransaction): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 }

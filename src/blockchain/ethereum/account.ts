@@ -68,6 +68,6 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
     }
 
     public send(transaction: EthereumTransaction): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 }

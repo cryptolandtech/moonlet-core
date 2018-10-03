@@ -14,15 +14,15 @@ export class ZilliqaNode extends GenericNode {
     }
 
     public getBalance(address: string): Promise<BigNumber> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 
     public getNonce(caddress: string): Promise<number> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 
     public send(rawTransaction: Buffer): Promise<string> {
-        throw new Error("Method not implemented.");
+        return Promise.reject("Method not implemented.");
     }
 
 }

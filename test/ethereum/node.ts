@@ -109,10 +109,175 @@ describe("Core", async () => {
 
             });
 
+            describe("call( method: string, params: any, dec?: string  )", async () => {
+
+                describe("valid call", async () => {
+
+                    const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                    TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+
+                    it("should return a Promise", async () => {
+                        const test = TestNode.rpcCall(
+                            "eth_getBalance", [
+                                ethereumWallet0Address,
+                                'latest',
+                            ], "BigNumber",
+                        );
+                        assert.equal( test.constructor.name, "Promise", "Returned object should be a Promise" );
+                    });
+
+                    it("should be string once the Promise resolves and decoder is not specified", async () => {
+                        const test = await TestNode.rpcCall(
+                            "eth_getBalance", [
+                                ethereumWallet0Address,
+                                'latest',
+                            ], "",
+                        );
+                        assert.equal( typeof test, "string", "Returned parameter should be a string" );
+                    });
+
+                });
+
+                describe("invalid call ( to testrpc / ganache )", async () => {
+
+                    const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                    TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+
+                    it("error can be caught using a try/catch statement", async () => {
+                        try {
+                            const test = await TestNode.rpcCall(
+                                "eth_badMethod", [
+                                    ethereumWallet0Address,
+                                    'latest',
+                                ], "",
+                            );
+                        } catch (e) {
+                            assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
+                            assert.equal(
+                                e.message,
+                                "Method eth_badMethod not supported.",
+                                "Invalid message",
+                            );
+                        }
+                    });
+
+                    it("error can be caught using a then().catch() statement", async () => {
+                        const test = TestNode.rpcCall(
+                            "eth_badMethod", [
+                                ethereumWallet0Address,
+                                'latest',
+                            ], "",
+                        ).then( ( result ) => {
+                            // this never gets called
+                            assert.isTrue( false, "Promise.resolve should not be called in this case!" );
+                        }).catch( e => {
+                            assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
+                            assert.equal(
+                                e.message,
+                                "Method eth_badMethod not supported.",
+                                "Invalid message",
+                            );
+                        });
+                    });
+                });
+
+                describe("invalid call ( to geth node / infura proxy )", async () => {
+
+                    const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                    TestNode.init( TestNode.NETWORKS[ 0 ] );
+
+                    it("error can be caught using a try/catch statement", async () => {
+
+                        try {
+                            const test = await TestNode.rpcCall(
+                                "eth_badMethod", [
+                                    ethereumWallet0Address,
+                                    'latest',
+                                ], "",
+                            );
+                        } catch (e) {
+                            assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
+                            assert.equal(
+                                e.message,
+                                "Error: Request failed with status code 405",
+                                "Invalid message",
+                            );
+                        }
+
+                    });
+
+                    it("error can be caught using a then().catch() statement", async () => {
+                        const test = TestNode.rpcCall(
+                            "eth_badMethod", [
+                                ethereumWallet0Address,
+                                'latest',
+                            ], "",
+                        ).then( ( result ) => {
+                            // this never gets called
+                            assert.isTrue( false, "Promise.resolve should not be called in this case!" );
+                        }).catch( e => {
+                            assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
+                            assert.equal(
+                                e.message,
+                                "Error: Request failed with status code 405",
+                                "Invalid message",
+                            );
+                        });
+                    });
+                });
+
+            });
+
+            describe("resultDecoder()", async () => {
+
+                const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+
+                it("should return a string if type not specified", async () => {
+                    const test = TestNode.resultDecoder( ethereumWallet0Address );
+                    assert.equal( typeof test, "string", "Should have returned a string" );
+                });
+
+                it("should return a BigNumber if requested", async () => {
+                    const test: BigNumber = TestNode.resultDecoder( "0x0A", "BigNumber" );
+                    assert.equal( test.constructor.name, "BigNumber", "Returned parameter should be a BigNumber" );
+                    assert.equal( test.toNumber(), 10, "Should match" );
+                });
+
+                it("should return a number if requested", async () => {
+                    const test: number = TestNode.resultDecoder( "0x0A", "number" );
+                    assert.equal( typeof test, "number", "Returned parameter should be a number" );
+                    assert.equal( test, 10, "Should match" );
+                });
+
+                it("should return a Buffer if requested", async () => {
+                    const hexString = "0x0102030405";
+                    const test: Buffer = TestNode.resultDecoder( hexString , "Buffer" );
+                    assert.isTrue( Buffer.isBuffer(test), "Returned parameter should be a Buffer" );
+                    assert.equal( test.toString(), hexString, "Should match" );
+                });
+            });
+
+            describe("getNonce( address )", async () => {
+
+                const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
+                TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+
+                it("should return a Promise", async () => {
+                    const nonce = TestNode.getNonce( ethereumWallet0Address );
+                    assert.equal( nonce.constructor.name, "Promise", "Returned object should be a Promise" );
+                });
+
+                it("should be a number once the Promise resolves", async () => {
+                    const nonce: number = await TestNode.getNonce( ethereumWallet0Address );
+                    assert.equal( typeof nonce, "number", "Returned parameter should be a number" );
+                });
+
+            });
+
             describe("getBalance( address )", async () => {
 
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
-                TestNode.init( TestNode.NETWORKS[0] );
+                TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
 
                 it("should return a Promise", async () => {
                     const nonce = TestNode.getBalance( ethereumWallet0Address );
@@ -120,23 +285,13 @@ describe("Core", async () => {
                 });
 
                 it("should be a BigNumber once the Promise resolves", async () => {
-                    let balance: BigNumber;
+                    const balance = await TestNode.getBalance( ethereumWallet0Address );
+                    assert.equal( balance.constructor.name, "BigNumber", "Returned parameter should be a BigNumber" );
 
-                    try {
-                        // binance_4
-                        balance = await TestNode.getBalance( "0x0681d8db095565fe8a346fa0277bffde9c0edbbf" );
-                    } catch (e) {
-                        console.log( e );
-                    }
-
-                    const accutils = new EthereumAccountUtils();
-                    const b = accutils.balanceToStd( balance );
-                    console.log(b);
-
-                    assert.equal( balance.constructor.name, "BigNumber", "Returned parameter should be a number" );
                 });
 
             });
+
         });
     });
 });

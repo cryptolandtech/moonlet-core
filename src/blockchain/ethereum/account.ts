@@ -1,5 +1,4 @@
 import { GenericAccount, IaccountOptions } from "../../core/account";
-// import { EthereumNode } from "./node";
 import { EthereumTransaction, IEthereumTransactionOptions } from "./transaction";
 import { EthereumAccountUtils } from "./account-utils";
 import { BigNumber } from "bignumber.js";

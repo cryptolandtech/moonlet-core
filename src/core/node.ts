@@ -51,22 +51,21 @@ export abstract class GenericNode {
         }
     }
 
-    public call( method: string, params: any, cb?: any ): Promise<any> | void {
+    public rpcCall( method: string, params: any, dec?: string ): Promise<any> {
 
         const callData = this.buildCall(method, params);
         const callOptions = {};
 
-        try {
-            const action = axios.post( this.network.url, callData, callOptions );
-            if (cb) {
-                action.then(data => cb(null, data)).catch(error => cb(error));
+        const action = axios.post( this.network.url, callData, callOptions );
+        return action.then( (data) => {
+            if ( data.data.result ) {
+                return this.resultDecoder( data.data.result, dec );
             } else {
-                return action;
+                return Promise.reject( data.data.error.message );
             }
-        } catch ( error ) {
-
-            throw new Error("call:" + error);
-        }
+        }).catch(error => {
+            return Promise.reject( new Error(error) );
+        });
     }
 
     public buildCall( cmethod: string, cparams: any ): any {
@@ -76,6 +75,26 @@ export abstract class GenericNode {
             params: cparams,
             id: ++this.callId,
         };
+    }
+
+    public resultDecoder( data: any, type?: string ): any {
+        if (type === "raw" || type === undefined || type === "" || type === null ) {
+            return data;
+
+        } else if (type === "BigNumber" ) {
+            return new BigNumber( data );
+
+        } else if (type === "string" ) {
+            return data.toString("hex");
+
+        } else if (type === "number" ) {
+            // set radix to js default
+            return parseInt(data, 16);
+
+        } else if (type === "Buffer" ) {
+            return Buffer.from(data);
+
+        }
     }
 
 }

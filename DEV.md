@@ -16,3 +16,22 @@ wordlists: {
 }
 ```
 Note: using externally provided wordlists is not supported at the moment and should be PR'ed into upstream BIP39 package.
+
+
+```typescript
+try {
+    const nonce = await TestNode.getNonce( undefined );
+    assert.equal( nonce.constructor.name, "Error", "Should have returned an Error object" );
+} catch (e) {
+    console.log("catch:", e);
+}
+
+// OR
+
+const test = TestNode.getNonce( undefined );
+test.then( ( res ) => {
+    console.log("res:", res);
+}).catch( err => {
+    console.log("2catch:", err);
+});
+```

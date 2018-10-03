@@ -14,35 +14,17 @@ export class EthereumNode extends GenericNode {
     }
 
     public getBalance(caddress: string): Promise<BigNumber> {
-        return new Promise((resolve: any, reject: any) => {
-            const result = this.call("eth_getBalance", [
-                caddress,
-                'latest',
-            ]) as Promise<any>;
-
-            return result.then((res) => {
-                return resolve( new BigNumber( res.data.result ) );
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+        return this.rpcCall("eth_getBalance", [
+            caddress,
+            'latest',
+        ], "BigNumber") as Promise<any>;
     }
 
-    public getNonce(caddress: string): Promise<number> {
-
-        return new Promise((resolve: any, reject: any) => {
-            const result = this.call("eth_getTransactionCount", [
-                caddress,
-                'pending',
-            ]) as Promise<any>;
-
-            return result.then((res) => {
-                const num = new BigNumber( res.data.result );
-                return resolve( num.toNumber() );
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+    public async getNonce(caddress: string): Promise<number> {
+        return this.rpcCall("eth_getTransactionCount", [
+            caddress,
+            'pending',
+        ], "number") as Promise<any>;
     }
 
     public send(rawTransaction: Buffer): Promise<string> {

@@ -20,7 +20,7 @@ export class EthereumNode extends GenericNode {
         ], "BigNumber") as Promise<any>;
     }
 
-    public async getNonce(caddress: string): Promise<number> {
+    public getNonce(caddress: string): Promise<number> {
         return this.rpcCall("eth_getTransactionCount", [
             caddress,
             'pending',

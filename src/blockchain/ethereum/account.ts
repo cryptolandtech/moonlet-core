@@ -31,8 +31,20 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
         throw new Error("Method not implemented.");
     }
 
-    public buildTransferTransaction(to: string, amount: number, nonce: number, options?: IEthereumTransactionOptions): EthereumTransaction {
-        throw new Error("Method not implemented.");
+    public buildTransferTransaction(to: string, amount: number, nonce: number, priceInGWei?: number): EthereumTransaction {
+        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
+
+        return new EthereumTransaction(
+            this.address,               // from me
+            to,                         // to receiver
+            amount,                     // value in wei
+            nonce,                      // account nonce
+            {
+                gasLimit: 21000,                            // default transfer gas limit
+                gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
+                chainId: this.node.network.chainId,         // current network chain id
+            },
+        );
     }
 
     public buildCancelTransaction(nonce: number, priceInGWei?: number): EthereumTransaction {

@@ -24,7 +24,7 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
     public options: TO;
 
     public txn: string = ""; // transaction id from blockchain
-    public raw: Buffer = new Buffer("");
+    public raw: Buffer = Buffer.from("");
     public status: TransactionStatus = TransactionStatus.NEW;
 
     constructor(from: string, to: string, amount: number, nonce: number, options: TO) {

@@ -40,7 +40,7 @@ const networks: Network[] = [
         blockchain: Blockchain.ETHEREUM,
         mainNet: false,
         url: "http://127.0.0.1:8545/",
-        HDCoinValue: 1, // Test Net
+        HDCoinValue: 60, // 60 since ganache wants to emulate Main Net
     },
 ];
 

@@ -85,8 +85,8 @@ export abstract class GenericAccount<
     public abstract getBalance(): Promise<BigNumber>;
     public abstract getNonce(): Promise<number>;
 
-    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, options?: TO): T;
-    public abstract buildCancelTransaction(nonce: number, priceInGWei: number): T;
+    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, priceInNativeBase?: number): T;
+    public abstract buildCancelTransaction(nonce: number, priceInNativeBase?: number): T;
     public abstract buildTransaction(): T;
 
     public abstract signTransaction(transaction: T): boolean;

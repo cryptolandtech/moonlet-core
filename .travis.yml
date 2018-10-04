@@ -1,0 +1,13 @@
+language: node_js
+node_js: 8
+branches:
+  only:
+  - master
+script:
+- echo "Deploy!!"
+install:
+- npm install
+- npm run test
+after_success:
+env:
+  global:

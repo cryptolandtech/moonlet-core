@@ -3,6 +3,7 @@ import mocha from "mocha";
 
 const EthereumjsUtil = require('ethereumjs-util');
 import { EthereumAccountUtils } from "../../src/blockchain/ethereum/account-utils";
+import BigNumber from "bignumber.js";
 
 describe("Ethereum", async () => {
 
@@ -311,6 +312,26 @@ describe("Ethereum", async () => {
                 const mine = instance.isValidPublic( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
                 const theirs = EthereumjsUtil.isValidPublic( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
                 assert.equal( mine, theirs, "results do not match");
+            });
+        });
+
+        describe("balanceToStd( input: BigNumber ): string", async () => {
+
+            it("should throw if supplied parameter is not of type BigNumber", async () => {
+                assert.throws(() => {
+                    // @ts-ignore: we're testing for this scenario
+                    instance.balanceToStd("test");
+                }, 'balanceToStd: parameter must be of type BigNumber.');
+            });
+
+            it("should return 1 if input is 1 * 10 ** 18", async () => {
+                const result = instance.balanceToStd( new BigNumber( 1 * 10 ** 18 ) );
+                assert.equal( result, "1", "Should return 1" );
+            });
+
+            it("should return 0.01 if input is 1 * 10 ** 16", async () => {
+                const result = instance.balanceToStd( new BigNumber( 1 * 10 ** 16 ) );
+                assert.equal( result, "0.01", "Should return 0.01" );
             });
         });
 

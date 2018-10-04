@@ -1,6 +1,7 @@
 import { Network } from "./network";
 import { BigNumber } from "bignumber.js";
 import axios from 'axios';
+import { GenericTransaction } from "./transaction";
 
 export abstract class GenericNode {
     public static readonly NETWORKS: Network[] = [];
@@ -23,11 +24,6 @@ export abstract class GenericNode {
         this.customNetworkUrl = false;
         this.network = Object.assign({}, network);
     }
-
-    public abstract getBalance(address: string): Promise<BigNumber>;
-    public abstract getNonce(address: string): Promise<number>;
-
-    public abstract send(rawTransaction: Buffer): Promise<string>;
 
     public getCurrentNetworkPathString(): any {
         return `m/44'/` + this.network.HDCoinValue + `'/0'/0`;
@@ -63,7 +59,7 @@ export abstract class GenericNode {
             } else {
                 return Promise.reject( data.data.error.message );
             }
-        }).catch(error => {
+        }).catch( (error) => {
             return Promise.reject( new Error(error) );
         });
     }
@@ -84,17 +80,20 @@ export abstract class GenericNode {
         } else if (type === "BigNumber" ) {
             return new BigNumber( data );
 
-        } else if (type === "string" ) {
-            return data.toString("hex");
-
         } else if (type === "number" ) {
-            // set radix to js default
-            return parseInt(data, 16);
+            return parseInt(data, 16); // radix js default = 16
 
         } else if (type === "Buffer" ) {
             return Buffer.from(data);
 
         }
+        throw new Error("type: [" + type + "] not implemented" );
     }
+
+    public abstract getTransactionReceipt(transaction: GenericTransaction): Promise<any>;
+    public abstract getBalance(address: string): Promise<BigNumber>;
+    public abstract getNonce(address: string): Promise<number>;
+    public abstract estimateGas(from: string, callArguments: any): Promise<number>;
+    public abstract send(callArguments: any): Promise<string>;
 
 }

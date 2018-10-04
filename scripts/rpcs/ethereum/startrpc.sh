@@ -32,3 +32,10 @@ else
   echo "Starting new $softwareName instance at port $testrpc_port"
   start_testrpc
 fi
+
+if testrpc_running; then
+  echo "$softwareName initialised."
+else
+  echo "$softwareName did not initialize yet. Sleeping for 2 seconds.."
+  sleep 2
+fi

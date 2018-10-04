@@ -8,7 +8,9 @@ export abstract class GenericAccountUtils {
                 throw new Error(method + ": parameter must be a Buffer().");
             }
         } else if ( typeof target !== expected ) {
-            throw new Error(method + ": parameter must be of type " + expected + ".");
+            if ( target.constructor.name !== expected) {
+                throw new Error(method + ": parameter must be of type " + expected + ".");
+            }
         }
         return true;
     }

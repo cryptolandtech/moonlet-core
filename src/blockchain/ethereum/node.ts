@@ -2,6 +2,7 @@ import { GenericNode } from "../../core/node";
 import { Network } from "../../core/network";
 import networks from "./networks";
 import { BigNumber } from 'bignumber.js';
+import { GenericTransaction } from "../../core/transaction";
 
 export class EthereumNode extends GenericNode {
 
@@ -23,12 +24,35 @@ export class EthereumNode extends GenericNode {
     public getNonce(caddress: string): Promise<number> {
         return this.rpcCall("eth_getTransactionCount", [
             caddress,
-            'pending',
+            'latest',
         ], "number") as Promise<any>;
     }
 
-    public send(rawTransaction: Buffer): Promise<string> {
-        throw new Error("Method not implemented.");
+    public estimateGas(from: string, callArguments: any): Promise<number> {
+        return this.rpcCall("eth_estimateGas", [
+            callArguments,
+        ], "number") as Promise<any>;
+    }
+
+    public getTransactionReceipt(transaction: GenericTransaction): Promise<any> {
+        if ( transaction.receipt !== undefined ) {
+            return Promise.resolve( transaction.receipt );
+        } else {
+            return this.rpcCall("eth_getTransactionReceipt", [transaction.txn], "raw").then(data => {
+                transaction.setReceiptStatus( data );
+                return Promise.resolve( data );
+            }).catch(error => {
+                return Promise.reject( error );
+            });
+        }
+    }
+
+    public send(transaction: GenericTransaction): Promise<string> {
+        return this.sendRaw( transaction.raw.toString("hex") );
+    }
+
+    public sendRaw(rawTransaction: string): Promise<string> {
+        return this.rpcCall("eth_sendRawTransaction", [rawTransaction], "raw") as Promise<any>;
     }
 
 }

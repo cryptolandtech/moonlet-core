@@ -20,14 +20,15 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         return this.node.getNonce(this.address);
     }
 
-    public signTransaction(transaction: ZilliqaTransaction): boolean {
-        throw new Error("Method not implemented.");
-    }
-    public signMessage(message: string): boolean {
+    public estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number> {
         throw new Error("Method not implemented.");
     }
 
-    public buildTransferTransaction(to: string, amount: number, nonce: number, options?: IZilliqaTransactionOptions): ZilliqaTransaction {
+    public buildTransferTransaction(to: string, amount: number, nonce: number, priceInZil?: number): ZilliqaTransaction {
+        throw new Error("Method not implemented.");
+    }
+
+    public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, priceInGWei?: number): Promise<number> {
         throw new Error("Method not implemented.");
     }
 
@@ -39,7 +40,12 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         throw new Error("Method not implemented.");
     }
 
-    public send(transaction: ZilliqaTransaction): Promise<string> {
+    public signTransaction(transaction: ZilliqaTransaction): Buffer {
         throw new Error("Method not implemented.");
     }
+
+    public signMessage(message: string): Buffer {
+        throw new Error("Method not implemented.");
+    }
+
 }

@@ -24,6 +24,8 @@ describe("Core", async () => {
             const blockchain = Blockchains.ETHEREUM;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
+            const TransactionClassTypeString = GenericTransaction.getImplementedClassName( Blockchains[blockchain] );
+
             const account = defaultWallet.createAccount(blockchain);
 
             it("should create first account", async () => {
@@ -51,7 +53,6 @@ describe("Core", async () => {
                 assert.equal( getAccounts.length, 1, "getAccounts length does not match" );
             });
 
-            
         });
 
     });

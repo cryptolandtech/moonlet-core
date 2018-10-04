@@ -3,15 +3,20 @@ import mocha from "mocha";
 
 import DynamicClassMapper from "../../src/class.store";
 
-import { Blockchains } from "../../src/index";
+import { Wallet, Blockchains } from "../../src/index";
 import { GenericNode } from "../../src/core/node";
+import { GenericAccount } from "../../src/core/account";
+import { BigNumber } from 'bignumber.js';
+import { EthereumTransaction } from "../../src/blockchain/ethereum/transaction";
+
+import EthereumTx from 'ethereumjs-tx';
+import { GenericTransaction } from "../../src/core/transaction";
 
 const mapper = new DynamicClassMapper();
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
-import { BigNumber } from 'bignumber.js';
-import { EthereumAccountUtils } from "../../src/blockchain/ethereum/account-utils";
 
 const ethereumWallet0Address = "0x9d9216e0a29468bE1eCaCc351ce3887be8a26222";
+const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
 describe("Core", async () => {
 
@@ -232,6 +237,12 @@ describe("Core", async () => {
 
                 const TestNode: GenericNode = mapper.getInstance( DynamicClassName );
 
+                it("should throw if specified type is not implemented", async () => {
+                    assert.throws(() => {
+                        const test = TestNode.resultDecoder( ethereumWallet0Address, "not_implemented" );
+                    }, 'type: [not_implemented] not implemented');
+                });
+
                 it("should return a string if type not specified", async () => {
                     const test = TestNode.resultDecoder( ethereumWallet0Address );
                     assert.equal( typeof test, "string", "Should have returned a string" );
@@ -292,6 +303,59 @@ describe("Core", async () => {
 
             });
 
+            describe("getTransactionReceipt( GenericTransaction )", async () => {
+
+                let account;
+                let txHash;
+                let transaction;
+
+                before( async () => {
+                    const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+                    const blockchain = Blockchains.ETHEREUM;
+                    const WalletTestNode: GenericNode = defaultWallet.getNode( blockchain );
+                    WalletTestNode.init( WalletTestNode.NETWORKS[ WalletTestNode.NETWORKS.length - 1 ] );
+                    account = defaultWallet.createAccount(blockchain);
+
+                    const myNonce = await account.getNonce();
+
+                    // build a custom transaction
+                    const tx = new EthereumTx( {
+                        from: account.address,
+                        nonce: myNonce,
+                        data: "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3006080604052348015600f57600080fd5b500000a165627a7a72305820314703b0f77a5338ad6a5fea41ad7065949be7496f42d96e630efb1a00a375670029",
+                        gasPrice: 20000000000, // default rpc
+                        gasLimit: 6700000,
+                    });
+
+                    tx.sign( Buffer.from( account.privateKey.substr(2), "hex" ) );
+                    txHash = await account.node.sendRaw( tx.serialize() );
+
+                    transaction = {
+                        txn: txHash,
+                        setReceiptStatus: ( receipt => {
+                            transaction.receipt = receipt;
+                        }),
+                    } as GenericTransaction;
+                });
+
+                it("should throw an error if any problem arises", async () => {
+                    account.node.setCustomNetworkUrl("http://127.0.0.1:1");
+                    try {
+                        const receipt = await account.node.getTransactionReceipt( transaction );
+                        assert.isFalse( true, "This should never be false." );
+                    } catch ( err ) {
+                        const errMsg = err.message.split(":")[0];
+                        assert.equal( errMsg, "Error", "Error message did not match." );
+                    }
+                    account.node.resetCustomNetworkUrl();
+                });
+
+                it("should return the cached / same pointer to the receipt if already received", async () => {
+                    const receipt = await account.node.getTransactionReceipt( transaction );
+                    const secondReceipt = await account.node.getTransactionReceipt( transaction );
+                    assert.equal( receipt, secondReceipt, "Error receipts did not match." );
+                });
+            });
         });
     });
 });

@@ -82,15 +82,50 @@ export abstract class GenericAccount<
         return this.transactions;
     }
 
+    public send(transaction: T, cb?: any, cbtype?: string): Promise<{txn, receipt}> {
+        this.transactions.push( transaction );
+
+        if (transaction.status === "SIGNED") {
+            transaction.setPending();
+            return this.node.send( transaction ).then( (txndata) => {
+                transaction.setTxn( txndata );
+                if (cb !== undefined && cbtype === "txn") {
+                    cb(null, txndata);
+                }
+
+                // load extra transaction details
+                return this.node.getTransactionReceipt( transaction ).then(receiptdata => {
+                    if (cb !== undefined && cbtype === undefined) {
+                        cb(null, receiptdata);
+                    }
+                    return Promise.resolve( { txn: txndata, receipt: receiptdata} );
+                });
+
+            }).catch( (error) => {
+                if (cb !== undefined) {
+                    cb(error);
+                }
+                return Promise.reject( new Error(error) );
+            });
+
+        }
+        return Promise.reject( new Error("Transaction status needs to be SIGNED") );
+    }
+
     public abstract getBalance(): Promise<BigNumber>;
     public abstract getNonce(): Promise<number>;
 
-    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, priceInNativeBase?: number): T;
-    public abstract buildCancelTransaction(nonce: number, priceInNativeBase?: number): T;
-    public abstract buildTransaction(): T;
+    public abstract buildCancelTransaction(nonce: number): T;
 
-    public abstract signTransaction(transaction: T): boolean;
-    public abstract signMessage(message: string): boolean;
+    // transfer transactions
+    public abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;
+    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, gasLimit: number, gasPrice: number): T;
 
-    public abstract send(transaction: T): Promise<string>;
+    // future custom transactions
+    public abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer): Promise<number>;
+    public abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasLimit: number, priceInGWei: number): GenericTransaction;
+
+    public abstract signTransaction(transaction: T): Buffer;
+    public abstract signMessage(message: string): Buffer;
+
 }

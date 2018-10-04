@@ -80,10 +80,8 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
         return '0x' + buf.toString('hex');
     }
 
-    public balanceToStd( input: number | string | BigNumber): string {
-        if ( typeof input === "number" || typeof input === "string" ) {
-            return new BigNumber( input ).div(10 ** 2).toString();
-        }
+    public balanceToStd(input: BigNumber): string {
+        this.requireType(input, "BigNumber", "balanceToStd");
         return input.div(10 ** 2).toString();
     }
 }

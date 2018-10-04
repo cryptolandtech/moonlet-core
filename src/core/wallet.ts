@@ -131,4 +131,7 @@ export default class Wallet {
         this.getAccounts( account.node.blockchain ).push( account ) ;
     }
 
+    public toJSON(): string {
+        return "Wallet structure";
+    }
 }

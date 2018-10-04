@@ -19,9 +19,10 @@ script:
 - echo "Deploy!!"
 install:
 - npm install
-- npm run start-rpcs
+- npm run start-all-rpcs
 - sleep 5
-- npm run test
+- npm run coveralls
 after_success:
+- npm run stop-all-rpcs
 env:
   global:

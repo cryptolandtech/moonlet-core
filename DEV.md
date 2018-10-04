@@ -35,3 +35,7 @@ test.then( ( res ) => {
     console.log("2catch:", err);
 });
 ```
+
+```
+    see/test/
+```

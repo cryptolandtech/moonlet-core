@@ -18,7 +18,8 @@
     "testToHtml": "scripts/testOutputToHtml.sh",
     "start-all-rpcs": "scripts/rpcs/start_all.sh",
     "stop-all-rpcs": "scripts/rpcs/stop_all.sh",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coverallstest": "./node_modules/.bin/ts-mocha --require source-map-support/register --full-trace --colors --paths -p ./ test/*/*.ts test/*.ts",
+    "coveralls": "nyc npm run coverallstest && nyc report --reporter=text-lcov | coveralls"
   },
   "bin": {
     "rpcs": "./scripts/rpc.sh"

@@ -1,28 +1,17 @@
 language: node_js
 node_js: 
   - "8.7.0"
-env:
-  - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - build-essential
-      - g++-4.8
-before_install:
-  - export CXX="g++-4.8"
 branches:
   only:
   - master
-script:
-- echo "Deploy!!"
 install:
 - npm install
-- npm run start-all-rpcs
+script:
+- ganache-cli -p 8545 -a 10 -d -n -i 15 -p $testrpc_port -m "exchange neither monster ethics bless cancel ghost excite business record warfare invite" > /dev/null &
+- kaya --accounts scripts/rpcs/account-fixtures.json > scripts/TestRPCData/$moduleName.output.log & > /dev/null &
 - sleep 5
 - npm run coveralls
 after_success:
-- npm run stop-all-rpcs
+
 env:
   global:

@@ -1,5 +1,17 @@
 language: node_js
-node_js: 8
+node_js: 
+  - "8.7.0"
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - build-essential
+      - g++-4.8
+before_install:
+  - export CXX="g++-4.8"
 branches:
   only:
   - master
@@ -7,6 +19,8 @@ script:
 - echo "Deploy!!"
 install:
 - npm install
+- npm run start-rpcs
+- sleep 5
 - npm run test
 after_success:
 env:

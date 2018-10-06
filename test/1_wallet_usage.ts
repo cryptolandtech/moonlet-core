@@ -79,12 +79,13 @@ describe("Core", async () => {
 
         describe("toJSON() -> export", async () => {
 
+            /*
             const exportData = JSON.parse( defaultWallet.toJSON() );
 
             it("should ", async () => {
                 console.log( exportData );
             });
-
+            */
         });
     });
 

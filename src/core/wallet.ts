@@ -11,8 +11,8 @@ export default class Wallet {
         //
     }
 
-    // public mnemonics: string;
-    // public mnemonicslang: string;
+    public mnemonics: string;
+    public mnemonicslang: string;
     public seed: Buffer;
 
     // public hdroots: Map<Blockchain, any> = new Map();
@@ -30,6 +30,8 @@ export default class Wallet {
             mnemonics = Mnemonic.generateMnemonic(mnemonicslang);
         }
 
+        this.mnemonics = mnemonics;
+        this.mnemonicslang = mnemonicslang;
         // setup seed
         this.seed = Mnemonic.mnemonicToSeed(mnemonics, mnemonicslang, mnemonicPassword);
     }

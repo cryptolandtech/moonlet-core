@@ -11,11 +11,11 @@ export default class Wallet {
         //
     }
 
-    public mnemonics: string;
-    public mnemonicslang: string;
+    // public mnemonics: string;
+    // public mnemonicslang: string;
     public seed: Buffer;
 
-    public hdroots: Map<Blockchain, any> = new Map();
+    // public hdroots: Map<Blockchain, any> = new Map();
     public nodes: Map<Blockchain, Map<number, GenericNode>> = new Map();
     public accounts: Map<Blockchain, GenericAccount[]> = new Map();
 
@@ -24,16 +24,14 @@ export default class Wallet {
     constructor(mnemonics?: string, language?: string, mnemonicPassword?: string) {
         this.mapper = new DynamicClassMapper();
 
-        this.mnemonicslang = language || "EN";
+        const mnemonicslang = language || "EN";
 
-        if (mnemonics) {
-            this.mnemonics = mnemonics;
-        } else {
-            this.mnemonics = Mnemonic.generateMnemonic(this.mnemonicslang);
+        if (!mnemonics) {
+            mnemonics = Mnemonic.generateMnemonic(mnemonicslang);
         }
 
         // setup seed
-        this.seed = Mnemonic.mnemonicToSeed(this.mnemonics, this.mnemonicslang, mnemonicPassword);
+        this.seed = Mnemonic.mnemonicToSeed(mnemonics, mnemonicslang, mnemonicPassword);
     }
 
     public getClassMapper(): DynamicClassMapper {
@@ -84,12 +82,6 @@ export default class Wallet {
 
             const hdkey = HDKey.fromMasterSeed(this.seed);
             byNetwork.HDRootKey = hdkey.derivePath(byNetwork.getCurrentNetworkPathString());
-
-            // this.root = this.hdWallet.derivePath(this.hdPathString);
-            // byNetwork.setCustomNetworkUrl("test");
-            // byNetwork.resetCustomNetworkUrl();
-
-            // getCurrentNetworkPathString
         }
         return byNetwork;
 
@@ -128,10 +120,22 @@ export default class Wallet {
         if (account.type === AccountType.HD) {
             throw new Error("importAccount: you cannot import HD Wallets.");
         }
-        this.getAccounts( account.node.blockchain ).push( account ) ;
+        const accountStore = this.getAccounts( account.node.blockchain );
+        accountStore.push( account ) ;
+        return accountStore[accountStore.length - 1];
     }
 
     public toJSON(): string {
-        return "Wallet structure";
+
+        const data = {
+            seed: this.seed,
+            nodes: [],
+            accounts: [],
+        };
+
+        // iterate through accounts
+        //      for each account
+
+        return JSON.stringify(data);
     }
 }

@@ -1,6 +1,6 @@
 # Moonlet - Core Package
 
-[![Build Status](https://travis-ci.org/cryptolandtech/moonlet-core.svg?branch=master)](https://travis-ci.org/cryptolandtech/moonlet-core)[![Coverage Status](https://coveralls.io/repos/github/cryptolandtech/moonlet-core/badge.svg)](https://coveralls.io/github/cryptolandtech/moonlet-core)
+[![Build Status](https://travis-ci.org/cryptolandtech/moonlet-core.svg?branch=master)](https://travis-ci.org/cryptolandtech/moonlet-core) [![Coverage Status](https://coveralls.io/repos/github/cryptolandtech/moonlet-core/badge.svg)](https://coveralls.io/github/cryptolandtech/moonlet-core)
 
 ## Usage
 

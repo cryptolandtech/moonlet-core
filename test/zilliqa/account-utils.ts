@@ -3,6 +3,7 @@ import mocha from "mocha";
 
 import { util as OfficialUtil } from 'zilliqa-js';
 import { ZilliqaAccountUtils as AccountUtils } from "../../src/blockchain/zilliqa/account-utils";
+import BigNumber from "bignumber.js";
 
 describe("Zilliqa", async () => {
 
@@ -305,6 +306,26 @@ describe("Zilliqa", async () => {
                 const mine = instance.isValidPublic( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
                 const theirs = OfficialUtil.isPubKey( Wallet0PublicKey.substr(2) );
                 assert.equal( mine, theirs, "results do not match");
+            });
+        });
+
+        describe("balanceToStd( input: BigNumber ): string", async () => {
+
+            it("should throw if supplied parameter is not of type BigNumber", async () => {
+                assert.throws(() => {
+                    // @ts-ignore: we're testing for this scenario
+                    instance.balanceToStd("test");
+                }, 'balanceToStd: parameter must be of type BigNumber.');
+            });
+
+            it("should return 1 if input is 1 * 10 ** 2", async () => {
+                const result = instance.balanceToStd( new BigNumber( 1 * 10 ** 2 ) );
+                assert.equal( result, "1", "Should return 1" );
+            });
+
+            it("should return 0.01 if input is 1 ", async () => {
+                const result = instance.balanceToStd( new BigNumber( 1 ) );
+                assert.equal( result, "0.01", "Should return 0.01" );
             });
         });
 

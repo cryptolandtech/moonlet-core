@@ -22,6 +22,7 @@ export abstract class GenericNode {
     public init(network?: Network) {
         network = network || this.NETWORKS[0];
         this.customNetworkUrl = false;
+        this.blockchain = network.blockchain;
         this.network = Object.assign({}, network);
     }
 

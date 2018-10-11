@@ -3,6 +3,7 @@ import { Network } from '../../core/network';
 
 const networks: Network[] = [
     {
+        network_id: 0,
         name: "Main net",
         chainId: 1,
         blockchain: Blockchain.ETHEREUM,
@@ -11,6 +12,7 @@ const networks: Network[] = [
         HDCoinValue: 60, // 60 = Ethereum Main Network!
     },
     {
+        network_id: 1,
         name: "Ropsten",
         chainId: 3,
         blockchain: Blockchain.ETHEREUM,
@@ -19,6 +21,7 @@ const networks: Network[] = [
         HDCoinValue: 1, // Test Net
     },
     {
+        network_id: 2,
         name: "Rinkeby",
         chainId: 4,
         blockchain: Blockchain.ETHEREUM,
@@ -27,6 +30,7 @@ const networks: Network[] = [
         HDCoinValue: 1, // Test Net
     },
     {
+        network_id: 3,
         name: "Kovan",
         chainId: 42,
         blockchain: Blockchain.ETHEREUM,
@@ -35,6 +39,7 @@ const networks: Network[] = [
         HDCoinValue: 1, // Test Net
     },
     {
+        network_id: 4,
         name: "Ganache - TestRPC",
         chainId: 15,
         blockchain: Blockchain.ETHEREUM,

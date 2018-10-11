@@ -42,8 +42,8 @@ describe("Core", async () => {
                     assert.isFalse( TestNode.connected, "connected should be false" );
                 });
 
-                it("blockchain should be undefined", async () => {
-                    assert.equal( TestNode.blockchain, undefined, "blockchain should be undefined" );
+                it("blockchain should be defined", async () => {
+                    assert.notEqual( TestNode.blockchain, undefined, "blockchain should be defined" );
                 });
 
                 it("HDRootKey should be null", async () => {
@@ -312,7 +312,8 @@ describe("Core", async () => {
                 before( async () => {
                     const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
                     const blockchain = Blockchains.ETHEREUM;
-                    const WalletTestNode: GenericNode = defaultWallet.getNode( blockchain );
+                    const WalletBlockchain = defaultWallet.getBlockchain( blockchain );
+                    const WalletTestNode: GenericNode = WalletBlockchain.getNode();
                     WalletTestNode.init( WalletTestNode.NETWORKS[ WalletTestNode.NETWORKS.length - 1 ] );
                     account = defaultWallet.createAccount(blockchain);
 

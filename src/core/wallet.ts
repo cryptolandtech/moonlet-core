@@ -5,19 +5,119 @@ import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
 
+export interface WalletExport {
+    mnemonics: string;
+    mnemonicslang: string;
+    blockchains: any;
+    currentNetworks: {};
+    seed: string;
+    accounts: {};
+    nodes: {};
+    version: string;
+}
+
 export default class Wallet {
 
     public static fromJson(json: string) {
-        //
+
+        const data: WalletExport = JSON.parse( json );
+        const wallet: Wallet = new Wallet( data.mnemonics, data.mnemonicslang );
+        // replace mnemonic data with saved values
+        wallet.mnemonics = data.mnemonics;
+        wallet.mnemonicslang = data.mnemonicslang;
+
+        // set seed buffer
+        wallet.seed = Buffer.from( data.seed, "hex" );
+
+        // set current networks
+        wallet.currentNetwork = data.currentNetworks;
+
+        // import accounts.
+        for ( const bcType in data.blockchains ) {
+            if (Blockchain[ data.blockchains[bcType] ] ) {
+
+                const currentBlockchainEnum = Blockchain[ data.blockchains[bcType] ];
+                const currentBlockchain = Blockchain[currentBlockchainEnum];
+
+                const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchain[currentBlockchain] );
+                const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchain[currentBlockchain] );
+
+                const bc = wallet.getBlockchain(Blockchain[currentBlockchainEnum]);
+                const currentNetworkId = bc.getCurrentNetwork();
+                const currentBlockchainAccounts = data.accounts[currentBlockchainEnum];
+
+                for ( let i = 0; i < currentBlockchainAccounts.length; i++) {
+
+                    const account = currentBlockchainAccounts[i];
+                    const accountNetworkId = account.node.network.network_id;
+                    let currentNode = bc.getNode();
+
+                    let importedAccount;
+
+                    if ( account.type === AccountType.HD) {
+
+                        // create account using internal hd key, no need to import anything.
+                        importedAccount = wallet.createAccount(currentBlockchain, accountNetworkId);
+
+                    } else if ( account.type === AccountType.LOOSE) {
+
+                        if (accountNetworkId !== currentNetworkId) {
+                            const CustomNode: GenericNode = wallet.mapper.getInstance( NodeClassTypeString );
+                            CustomNode.init( CustomNode.NETWORKS[ accountNetworkId ] );
+                            currentNode = CustomNode;
+                        }
+
+                        // Loose account setup
+                        importedAccount = wallet.importAccount(
+                            wallet.mapper.getInstance( AccountClassTypeString, {
+                                node: currentNode,
+                                type: AccountType.LOOSE,
+                                privateKey: account.privateKey,
+                            }),
+                        );
+
+                    } else if ( account.type === AccountType.HARDWARE) {
+
+                        if (accountNetworkId !== currentNetworkId) {
+                            const CustomNode: GenericNode = wallet.mapper.getInstance( NodeClassTypeString );
+                            CustomNode.init( CustomNode.NETWORKS[ accountNetworkId ] );
+                            currentNode = CustomNode;
+                        }
+
+                        // HW account setup
+                        importedAccount = wallet.importAccount(
+                            wallet.mapper.getInstance( AccountClassTypeString, {
+                                node: currentNode,
+                                type: AccountType.HARDWARE,
+                                address: account.address,
+                            }),
+                        );
+
+                    }
+
+                    // set custom url on node if found
+                    if ( account.node.customNetworkUrl ) {
+                        importedAccount.node.setCustomNetworkUrl( account.node.network.url );
+                    }
+
+                    // import transactions
+                    importedAccount.transactions = account.transactions;
+
+                }
+
+            }
+        }
+
+        return wallet;
     }
 
     public mnemonics: string;
     public mnemonicslang: string;
     public seed: Buffer;
 
-    // public hdroots: Map<Blockchain, any> = new Map();
     public nodes: Map<Blockchain, Map<number, GenericNode>> = new Map();
     public accounts: Map<Blockchain, GenericAccount[]> = new Map();
+    public currentNetwork: any = {};
 
     private mapper: DynamicClassMapper;
 
@@ -40,15 +140,35 @@ export default class Wallet {
         return this.mapper;
     }
 
-    public getAccounts(blockchain: Blockchain): GenericAccount[] {
+    public getAccounts(blockchain: Blockchain, reference: boolean = true, filter: boolean = false, networkId?: number): GenericAccount[] {
         this.requireImplementation(blockchain, "getAccounts");
+        networkId = networkId || this.getCurrentNetwork(blockchain);
 
         let Results = this.accounts.get(blockchain);
         if (!Results) {
             Results = [];
             this.accounts.set(blockchain, Results);
         }
-        return Results;
+
+        if (reference) {
+            return Results;
+        } else {
+
+            // filter by network if specified
+            let ReturnData = [];
+            if (filter === false) {
+                ReturnData = Results;
+            } else {
+                for ( const r in Results) {
+                    if (Results[r]) {
+                        if ( Results[r].node.network.network_id === networkId) {
+                            ReturnData.push( Results[r] );
+                        }
+                    }
+                }
+            }
+            return ReturnData;
+        }
     }
 
     public getAccountsMap(): Map<Blockchain, GenericAccount[]> {
@@ -58,15 +178,36 @@ export default class Wallet {
     public getBlockchain(blockchain: Blockchain) {
         return {
             getNode: () => this.getNode(blockchain),
-            getAccounts: () => this.getAccounts(blockchain),
+            getAccounts: () => this.getAccounts(blockchain, false, true),
+            getAllAccounts: () => this.getAccounts(blockchain, false, false),
             createAccount: () => this.createAccount(blockchain),
             importAccount: (account: GenericAccount) => this.importAccount(account),
+            getNetworks: () => this.getNetworks(blockchain),
+            getCurrentNetwork: () => this.getCurrentNetwork(blockchain),
+            switchNetwork: (networkId) => this.switchNetwork(blockchain, networkId),
+            getInitializedNodes: () => this.nodes.get(blockchain),
         };
+    }
+
+    public getNetworks(blockchain: Blockchain) {
+        return this.getNode(blockchain, this.currentNetwork[blockchain] ).NETWORKS;
+    }
+
+    public getCurrentNetwork(blockchain: Blockchain): number {
+        if (this.currentNetwork[blockchain] === undefined) {
+            this.currentNetwork[blockchain] = 0;
+        }
+        return this.currentNetwork[blockchain];
+    }
+
+    public switchNetwork(blockchain: Blockchain, networkId: number) {
+        this.currentNetwork[blockchain] = networkId;
+        return this.getNode(blockchain, networkId );
     }
 
     public getNode(blockchain: Blockchain, networkId?: number) {
         this.requireImplementation(blockchain, "getNode");
-        networkId = networkId || 0;
+        networkId = networkId || this.getCurrentNetwork(blockchain);
 
         let initialisedNodesMap = this.nodes.get( blockchain );
         if (initialisedNodesMap === undefined) {
@@ -77,9 +218,9 @@ export default class Wallet {
         let byNetwork = initialisedNodesMap.get( networkId );
         if (byNetwork === undefined) {
             // init new node with requested type
-            const NodeClassName = GenericNode.getImplementedClassName( Blockchain[blockchain] );
+            const NodeClassName = GenericNode.getImplementedClassName( blockchain );
             byNetwork = this.mapper.getInstance( NodeClassName ) as GenericNode;
-            byNetwork.blockchain = blockchain;
+            byNetwork.init( byNetwork.NETWORKS[ networkId ] );
             initialisedNodesMap.set( networkId, byNetwork );
 
             const hdkey = HDKey.fromMasterSeed(this.seed);
@@ -91,7 +232,7 @@ export default class Wallet {
 
     public createAccount(blockchain: Blockchain, networkId?: number): GenericAccount {
         this.requireImplementation(blockchain, "createAccount");
-        networkId = networkId || 0;
+        networkId = networkId || this.getCurrentNetwork(blockchain);
 
         const existingAccounts = this.getAccounts( blockchain );
 
@@ -103,7 +244,7 @@ export default class Wallet {
             type: AccountType.HD,
             hd: hdkey,
         };
-        const DynamicClassName = GenericAccount.getImplementedClassName( Blockchain[blockchain] );
+        const DynamicClassName = GenericAccount.getImplementedClassName( blockchain );
         const account: GenericAccount = this.mapper.getInstance( DynamicClassName, accountOptions );
 
         this.getAccounts( blockchain ).push( account ) ;
@@ -123,21 +264,71 @@ export default class Wallet {
             throw new Error("importAccount: you cannot import HD Wallets.");
         }
         const accountStore = this.getAccounts( account.node.blockchain );
+
+        /*
+        // map account's custom node network and replace with wallet's initialized node
+        const customNetworkUrl = account.node.network.url;
+        account.node = this.getNode(account.node.blockchain, account.node.network.network_id );
+
+        // if we're importing an account with a custom url, we set it up for all accounts under that network.
+        if (account.node.customNetworkUrl) {
+            account.node.setCustomNetworkUrl( customNetworkUrl );
+        }
+        */
+
+        // generate address for loose imports
+        if (account.type === AccountType.LOOSE) {
+            account.publicKey = account.utils.bufferToHex( account.utils.privateToPublic( Buffer.from( account.privateKey, "hex" ) ) );
+            account.address = account.utils.toChecksumAddress( account.utils.privateToAddress( Buffer.from( account.privateKey, "hex" ) ).toString("hex") );
+        }
         accountStore.push( account ) ;
         return accountStore[accountStore.length - 1];
     }
 
     public toJSON(): string {
 
-        const data = {
-            seed: this.seed,
-            nodes: [],
-            accounts: [],
+        const data: WalletExport = {
+            // we should probably not store mnemonics, but metamask does.. do we want them ?
+            mnemonics: this.mnemonics,
+            mnemonicslang: this.mnemonicslang,
+            blockchains: [],
+            currentNetworks: {},
+            seed: this.seed.toString("hex"),
+            accounts: {},
+            nodes: {},
+            version: "0.1",
         };
 
-        // iterate through accounts
-        //      for each account
+        for ( const bcType in Blockchain ) {
+            if (Blockchain[bcType]) {
 
+                const currentBlockchainEnum = Blockchain[ Blockchain[bcType] ];
+                // save implemented blockchains
+                data.blockchains.push( Blockchain[bcType] );
+
+                // save current networks
+                data.currentNetworks[bcType] = this.getCurrentNetwork(currentBlockchainEnum);
+
+                data.accounts[bcType] = [];
+                // export accounts for each blockchain
+                const accounts = this.getAccounts( currentBlockchainEnum, false, false );
+                for ( let i = 0; i < accounts.length; i++) {
+                    data.accounts[bcType].push( accounts[i] );
+                }
+
+                const nodes = this.nodes.get( Blockchain[ Blockchain[bcType]] );
+                const networks = this.getNode( currentBlockchainEnum ).NETWORKS;
+
+                data.nodes[bcType] = [];
+                for ( let i = 0; i < networks.length; i++) {
+                    if (networks[i] && nodes) {
+                        data.nodes[bcType][networks[i].network_id] = nodes.get( networks[i].network_id );
+                    } else {
+                        data.nodes[bcType][networks[i].network_id] = null;
+                    }
+                }
+            }
+        }
         return JSON.stringify(data);
     }
 }

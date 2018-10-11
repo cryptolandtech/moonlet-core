@@ -8,7 +8,7 @@ install:
 - npm install
 script:
 - ganache-cli -p 8545 -a 10 -d -n -i 15 -m "exchange neither monster ethics bless cancel ghost excite business record warfare invite" > /dev/null &
-- kaya --accounts scripts/rpcs/account-fixtures.json > scripts/TestRPCData/$moduleName.output.log & > /dev/null &
+- kaya --accounts scripts/rpcs/account-fixtures.json > /dev/null &
 - sleep 5
 - npm run coveralls
 after_success:

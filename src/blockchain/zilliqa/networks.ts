@@ -3,6 +3,7 @@ import { Network } from '../../core/network';
 
 const networks: Network[] = [
     {
+        network_id: 0,
         name: "Main net",
         chainId: 1,
         blockchain: Blockchain.ZILLIQA,
@@ -11,6 +12,7 @@ const networks: Network[] = [
         HDCoinValue: 10018, // 10018 = Proposed as Zilliqa Main Network!
     },
     {
+        network_id: 1,
         name: "Test net",
         chainId: 2,
         blockchain: Blockchain.ZILLIQA,
@@ -19,6 +21,7 @@ const networks: Network[] = [
         HDCoinValue: 1, // testnet
     },
     {
+        network_id: 2,
         name: "Kaya - TestRPC",
         chainId: 15,
         blockchain: Blockchain.ZILLIQA,

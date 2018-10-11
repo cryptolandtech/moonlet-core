@@ -57,14 +57,12 @@ export abstract class GenericNode {
         // console.log( callData );
         return action.then( (data) => {
             // console.log( "return result:", data );
-            if ( data.data.result ) {
+            if ( data.data.result !== undefined ) {
                 return this.resultDecoder( data.data.result, dec );
             } else {
-                // console.log("data catch error:", data.data.error.message);
                 return Promise.reject( data.data.error.message );
             }
         }).catch( (error) => {
-            // console.log("catch error:", error);
             return Promise.reject( new Error(error) );
         });
     }

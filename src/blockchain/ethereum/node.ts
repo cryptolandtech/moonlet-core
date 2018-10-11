@@ -48,7 +48,7 @@ export class EthereumNode extends GenericNode {
     }
 
     public send(transaction: EthereumTransaction): Promise<string> {
-        return this.sendRaw( transaction.raw.toString("hex") );
+        return this.sendRaw( "0x" + transaction.raw.toString("hex") );
     }
 
     public sendRaw(rawTransaction: string): Promise<string> {

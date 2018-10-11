@@ -121,6 +121,9 @@ export abstract class GenericAccount<
     public abstract getBalance(): Promise<BigNumber>;
     public abstract getNonce(): Promise<number>;
 
+    public buildCancelTransaction(nonce: number): any {
+        //
+    }
     // transfer transactions
     public abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;
     public abstract buildTransferTransaction(to: string, amount: number, nonce: number, gasLimit: number, gasPrice: number): T;

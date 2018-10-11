@@ -1,24 +1,31 @@
 import { assert } from "chai";
 import mocha from "mocha";
 
-import { Wallet, Blockchains, AccountType, MnemonicUtils } from "../src/index";
-import { GenericAccount } from "../src/core/account";
-import { GenericNode } from "../src/core/node";
-import { GenericTransaction } from "../src/core/transaction";
-import { GenericAccountUtils } from "../src/core/account-utils";
+import { Wallet, Blockchains, AccountType, MnemonicUtils } from "../../src/index";
+import { GenericAccount } from "../../src/core/account";
+import { GenericNode } from "../../src/core/node";
+import { GenericTransaction } from "../../src/core/transaction";
+import { GenericAccountUtils } from "../../src/core/account-utils";
+
+import DynamicClassMapper from "../../src/class.store";
+
+const mapper = new DynamicClassMapper();
+const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ZILLIQA] );
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
-describe("Integration", async () => {
+describe("Core", async () => {
 
-    describe("Wallet: constructed with parameters ( mnemonic, language = EN )", async () => {
+    describe("ZilliqaTransaction", async () => {
 
-        describe("create one Ethereum account", async () => {
+        describe("one Zilliqa account", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
-            const blockchain = Blockchains.ETHEREUM;
+            const blockchain = Blockchains.ZILLIQA;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
+            const TransactionClassTypeString = GenericTransaction.getImplementedClassName( Blockchains[blockchain] );
+
             const account = defaultWallet.createAccount(blockchain);
 
             it("should create first account", async () => {
@@ -34,7 +41,8 @@ describe("Integration", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey ) ), "private key is invalid" );
+
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from(account.privateKey.substr(2), "hex") ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );
@@ -45,6 +53,7 @@ describe("Integration", async () => {
                 const getAccounts = defaultWallet.getAccounts(blockchain);
                 assert.equal( getAccounts.length, 1, "getAccounts length does not match" );
             });
+
         });
 
     });

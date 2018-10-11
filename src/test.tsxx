@@ -44,7 +44,7 @@ const hwAccount = new EthereumAccount(wallet.getNode(Blockchain.ETHEREUM), {addr
 wallet.importAccount(hwAccount);
 const hwTransaction = hwAccount.buildTransferTransaction("0x321", 1);
 // send sign request to hardware wallet device
-hwTransaction.raw = new Buffer(12); // output from hardware device
+hwTransaction.raw = Buffer.from(12); // output from hardware device
 hwAccount.send(hwTransaction);
 
 // a more simple approach, to

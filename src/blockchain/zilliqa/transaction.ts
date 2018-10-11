@@ -1,14 +1,15 @@
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
+const BN = require( 'bn.js' );
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
     gasLimit: number;
-    pubKey: string;
-    code: Buffer;
+    pubKey?: string;
+    code?: Buffer;
 }
 
 export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOptions> {
-    public version: number = 0.1;
+    public version: number = 0;
     public pubKey: string;
     public code: Buffer;
     public amount: number;
@@ -16,6 +17,7 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
     public chainId: number;
     public gasPrice: number;
     public gasLimit: number;
+    public TXObject: any;
 
     constructor(from: string, to: string, amount: number, nonce: number, options: IZilliqaTransactionOptions) {
         super(from, to, nonce, options);
@@ -30,13 +32,16 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
 
     public toParams() {
         return {
-            nonce: this.getNumberToHex( this.nonce ) as any,
-            gasPrice: this.getNumberToHex( this.gasPrice ),
-            gasLimit: this.getNumberToHex( this.gasLimit ),
+            version: this.version,
+            nonce: this.nonce,
             to: this.to,
-            amount: this.getNumberToHex( this.amount ),
-            code: "0x" + this.code,
-            chainId: this.getNumberToHex( this.chainId ),
+            amount: new BN( this.amount ),
+            gasPrice: this.gasPrice,
+            gasLimit: this.gasLimit,
+            code: null,
+            data: null,
+            pubKey: null,
+            // chainId: this.getNumberToHex( this.chainId ),
         };
     }
 }

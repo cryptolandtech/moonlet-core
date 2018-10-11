@@ -103,14 +103,14 @@ describe("Core", async () => {
                 let scopeAccount = accountHD;
                 let HDKey = scopeAccount.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
 
                 scopeAccount = accountHD2;
                 HDKey = scopeAccount.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
             });
@@ -118,12 +118,12 @@ describe("Core", async () => {
             it("should validate account 3 and 4 ( LOOSE )", async () => {
                 let scopeAccount = accountLoose;
                 assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
-                assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                 assert.equal( LooseAddress, scopeAccount.address, "address did not match");
 
                 scopeAccount = accountLoose2;
                 assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
-                assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                 assert.equal( LooseAddress, scopeAccount.address, "address did not match");
             });
 
@@ -131,12 +131,12 @@ describe("Core", async () => {
                 let scopeAccount = accountHardware;
                 assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                 assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                assert.isTrue( scopeAccount.utils.isValidAddress( new Buffer( scopeAccount.address ) ), "address is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address ) ), "address is invalid" );
 
                 scopeAccount = accountHardware2;
                 assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                 assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                assert.isTrue( scopeAccount.utils.isValidAddress( new Buffer( scopeAccount.address ) ), "address is invalid" );
+                assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address ) ), "address is invalid" );
             });
 
         });
@@ -184,14 +184,14 @@ describe("Core", async () => {
                     let scopeAccount = getAllAccounts[0];
                     let HDKey = scopeAccount.hd;
                     assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                     assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                     assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
 
                     scopeAccount = getAllAccounts[1];
                     HDKey = scopeAccount.hd;
                     assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                     assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                     assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 });
@@ -199,12 +199,12 @@ describe("Core", async () => {
                 it("should validate account 3 and 4 ( LOOSE )", async () => {
                     let scopeAccount = getAllAccounts[2];
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                     assert.equal( LooseAddress, scopeAccount.address, "address did not match");
 
                     scopeAccount = getAllAccounts[3];
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( new Buffer( scopeAccount.privateKey ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey ) ), "private key is invalid" );
                     assert.equal( LooseAddress, scopeAccount.address, "address did not match");
                 });
 
@@ -212,12 +212,12 @@ describe("Core", async () => {
                     let scopeAccount = getAllAccounts[4];
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                     assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidAddress( new Buffer( scopeAccount.address ) ), "address is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address ) ), "address is invalid" );
 
                     scopeAccount = getAllAccounts[5];
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                     assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidAddress( new Buffer( scopeAccount.address ) ), "address is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address ) ), "address is invalid" );
                 });
 
             });

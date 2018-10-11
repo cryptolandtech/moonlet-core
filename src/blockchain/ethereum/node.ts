@@ -2,7 +2,7 @@ import { GenericNode } from "../../core/node";
 import { Network } from "../../core/network";
 import networks from "./networks";
 import { BigNumber } from 'bignumber.js';
-import { GenericTransaction } from "../../core/transaction";
+import { EthereumTransaction } from "./transaction";
 
 export class EthereumNode extends GenericNode {
 
@@ -34,7 +34,7 @@ export class EthereumNode extends GenericNode {
         ], "number") as Promise<any>;
     }
 
-    public getTransactionReceipt(transaction: GenericTransaction): Promise<any> {
+    public getTransactionReceipt(transaction: EthereumTransaction): Promise<any> {
         if ( transaction.receipt !== undefined ) {
             return Promise.resolve( transaction.receipt );
         } else {
@@ -47,7 +47,7 @@ export class EthereumNode extends GenericNode {
         }
     }
 
-    public send(transaction: GenericTransaction): Promise<string> {
+    public send(transaction: EthereumTransaction): Promise<string> {
         return this.sendRaw( transaction.raw.toString("hex") );
     }
 

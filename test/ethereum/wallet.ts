@@ -56,7 +56,7 @@ describe("Ethereum", async () => {
                     });
 
                     it("should have a valid private key", async () => {
-                        assert.isTrue( account.utils.isValidPrivate( new Buffer( account.privateKey ) ), "private key is invalid" );
+                        assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey ) ), "private key is invalid" );
                     });
 
                     it("should have a generated private key that matches in test PrivateKey value constant", async () => {
@@ -142,7 +142,7 @@ describe("Ethereum", async () => {
                     });
 
                     it("should have a valid private key", async () => {
-                        assert.isTrue( account.utils.isValidPrivate( new Buffer( account.privateKey ) ), "private key is invalid" );
+                        assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey ) ), "private key is invalid" );
                     });
 
                     it("should have a generated private key that matches in test PrivateKey value constant", async () => {

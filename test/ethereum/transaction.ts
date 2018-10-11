@@ -41,7 +41,7 @@ describe("Core", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( new Buffer( account.privateKey ) ), "private key is invalid" );
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );

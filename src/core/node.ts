@@ -54,13 +54,17 @@ export abstract class GenericNode {
         const callOptions = {};
 
         const action = axios.post( this.network.url, callData, callOptions );
+        // console.log( callData );
         return action.then( (data) => {
+            // console.log( "return result:", data );
             if ( data.data.result ) {
                 return this.resultDecoder( data.data.result, dec );
             } else {
+                // console.log("data catch error:", data.data.error.message);
                 return Promise.reject( data.data.error.message );
             }
         }).catch( (error) => {
+            // console.log("catch error:", error);
             return Promise.reject( new Error(error) );
         });
     }

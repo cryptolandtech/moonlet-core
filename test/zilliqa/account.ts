@@ -7,27 +7,30 @@ import { Wallet, Blockchains } from "../../src/index";
 import { GenericAccount, AccountType } from "../../src/core/account";
 import { GenericNode } from "../../src/core/node";
 import { GenericTransaction, TransactionStatus } from "../../src/core/transaction";
-import { EthereumTransaction } from "../../src/blockchain/ethereum/transaction";
+import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
 
-import Deployer from "./solc/deployer";
-const testDeployerAddress = "0x7839919b879250910e8646f3b46ebbca8438be32";
+// import Deployer from "./solc/deployer";
+/*
 const DeployeHelper = new Deployer(
     testDeployerAddress,
     "b9459a91a412c986cf92c02badb335e38720886214326b10e9ccf4d53cae302d",
 );
+*/
+
+const testReceiverAddress = "0x22537dfddb1232be8ce10c7fc4b784f61a4375a9";
 
 const mapper = new DynamicClassMapper();
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
 describe("Core", async () => {
 
-    describe("EthereumAccount", async () => {
+    describe("ZilliqaAccount", async () => {
 
         describe("instantiating new object", async () => {
 
             const wallet: Wallet = new Wallet();
-            const TestNode: GenericNode = wallet.getNode(Blockchains.ETHEREUM);
-            const DynamicClassName = GenericAccount.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
+            const TestNode: GenericNode = wallet.getNode(Blockchains.ZILLIQA);
+            const DynamicClassName = GenericAccount.getImplementedClassName( Blockchains[Blockchains.ZILLIQA] );
 
             it("should throw if creating an HD account that is missing accountOptions.hd", async () => {
                 assert.throws(() => {
@@ -65,10 +68,10 @@ describe("Core", async () => {
             });
         });
 
-        describe("Wallet with one Ethereum account ( testrpc )", async () => {
+        describe("Wallet with one Zilliqa account ( testrpc )", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
-            const blockchain = Blockchains.ETHEREUM;
+            const blockchain = Blockchains.ZILLIQA;
 
             const TestNode: GenericNode = defaultWallet.getNode( blockchain );
             TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
@@ -91,7 +94,7 @@ describe("Core", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey ) ), "private key is invalid" );
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.substr(2), "hex" ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );
@@ -115,34 +118,35 @@ describe("Core", async () => {
 
                 it("should return a valid balance", async () => {
                     const result = await account.getBalance();
-                    let expected = 0;
-                    if (TestNode.network.chainId === 15) {
-                        expected = 100 * 10 ** 18;
-                    }
-                    assert.isAtLeast( parseInt(result.toString(), 16), 1, "Balance should be at least 1" );
+                    assert.isAtLeast( parseInt(result.toString(), 16), 0, "Balance should be at least 0" );
                 });
             });
 
             describe("estimateTransferTransaction()", async () => {
 
                 let nonce;
-                const value = 0.01 * 10 ** 18;
+                const value = 10;
 
                 describe("receiver is an account", async () => {
 
                     const receiverAccountAddr = "0x7839919b879250910e8646f3b46ebbca8438be32";
 
+                    // const LivetNode: GenericNode = defaultWallet.getNode( blockchain );
+                    // TestNode.init( TestNode.NETWORKS[ 0 ] );
+
                     before( async () => {
                         nonce = await account.getNonce();
                     });
 
-                    it("should return 21000 gas estimation", async () => {
+                    it("should return 99 gas estimation ( 99 = not implemented by zilliqa yet )", async () => {
                         const accountGasTransferEstimation = await account.estimateTransferTransaction( receiverAccountAddr, value, nonce) as any;
-                        assert.equal( accountGasTransferEstimation.toString(), "21000", "Estimation should be 21000" );
+                        assert.equal( accountGasTransferEstimation.toString(), "99", "Estimation should be 99" );
                     });
 
                 });
 
+                /*
+                TODO:
                 describe("receiver is a contract with a non payable fallback method ()", async () => {
 
                     let contractAddress;
@@ -198,6 +202,7 @@ describe("Core", async () => {
                     });
 
                 });
+                */
 
             });
 
@@ -209,7 +214,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, nonce, 10, 1 ) as ZilliqaTransaction;
                     signed = await account.signTransaction ( transaction );
                 });
 
@@ -232,13 +237,13 @@ describe("Core", async () => {
 
                 let transaction;
                 let nonce;
-                const value = 0.01 * 10 ** 18;
-                const gasLimit = 21000;
-                const gasPrice = 5; // gwei
+                const value = 1;
+                const gasLimit = 10;
+                const gasPrice = 1;
 
                 beforeEach( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildTransferTransaction( testDeployerAddress, value, nonce, gasLimit, gasPrice ) as any;
+                    transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), value, nonce, gasLimit, gasPrice ) as any;
                 });
 
                 it("transaction.txn should be an empty string", async () => {
@@ -258,19 +263,19 @@ describe("Core", async () => {
                 });
 
                 it("transaction.to should be receiver address", async () => {
-                    assert.equal( transaction.to, testDeployerAddress, "transaction to address is bad" );
+                    assert.equal( transaction.to, testReceiverAddress.substr(2), "transaction to address is bad" );
                     assert.notEqual( transaction.from, transaction.to, "transaction from / to addresses are bad" );
                 });
 
-                it("transaction.value should be a number higher than 0", async () => {
-                    assert.isAtLeast( transaction.value, 1, "transaction value is bad" );
+                it("transaction.amount should be a number higher than 0", async () => {
+                    assert.isAtLeast( transaction.amount, 1, "transaction value is bad" );
                 });
 
                 it("transaction.gasPrice should be a number", async () => {
                     assert.equal( typeof transaction.gasPrice, "number", "transaction gasPrice is not a number" );
                 });
 
-                it("transaction.gasLimit should be 21000", async () => {
+                it("transaction.gasLimit should be at least 0", async () => {
                     assert.isAtLeast( transaction.gasPrice, 0, "transaction gasPrice issue" );
                 });
 
@@ -297,6 +302,7 @@ describe("Core", async () => {
 
             });
 
+            /*
             describe("buildCancelTransaction()", async () => {
 
                 let nonce;
@@ -304,7 +310,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildCancelTransaction( nonce ) as ZilliqaTransaction;
                 });
 
                 it("transaction.txn should be an empty string", async () => {
@@ -345,6 +351,7 @@ describe("Core", async () => {
                 });
 
             });
+            */
 
             describe("send()", async () => {
 
@@ -352,7 +359,7 @@ describe("Core", async () => {
 
                     it("should throw if transaction status is not SIGNED", async () => {
                         const nonce = await account.getNonce();
-                        const transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        const transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, nonce, 10, 1 ) as ZilliqaTransaction;
 
                         try {
                             await account.send( transaction );
@@ -369,7 +376,7 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, nonce, 10, 1 ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -392,27 +399,26 @@ describe("Core", async () => {
                         assert.equal( transaction.txn, result.txn, "Transaction txn did not match." );
                     });
 
-                    it("should have a receipt object after the Promise resolves", async () => {
-                        const result = await account.send( transaction );
-                        assert.equal( transaction.receipt, result.receipt, "Transaction receipt did not match." );
-                    });
-
                     it("should throw if sending a transaction with a lower nonce than current account nonce", async () => {
                         await account.send( transaction );
 
+                        TestNode.init( TestNode.NETWORKS[ 0 ] );
+
                         const nonce = await account.getNonce();
-                        const transactionTwo = account.buildCancelTransaction( nonce - 1 ) as EthereumTransaction;
+                        const transactionTwo = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, -1, 10, 1 ) as ZilliqaTransaction;
+
                         await account.signTransaction ( transactionTwo );
 
                         try {
                             await account.send( transactionTwo );
-
                             assert.isFalse( true, "This should never be false." );
                         } catch (err) {
-                            const errMsg = err.message.split(".")[0] + ".";
-                            assert.equal( errMsg, "Error: the tx doesn't have the correct nonce.", "Error message did not match." );
+                            assert.equal( err.message, "Error: Invalid Tx Json", "Error message did not match." );
                         }
-                    });
+
+                        TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+
+                    }).timeout(10000);
 
                     it("should throw an error if any problem arises", async () => {
                         // set a bad node url
@@ -435,7 +441,7 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, nonce, 10, 1 ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -491,7 +497,9 @@ describe("Core", async () => {
                                 assert.isFalse( true, "This should never be false." );
                                 done();
                             }
-                        }, "txn").catch(e => { /* */ });
+                        }, "txn").catch(e => {
+                            //
+                        });
 
                     });
 
@@ -503,7 +511,7 @@ describe("Core", async () => {
 
                 beforeEach( async () => {
                     const nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildTransferTransaction( testReceiverAddress.substr(2), 1, nonce, 10, 1 ) as ZilliqaTransaction;
                     await account.signTransaction ( transaction );
                 });
 
@@ -521,6 +529,9 @@ describe("Core", async () => {
             describe("signMessage()", async () => {
                 //
             });
+
         });
+
     });
+
 });

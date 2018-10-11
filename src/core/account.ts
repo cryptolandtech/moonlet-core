@@ -37,6 +37,7 @@ export abstract class GenericAccount<
     public type: AccountType;
     public hd: HDKey | any;
     public utils: GenericAccountUtils | any;
+    public supportsCancel: boolean = false;
 
     private transactions: T[] = [];
 
@@ -93,6 +94,11 @@ export abstract class GenericAccount<
                     cb(null, txndata);
                 }
 
+                // kaya does not throw this error properly..
+                if (transaction.txn === "Invalid Tx Json") {
+                    throw new Error("Invalid Tx Json");
+                }
+
                 // load extra transaction details
                 return this.node.getTransactionReceipt( transaction ).then(receiptdata => {
                     if (cb !== undefined && cbtype === undefined) {
@@ -114,8 +120,6 @@ export abstract class GenericAccount<
 
     public abstract getBalance(): Promise<BigNumber>;
     public abstract getNonce(): Promise<number>;
-
-    public abstract buildCancelTransaction(nonce: number): T;
 
     // transfer transactions
     public abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;

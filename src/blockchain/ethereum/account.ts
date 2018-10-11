@@ -6,6 +6,7 @@ import EthereumTx from 'ethereumjs-tx';
 
 export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthereumTransactionOptions> {
     public defaultGasPriceInGwei: number = 30;
+    public supportsCancel: boolean = true;
 
     constructor(accountOptions: IaccountOptions) {
         super(accountOptions);

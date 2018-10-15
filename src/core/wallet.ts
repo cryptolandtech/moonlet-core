@@ -4,6 +4,8 @@ import { Blockchain } from "./blockchain";
 import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
+import { IBlockchainImplementation } from "./blockchain-implementation";
+import { Amount } from "./amount";
 
 export interface WalletExport {
     mnemonics: string;
@@ -138,6 +140,11 @@ export default class Wallet {
 
     public getClassMapper(): DynamicClassMapper {
         return this.mapper;
+    }
+
+    public loadBlockchain(blockchainImplementation: IBlockchainImplementation) {
+        this.mapper.collectClasses(blockchainImplementation.AvailableClasses);
+        Amount.addConfig(blockchainImplementation.config);
     }
 
     public getAccounts(blockchain: Blockchain, reference: boolean = true, filter: boolean = false, networkId?: number): GenericAccount[] {

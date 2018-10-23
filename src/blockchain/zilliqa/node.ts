@@ -69,13 +69,13 @@ export class ZilliqaNode extends GenericNode {
                 status: "0x1",
             };
             transaction.setReceiptStatus( data );
-
             return Promise.resolve( data );
-
         }
     }
 
     public send(transaction: ZilliqaTransaction): Promise<string> {
+        // @TODO: fix this once library does. transaction.TXObject hack
+        transaction.TXObject.amount = transaction.TXObject.amount.toNumber();
         return this.sendRaw( transaction.TXObject );
     }
 

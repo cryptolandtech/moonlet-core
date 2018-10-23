@@ -125,7 +125,7 @@ describe("Integration", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );
@@ -159,7 +159,7 @@ describe("Integration", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );
@@ -179,7 +179,7 @@ describe("Integration", async () => {
 
                 const HDKey = account2.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account2.utils.isValidPrivate( Buffer.from( account2.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                assert.isTrue( account2.utils.isValidPrivate( Buffer.from( account2.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 1, "HDKey index does not match" );
@@ -238,7 +238,7 @@ describe("Integration", async () => {
 
                 const HDKey = account.hd;
                 assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                assert.isTrue( account.utils.isValidPrivate( Buffer.from( account.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                 assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                 assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 assert.equal( HDKey.npmhdkey.index, 0, "HDKey index does not match" );

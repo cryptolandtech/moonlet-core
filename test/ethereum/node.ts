@@ -328,7 +328,7 @@ describe("Core", async () => {
                         gasLimit: 6700000,
                     });
 
-                    tx.sign( Buffer.from( account.privateKey.substr(2), "hex" ) );
+                    tx.sign( Buffer.from( account.privateKey.replace("0x", ""), "hex" ) );
                     txHash = await account.node.sendRaw( tx.serialize() );
 
                     transaction = {

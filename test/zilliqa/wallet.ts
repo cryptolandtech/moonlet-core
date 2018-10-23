@@ -56,7 +56,7 @@ describe("Zilliqa", async () => {
                     });
 
                     it("should have a valid private key", async () => {
-                        assert.isTrue( account.utils.isValidPrivate( Buffer.from(account.privateKey.substr(2), "hex") ), "private key is invalid" );
+                        assert.isTrue( account.utils.isValidPrivate( Buffer.from(account.privateKey.replace("0x", ""), "hex") ), "private key is invalid" );
                     });
 
                     it("should have a generated private key that matches in test PrivateKey value constant", async () => {
@@ -142,7 +142,7 @@ describe("Zilliqa", async () => {
                     });
 
                     it("should have a valid private key", async () => {
-                        assert.isTrue( account.utils.isValidPrivate( Buffer.from(account.privateKey.substr(2), "hex") ), "private key is invalid" );
+                        assert.isTrue( account.utils.isValidPrivate( Buffer.from(account.privateKey.replace("0x", ""), "hex") ), "private key is invalid" );
                     });
 
                     it("should have a generated private key that matches in test PrivateKey value constant", async () => {

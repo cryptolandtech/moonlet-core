@@ -315,9 +315,9 @@ describe("Core", async () => {
                         data: null,
                         pubKey: null,
                     };
-                    const tx = ZilliqaTx.createTransactionJson( account.privateKey.substr(2), transactionDetails );
+                    const tx = ZilliqaTx.createTransactionJson( account.privateKey.replace("0x", ""), transactionDetails );
 
-                    // tx.sign( Buffer.from( account.privateKey.substr(2), "hex" ) );
+                    // tx.sign( Buffer.from( account.privateKey.replace("0x", ""), "hex" ) );
                     txHash = await account.node.sendRaw( tx );
 
                     transaction = {

@@ -99,7 +99,7 @@ describe("Core", async () => {
             mapper.getInstance( zilAccountClassTypeString, {
                 node: zilTestNode,
                 type: AccountType.LOOSE,
-                privateKey: ZilLoosePrivateKey.substr(2),
+                privateKey: ZilLoosePrivateKey.replace("0x", ""),
             }),
         );
 
@@ -114,7 +114,7 @@ describe("Core", async () => {
             mapper.getInstance( zilAccountClassTypeString, {
                 node: zilCustomNode,
                 type: AccountType.LOOSE,
-                privateKey: ZilLoosePrivateKey.substr(2),
+                privateKey: ZilLoosePrivateKey.replace("0x", ""),
             }),
         );
 
@@ -227,14 +227,14 @@ describe("Core", async () => {
                     let scopeAccount = zilaccountHD;
                     let HDKey = scopeAccount.hd;
                     assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                     assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                     assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
 
                     scopeAccount = zilaccountHD2;
                     HDKey = scopeAccount.hd;
                     assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                     assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                     assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                 });
@@ -255,12 +255,12 @@ describe("Core", async () => {
                     let scopeAccount = zilaccountHardware;
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                     assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.substr(2), "hex" ) ), "address is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.replace("0x", ""), "hex" ) ), "address is invalid" );
 
                     scopeAccount = zilaccountHardware2;
                     assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                     assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.substr(2), "hex" ) ), "address is invalid" );
+                    assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.replace("0x", ""), "hex" ) ), "address is invalid" );
                 });
             });
         });
@@ -374,14 +374,14 @@ describe("Core", async () => {
                         let scopeAccount = getAllAccounts[0];
                         let HDKey = scopeAccount.hd;
                         assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                        assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                        assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                         assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                         assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
 
                         scopeAccount = getAllAccounts[1];
                         HDKey = scopeAccount.hd;
                         assert.isNotNull( HDKey, "HDRootKey should not be null" );
-                        assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.substr(2), "hex" ) ), "private key is invalid" );
+                        assert.isTrue( scopeAccount.utils.isValidPrivate( Buffer.from( scopeAccount.privateKey.replace("0x", ""), "hex" ) ), "private key is invalid" );
                         assert.equal( HDKey.constructor.name, "HDKey", "HDKey class does not match expected" );
                         assert.equal( HDKey.npmhdkey.depth, 5, "HDKey depth does not match" );
                     });
@@ -402,12 +402,12 @@ describe("Core", async () => {
                         let scopeAccount = getAllAccounts[4];
                         assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                         assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                        assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.substr(2), "hex"  ) ), "address is invalid" );
+                        assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.replace("0x", ""), "hex"  ) ), "address is invalid" );
 
                         scopeAccount = getAllAccounts[5];
                         assert.isUndefined( scopeAccount.hd, "HDRootKey should be undefined" );
                         assert.equal( scopeAccount.privateKey, "", "privateKey should be undefined" );
-                        assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.substr(2), "hex" ) ), "address is invalid" );
+                        assert.isTrue( scopeAccount.utils.isValidAddress( Buffer.from( scopeAccount.address.replace("0x", ""), "hex" ) ), "address is invalid" );
                     });
 
                 });

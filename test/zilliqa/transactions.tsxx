@@ -11,48 +11,48 @@ describe("Zilliqa", async () => {
 
         it("Should work", async () => {
 
-const zilliqa = new Zilliqa({
-    nodeUrl: 'http://localhost:4200',
-});
+            const zilliqa = new Zilliqa({
+                nodeUrl: 'https://scilla-test-api.aws.z7a.xyz/',
+            });
 
-const privateKey = "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3";
-const myCode = "";
-const contractState = [
-{
-    vname: "owner",
-    type : "ByStr20",
-    value : "7bb3b0e8a59f3f61d9bff038f4aeb42cae2ecce8",
-},
-{
-    vname: "_creation_block",
-    type: "BNum",
-    value: "1",
-}];
+            const privateKey = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
+            const myCode = "";
+            const contractState = [
+            {
+                vname: "owner",
+                type : "ByStr20",
+                value : "7bb3b0e8a59f3f61d9bff038f4aeb42cae2ecce8",
+            },
+            {
+                vname: "_creation_block",
+                type: "BNum",
+                value: "1",
+            }];
 
-const transactionDetails = {
-    version: 0,
-    nonce: 1,
-    to: '0000000000000000000000000000000000000000',
-    amount: new BN( 0 ) ,
-    gasPrice: 1,
-    gasLimit: 5000,
-    code: myCode,
-    data: JSON.stringify(contractState).replace(/\"/g, '"'),
-    pubKey: zilliqa.util.getPubKeyFromPrivateKey(privateKey),
-};
+            const transactionDetails = {
+                version: 0,
+                nonce: 2,
+                to: '22537dfddb1232be8ce10c7fc4b784f61a4375a9',
+                amount: new BN( 10 ) ,
+                gasPrice: 1,
+                gasLimit: 10,
+                code: '',
+                data: '',
+                pubKey: zilliqa.util.getPubKeyFromPrivateKey(privateKey),
+            };
 
-const tx = OfficialUtil.createTransactionJson( privateKey, transactionDetails );
+            const tx = OfficialUtil.createTransactionJson( privateKey, transactionDetails );
 
-const node = zilliqa.getNode();
-const exec = await node.createTransaction(tx, (err, data) => {
-    if (err || data.error) {
-        console.log('Error', err, data);
-    } else {
-        console.log(data.result);
-    }
-});
+            const node = zilliqa.getNode();
+            const exec = await node.createTransaction(tx, (err, data) => {
+                if (err || data.error) {
+                    console.log('Error:', err, data);
+                } else {
+                    console.log('OK:', data.result);
+                }
+            });
 
-console.log(exec);
+            console.log("official tx:", tx);
         });
 
     });

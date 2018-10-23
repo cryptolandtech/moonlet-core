@@ -54,7 +54,7 @@ export abstract class GenericNode {
         const callOptions = {};
 
         const action = axios.post( this.network.url, callData, callOptions );
-        // console.log( callData );
+        // console.log( "CallData: ", callData );
         return action.then( (data) => {
             // console.log( "return result:", data );
             if ( data.data.result !== undefined ) {

@@ -42,7 +42,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
             this.address,               // from me
             to,                         // to receiver
             amount,                     // value in wei
-            nonce + 1,                  // account nonce
+            nonce,                      // account nonce
             {
                 gasLimit: 10,           // default transfer gas limit
                 gasPrice: priceInZil,   // price in gwei
@@ -59,7 +59,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
     }
 
     public signTransaction(transaction: ZilliqaTransaction): Buffer {
-        const tx = OfficialUtil.createTransactionJson( this.privateKey.substr(2), transaction.toParams() );
+        const tx = OfficialUtil.createTransactionJson( this.privateKey.replace("0x", ""), transaction.toParams() );
         const serialized = Buffer.from( JSON.stringify(tx) );
         transaction.TXObject = tx;
         transaction.setSignedResult( serialized );

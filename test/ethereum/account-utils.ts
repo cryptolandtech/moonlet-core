@@ -95,19 +95,19 @@ describe("Ethereum", async () => {
             });
 
             it("should return a valid 64 byte Buffer containing a public key", async () => {
-                const key: Buffer = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
+                const key: Buffer = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 64, "returned buffer length invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const key = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
+                const key = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.equal( instance.bufferToHex( key ) , ethereumwallet0PublicKey, "keys do not match");
             });
 
             it("should match the return of ethereumjs-util privateToPublic()", async () => {
-                const mine = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
-                const theirs = EthereumjsUtil.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") ) ;
+                const mine = instance.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
+                const theirs = EthereumjsUtil.privateToPublic( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") ) ;
                 assert.equal( mine.toString("hex") , theirs.toString("hex"), "keys do not match");
             });
 
@@ -129,20 +129,20 @@ describe("Ethereum", async () => {
             });
 
             it("should return a valid 20 byte Buffer containing an address", async () => {
-                const key: Buffer = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
+                const key: Buffer = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 20, "returned buffer length invalid");
             });
 
             it("should return address that matches in test constant ", async () => {
-                const key = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
+                const key = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
                 const checksummed = instance.addressBufferToChecksum(key);
                 assert.equal( checksummed , ethereumWallet0Address, "keys do not match");
             });
 
             it("should match the return of ethereumjs-util privateToAddress()", async () => {
-                const mine = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
-                const theirs = EthereumjsUtil.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.substr(2), "hex") );
+                const mine = instance.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
+                const theirs = EthereumjsUtil.privateToAddress( Buffer.from(ethereumwallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.equal( mine.toString("hex") , theirs.toString("hex"), "results do not match");
             });
 
@@ -164,12 +164,12 @@ describe("Ethereum", async () => {
             });
 
             it("should return a valid 42 length string containing a public key", async () => {
-                const result: string = instance.addressBufferToChecksum( Buffer.from(ethereumWallet0Address.substr(2), "hex") );
+                const result: string = instance.addressBufferToChecksum( Buffer.from(ethereumWallet0Address.replace("0x", ""), "hex") );
                 assert.equal(result.length, 42, "returned string length is invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const result: string = instance.addressBufferToChecksum( Buffer.from(ethereumWallet0Address.substr(2), "hex") );
+                const result: string = instance.addressBufferToChecksum( Buffer.from(ethereumWallet0Address.replace("0x", ""), "hex") );
                 assert.equal( result , ethereumWallet0Address, "results do not match");
             });
 
@@ -191,27 +191,27 @@ describe("Ethereum", async () => {
             });
 
             it("should return a valid 20 byte Buffer containing a public key", async () => {
-                const key: Buffer = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
+                const key: Buffer = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 20, "returned buffer length invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const key = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
+                const key = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
                 const checksummed = instance.addressBufferToChecksum(key);
                 assert.equal( checksummed , ethereumWallet0Address, "keys do not match");
             });
 
             it("should match the return of ethereumjs-util publicToAddress()", async () => {
-                const mine = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
-                const theirs = EthereumjsUtil.publicToAddress( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
+                const mine = instance.publicToAddress( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
+                const theirs = EthereumjsUtil.publicToAddress( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
                 assert.equal( mine.toString("hex") , theirs.toString("hex"), "results do not match");
             });
         });
 
         describe("isValidChecksumAddress( string ): boolean", async () => {
 
-            const lowercaseAddress = ethereumWallet0Address.toLocaleLowerCase().substr(2);
+            const lowercaseAddress = ethereumWallet0Address.toLocaleLowerCase().replace("0x", "");
 
             it("should throw if supplied parameter is not of type string", async () => {
                 assert.throws(() => {
@@ -305,12 +305,12 @@ describe("Ethereum", async () => {
             });
 
             it("should return true if supplied Buffer contains a valid public key", async () => {
-                assert.isTrue( instance.isValidPublic( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") ), "Should return true for a valid public key buffer" );
+                assert.isTrue( instance.isValidPublic( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") ), "Should return true for a valid public key buffer" );
             });
 
             it("should match the return of ethereumjs-util isValidPublic()", async () => {
-                const mine = instance.isValidPublic( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
-                const theirs = EthereumjsUtil.isValidPublic( Buffer.from(ethereumwallet0PublicKey.substr(2), "hex") );
+                const mine = instance.isValidPublic( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
+                const theirs = EthereumjsUtil.isValidPublic( Buffer.from(ethereumwallet0PublicKey.replace("0x", ""), "hex") );
                 assert.equal( mine, theirs, "results do not match");
             });
         });

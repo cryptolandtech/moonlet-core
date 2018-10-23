@@ -111,7 +111,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
 
     public signTransaction(transaction: EthereumTransaction): Buffer {
         const tx = new EthereumTx( transaction.toParams() );
-        tx.sign( Buffer.from( this.privateKey.substr( 2 ) , "hex" ) );
+        tx.sign( Buffer.from( this.privateKey.replace("0x", "") , "hex" ) );
         const serialized = tx.serialize();
         transaction.setSignedResult( serialized );
         return serialized;

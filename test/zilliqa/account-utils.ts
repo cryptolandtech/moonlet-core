@@ -95,19 +95,19 @@ describe("Zilliqa", async () => {
             });
 
             it("should return a valid 33 byte Buffer containing a public key", async () => {
-                const key: Buffer = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
+                const key: Buffer = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 33, "returned buffer length invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const key = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
+                const key = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.equal( instance.bufferToHex( key ) , Wallet0PublicKey, "keys do not match");
             });
 
             it("should match the return of zilliqa-js.util getPubKeyFromPrivateKey()", async () => {
-                const mine = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
-                const theirs = OfficialUtil.getPubKeyFromPrivateKey( Wallet0PrivateKey.substr(2) ) ;
+                const mine = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
+                const theirs = OfficialUtil.getPubKeyFromPrivateKey( Wallet0PrivateKey.replace("0x", "") ) ;
                 assert.equal( mine.toString("hex") , theirs, "keys do not match");
             });
 
@@ -129,20 +129,20 @@ describe("Zilliqa", async () => {
             });
 
             it("should return a valid 20 byte Buffer containing an address", async () => {
-                const key: Buffer = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
+                const key: Buffer = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 20, "returned buffer length invalid");
             });
 
             it("should return address that matches in test constant ", async () => {
-                const key = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
+                const key = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
                 const checksummed = instance.addressBufferToChecksum(key);
                 assert.equal( checksummed , Wallet0Address, "keys do not match");
             });
 
             it("should match the return of zilliqa-js.util getAddressFromPrivateKey()", async () => {
-                const mine = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
-                const theirs = OfficialUtil.getAddressFromPrivateKey( Wallet0PrivateKey.substr(2) );
+                const mine = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
+                const theirs = OfficialUtil.getAddressFromPrivateKey( Wallet0PrivateKey.replace("0x", "") );
                 assert.equal( mine.toString("hex") , theirs, "results do not match");
             });
 
@@ -164,12 +164,12 @@ describe("Zilliqa", async () => {
             });
 
             it("should return a valid 42 length string containing a public key", async () => {
-                const result: string = instance.addressBufferToChecksum( Buffer.from(Wallet0Address.substr(2), "hex") );
+                const result: string = instance.addressBufferToChecksum( Buffer.from(Wallet0Address.replace("0x", ""), "hex") );
                 assert.equal(result.length, 42, "returned string length is invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const result: string = instance.addressBufferToChecksum( Buffer.from(Wallet0Address.substr(2), "hex") );
+                const result: string = instance.addressBufferToChecksum( Buffer.from(Wallet0Address.replace("0x", ""), "hex") );
                 assert.equal( result , Wallet0Address, "results do not match");
             });
 
@@ -191,20 +191,20 @@ describe("Zilliqa", async () => {
             });
 
             it("should return a valid 20 byte Buffer containing a public key", async () => {
-                const key: Buffer = instance.publicToAddress( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
+                const key: Buffer = instance.publicToAddress( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
                 assert.isTrue( Buffer.isBuffer( key ) , "returned buffer is not a valid Buffer instance");
                 assert.equal(key.length, 20, "returned buffer length invalid");
             });
 
             it("should return public key that matches in test constant ", async () => {
-                const key = instance.publicToAddress( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
+                const key = instance.publicToAddress( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
                 const checksummed = instance.addressBufferToChecksum(key);
                 assert.equal( checksummed , Wallet0Address, "keys do not match");
             });
 
             it("should match the return of zilliqa-js.util getAddressFromPublicKey()", async () => {
-                const mine = instance.publicToAddress( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
-                const theirs = OfficialUtil.getAddressFromPublicKey( Wallet0PublicKey.substr(2) );
+                const mine = instance.publicToAddress( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
+                const theirs = OfficialUtil.getAddressFromPublicKey( Wallet0PublicKey.replace("0x", "") );
                 assert.equal( mine.toString("hex") , theirs, "results do not match");
             });
         });
@@ -248,12 +248,12 @@ describe("Zilliqa", async () => {
             });
 
             it("should return true if supplied Buffer contains a valid address", async () => {
-                assert.isTrue( instance.isValidAddress( Buffer.from(Wallet0Address.substr(2), "hex") ), "Should return true for a valid address buffer" );
+                assert.isTrue( instance.isValidAddress( Buffer.from(Wallet0Address.replace("0x", ""), "hex") ), "Should return true for a valid address buffer" );
             });
 
             it("should match the return of zilliqa-js.util isAddress() -> true", async () => {
-                const mine = instance.isValidAddress( Buffer.from(Wallet0Address.substr(2), "hex") );
-                const theirs = OfficialUtil.isAddress( Wallet0Address.substr(2) );
+                const mine = instance.isValidAddress( Buffer.from(Wallet0Address.replace("0x", ""), "hex") );
+                const theirs = OfficialUtil.isAddress( Wallet0Address.replace("0x", "") );
 
                 assert.isTrue( theirs, "Should return true for a valid address buffer" );
                 assert.equal( mine, theirs, "results do not match");
@@ -274,11 +274,11 @@ describe("Zilliqa", async () => {
             });
 
             it("should return true if supplied Buffer contains a valid private key", async () => {
-                assert.isTrue( instance.isValidPrivate( Buffer.from(Wallet0PrivateKey.substr(2), "hex") ), "Should return true for a valid private key buffer" );
+                assert.isTrue( instance.isValidPrivate( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") ), "Should return true for a valid private key buffer" );
             });
 
             it("should match the return of zilliqa-js.util verifyPrivateKey()", async () => {
-                const mine = instance.isValidPrivate( Buffer.from(Wallet0PrivateKey.substr(2), "hex") );
+                const mine = instance.isValidPrivate( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
                 const theirs = OfficialUtil.verifyPrivateKey( Wallet0PrivateKey );
                 assert.equal( mine, theirs, "results do not match");
             });
@@ -299,12 +299,12 @@ describe("Zilliqa", async () => {
             });
 
             it("should return true if supplied Buffer contains a valid public key", async () => {
-                assert.isTrue( instance.isValidPublic( Buffer.from(Wallet0PublicKey.substr(2), "hex") ), "Should return true for a valid public key buffer" );
+                assert.isTrue( instance.isValidPublic( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") ), "Should return true for a valid public key buffer" );
             });
 
             it("should match the return of zilliqa-js.util isPubKey()", async () => {
-                const mine = instance.isValidPublic( Buffer.from(Wallet0PublicKey.substr(2), "hex") );
-                const theirs = OfficialUtil.isPubKey( Wallet0PublicKey.substr(2) );
+                const mine = instance.isValidPublic( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
+                const theirs = OfficialUtil.isPubKey( Wallet0PublicKey.replace("0x", "") );
                 assert.equal( mine, theirs, "results do not match");
             });
         });

@@ -24,7 +24,7 @@ export class EthereumAccountUtils extends GenericAccountUtils {
 
         let privateKey = key.toString();
         if (privateKey.length === 66) {
-            privateKey = privateKey.substr(2);
+            privateKey = privateKey.replace("0x", "");
         }
         return !!privateKey.match(/^[0-9a-fA-F]{64}$/);
     }

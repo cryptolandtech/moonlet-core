@@ -27,7 +27,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
                 this.address,               // from me
                 to,                         // to actual receiver
                 amount,                     // value in wei
-                nonce,                      // account nonce
+                nonce + 1,                  // account nonce
                 {
                     gasLimit: 10,                           // max network allowed gas limit
                     gasPrice: this.defaultGasPriceInZil,    // price in zil
@@ -42,7 +42,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
             this.address,               // from me
             to,                         // to receiver
             amount,                     // value in wei
-            nonce,                      // account nonce
+            nonce + 1,                  // account nonce
             {
                 gasLimit: 10,           // default transfer gas limit
                 gasPrice: priceInZil,   // price in gwei

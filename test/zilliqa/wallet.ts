@@ -6,6 +6,8 @@ import { GenericAccount } from "../../src/core/account";
 import { GenericNode } from "../../src/core/node";
 import { GenericTransaction } from "../../src/core/transaction";
 import { GenericAccountUtils } from "../../src/core/account-utils";
+import Ethereum from "../../src/blockchain/ethereum/class.index";
+import Zilliqa from "../../src/blockchain/zilliqa/class.index";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
@@ -24,6 +26,8 @@ describe("Zilliqa", async () => {
             const Wallet1PublicKey = "0x038cc9c4a58a5e8e6f99c5909b4b8c87e6ef8344cbf21d7ecb240ba88a11d0ec82";
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
             const blockchain = Blockchains.ZILLIQA;
 
             describe("createAccount(Blockchains.ZILLIQA) -> index:0", async () => {

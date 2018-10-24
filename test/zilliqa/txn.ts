@@ -12,13 +12,17 @@ import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
 
 const BN = require( 'bn.js' );
 import { util as OfficialUtil } from 'zilliqa-js';
-import { Zilliqa } from 'zilliqa-js';
+
+import Ethereum from "../../src/blockchain/ethereum/class.index";
+import { Zilliqa } from "../../src/blockchain/zilliqa/class.index";
 
 const pk = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
 
 const testReceiverAddress = "0x22537dfddb1232be8ce10c7fc4b784f61a4375a9";
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
 /*
@@ -29,6 +33,8 @@ describe("Zilliqa", async () => {
     describe("Wallet with one Zilliqa account", async () => {
 
         const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+        defaultWallet.loadBlockchain(Ethereum);
+        defaultWallet.loadBlockchain(Zilliqa);
         const blockchain = Blockchains.ZILLIQA;
 
         const TestNode: GenericNode = defaultWallet.getNode( blockchain );

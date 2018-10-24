@@ -1,3 +1,4 @@
+import { Ethereum } from './../../src/blockchain/ethereum/class.index';
 import { assert } from "chai";
 import mocha from "mocha";
 
@@ -9,8 +10,11 @@ import { GenericAccount } from "../../src/core/account";
 import { BigNumber } from 'bignumber.js';
 import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
 import { GenericTransaction } from "../../src/core/transaction";
+import Zilliqa from '../../src/blockchain/zilliqa/class.index';
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ZILLIQA] );
 
 const Wallet0Address = "7bb3b0e8a59f3f61d9bff038f4aeb42cae2ecce8";
@@ -296,6 +300,8 @@ describe("Core", async () => {
 
                 before( async () => {
                     const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+                    defaultWallet.loadBlockchain(Ethereum);
+                    defaultWallet.loadBlockchain(Zilliqa);
                     const blockchain = Blockchains.ZILLIQA;
                     const WalletBlockchain = defaultWallet.getBlockchain( blockchain );
                     const WalletTestNode: GenericNode = WalletBlockchain.getNode();

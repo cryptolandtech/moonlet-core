@@ -282,7 +282,7 @@ describe("Core", async () => {
 
         describe("fromJson()", async () => {
 
-            const importedWallet = Wallet.fromJson( defaultWallet.toJSON() );
+            const importedWallet = Wallet.fromJson( defaultWallet.toJSON(), [Ethereum, Zilliqa]);
 
             describe("Wallet: setup, 2 Blockchains - 4 networks - 12 accounts ( HD / Loose / HW )", async () => {
 

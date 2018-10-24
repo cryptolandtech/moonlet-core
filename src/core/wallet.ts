@@ -19,10 +19,15 @@ export interface WalletExport {
 
 export default class Wallet {
 
-    public static fromJson(json: string) {
+    public static fromJson(json: string, blockchains?: IBlockchainImplementation[]) {
 
         const data: WalletExport = JSON.parse( json );
         const wallet: Wallet = new Wallet( data.mnemonics, data.mnemonicslang );
+
+        if (Array.isArray(blockchains)) {
+            blockchains.map(blockchain => wallet.loadBlockchain(blockchain));
+        }
+
         // replace mnemonic data with saved values
         wallet.mnemonics = data.mnemonics;
         wallet.mnemonicslang = data.mnemonicslang;

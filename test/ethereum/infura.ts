@@ -1,3 +1,4 @@
+import { Ethereum } from './../../src/blockchain/ethereum/class.index';
 import { assert } from "chai";
 import mocha from "mocha";
 
@@ -11,8 +12,11 @@ import { EthereumTransaction } from "../../src/blockchain/ethereum/transaction";
 
 import EthereumTx from 'ethereumjs-tx';
 import { GenericTransaction } from "../../src/core/transaction";
+import Zilliqa from '../../src/blockchain/zilliqa/class.index';
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
 
 const receiverAddress = "0x52b333c238Bf73888fDDe266E9D2A39B75752807";
@@ -25,6 +29,8 @@ describe("Core", async () => {
         describe("Infura test", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
             const blockchain = Blockchains.ETHEREUM;
             const WalletBlockchain = defaultWallet.getBlockchain( blockchain );
             const WalletTestNode: GenericNode = WalletBlockchain.getNode();

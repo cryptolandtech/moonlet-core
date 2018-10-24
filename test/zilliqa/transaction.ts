@@ -1,3 +1,4 @@
+import { Ethereum } from '../../src/blockchain/ethereum/class.index';
 import { assert } from "chai";
 import mocha from "mocha";
 
@@ -8,8 +9,11 @@ import { GenericTransaction } from "../../src/core/transaction";
 import { GenericAccountUtils } from "../../src/core/account-utils";
 
 import DynamicClassMapper from "../../src/class.store";
+import Zilliqa from '../../src/blockchain/zilliqa/class.index';
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ZILLIQA] );
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
@@ -21,6 +25,8 @@ describe("Core", async () => {
         describe("one Zilliqa account", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
             const blockchain = Blockchains.ZILLIQA;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );

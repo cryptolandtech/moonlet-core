@@ -17,3 +17,5 @@ export const Zilliqa: IBlockchainImplementation = {
     config,
     networks
 };
+
+export default Zilliqa;

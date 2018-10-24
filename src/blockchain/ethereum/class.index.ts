@@ -18,3 +18,5 @@ export const Ethereum: IBlockchainImplementation = {
     config,
     networks
 };
+
+export default Ethereum;

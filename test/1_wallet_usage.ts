@@ -4,6 +4,8 @@ import mocha from "mocha";
 import { Wallet, MnemonicUtils, Blockchains } from "../src/index";
 import { GenericAccount, AccountType } from "../src/core/account";
 import { GenericNode } from "../src/core/node";
+import { Ethereum } from "../src/blockchain/ethereum/class.index";
+import { Zilliqa } from "../src/blockchain/zilliqa/class.index";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 const LooseAddress = "0x52b333c238Bf73888fDDe266E9D2A39B75752807";
@@ -19,6 +21,9 @@ describe("Core", async () => {
     describe("Wallet - export / import", async () => {
 
         const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+        defaultWallet.loadBlockchain(Ethereum);
+        defaultWallet.loadBlockchain(Zilliqa);
+
         const mapper = defaultWallet.getClassMapper();
 
         const currentBlockchain = Blockchains.ETHEREUM;

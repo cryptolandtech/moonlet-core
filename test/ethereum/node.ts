@@ -11,6 +11,7 @@ import { EthereumTransaction } from "../../src/blockchain/ethereum/transaction";
 
 import EthereumTx from 'ethereumjs-tx';
 import { GenericTransaction } from "../../src/core/transaction";
+import { Ethereum } from "../../src/blockchain/ethereum/class.index";
 
 const mapper = new DynamicClassMapper();
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
@@ -311,6 +312,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+                    defaultWallet.loadBlockchain(Ethereum);
                     const blockchain = Blockchains.ETHEREUM;
                     const WalletBlockchain = defaultWallet.getBlockchain( blockchain );
                     const WalletTestNode: GenericNode = WalletBlockchain.getNode();

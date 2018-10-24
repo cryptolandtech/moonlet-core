@@ -15,7 +15,7 @@ describe("Core", async () => {
                 assert.throws(() => {
                     // @ts-ignore: we're testing for this scenario
                     classStore.getInstance("test", undefined);
-                }, /^Class type of \'test\' is not in the store$/);
+                }, /^Class type of \'test\' is not loaded\.$/);
 
             });
         });

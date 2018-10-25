@@ -403,21 +403,23 @@ describe("Core", async () => {
                     it("should throw if sending a transaction with a lower nonce than current account nonce", async () => {
                         await account.send( transaction );
 
-                        TestNode.init( TestNode.NETWORKS[ 0 ] );
+                        // TestNode.init( TestNode.NETWORKS[ 0 ] );
 
                         const nonce = await account.getNonce();
-                        const transactionTwo = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, -10, 10, 1 ) as ZilliqaTransaction;
+                        const transactionTwo = account.buildTransferTransaction( "44526c8eef2efab582b049003741079b36f7ad3b".replace("0x", ""), 31, 0, 10, 1 ) as ZilliqaTransaction;
 
                         await account.signTransaction ( transactionTwo );
-
+                        console.log( transactionTwo.TXObject );
                         try {
-                            await account.send( transactionTwo );
+                            const result = await account.send( transactionTwo );
+                            console.log(result);
                             assert.isFalse( true, "This should never be false." );
                         } catch (err) {
                             assert.equal( err.message, "Error: Invalid Tx Json", "Error message did not match." );
+                            console.log(err);
                         }
 
-                        TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+                        // TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
 
                     }).timeout(10000);
                     */

@@ -16,14 +16,14 @@ import { Zilliqa } from 'zilliqa-js';
 
 const pk = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
 
-const testReceiverAddress = "0x22537dfddb1232be8ce10c7fc4b784f61a4375a9";
+// ionut
+const testReceiverAddress = "0x9074038B0db4d16B35Cf39855D9639a883702e7D";
 
 const mapper = new DynamicClassMapper();
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
+// let myNonce = 0;
 /*
-let myNonce = 0;
-
 describe("Zilliqa", async () => {
 
     describe("Wallet with one Zilliqa account", async () => {
@@ -52,12 +52,14 @@ describe("Zilliqa", async () => {
         it("Should have a balance", async () => {
             myNonce = await account.getNonce();
             console.log( await account.getBalance() );
+            console.log( myNonce );
+
         });
 
         describe("send() signed transaction", async () => {
             it("debug", async () => {
                 const nonce = await account.getNonce();
-                const transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 1, 1 ) as ZilliqaTransaction;
+                const transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", "").toLowerCase(), 10, nonce, 1, 1 ) as ZilliqaTransaction;
                 await account.signTransaction ( transaction );
 
                 console.log("\n", ">>>> Moonlet txn:", transaction.TXObject);
@@ -84,9 +86,9 @@ describe("Zilliqa", async () => {
 
             const transactionDetails = {
                 version: 0,
-                nonce: myNonce,
-                to: '22537dfddb1232be8ce10c7fc4b784f61a4375a9',
-                amount: new BN( 1 ) ,
+                nonce: 1,
+                to: testReceiverAddress.replace("0x", "").toLowerCase(),
+                amount: new BN( 100 ) ,
                 gasPrice: 1,
                 gasLimit: 10,
                 code: '',
@@ -111,6 +113,45 @@ describe("Zilliqa", async () => {
 
         });
 
+    });
+
+});
+*/
+/*
+describe("Kaya - Moonlet Core - Wallet with one Zilliqa account", async () => {
+
+    const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+    const blockchain = Blockchains.ZILLIQA;
+
+    const TestNode: GenericNode = defaultWallet.getNode( blockchain );
+    TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+    // TestNode.init( TestNode.NETWORKS[ 0 ] );
+    // TestNode.setCustomNetworkUrl("https://scilla-test-api.aws.z7a.xyz/");
+
+    const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
+    const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
+    const account = defaultWallet.createAccount(blockchain);
+
+    it("Should have a balance", async () => {
+        console.log( await account.getBalance() );
+    });
+
+    describe("send() signed transaction", async () => {
+        it("debug", async () => {
+            const nonce = await account.getNonce();
+            const transaction = account.buildTransferTransaction( "44526c8eef2efab582b049003741079b36f7ad3b".replace("0x", "").toUpperCase(), 10, nonce, 1, 1 ) as ZilliqaTransaction;
+            await account.signTransaction ( transaction );
+
+            console.log("\n", ">>>> Moonlet txn:", transaction.TXObject);
+
+            await account.send( transaction );
+
+            console.log( transaction.toParams() );
+            console.log( "TXN:", transaction.txn );
+
+            console.log( "PK:", account.privateKey.replace("0x", "") );
+            assert.equal( 1, 1, "Transaction Status did not match." );
+        });
     });
 
 });

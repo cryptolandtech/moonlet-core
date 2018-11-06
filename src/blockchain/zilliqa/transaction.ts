@@ -34,7 +34,7 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         return {
             version: this.version,
             nonce: this.nonce,
-            to: this.to,
+            to: this.to.replace("0x", ""),  // remove 0x if present
             amount: new BN( this.amount ),
             gasPrice: this.gasPrice,
             gasLimit: this.gasLimit,

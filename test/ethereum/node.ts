@@ -11,8 +11,12 @@ import { EthereumTransaction } from "../../src/blockchain/ethereum/transaction";
 
 import EthereumTx from 'ethereumjs-tx';
 import { GenericTransaction } from "../../src/core/transaction";
+import { Ethereum } from "../../src/blockchain/ethereum/class.index";
+import Zilliqa from "../../src/blockchain/zilliqa/class.index";
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
 
 const ethereumWallet0Address = "0x9d9216e0a29468bE1eCaCc351ce3887be8a26222";
@@ -311,6 +315,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+                    defaultWallet.loadBlockchain(Ethereum);
                     const blockchain = Blockchains.ETHEREUM;
                     const WalletBlockchain = defaultWallet.getBlockchain( blockchain );
                     const WalletTestNode: GenericNode = WalletBlockchain.getNode();

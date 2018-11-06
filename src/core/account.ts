@@ -1,4 +1,4 @@
-import { GenericTransaction, ITransactionOptions } from './transaction';
+import { GenericTransaction, ITransactionOptions, TransactionStatus } from './transaction';
 import { GenericNode } from "./node";
 import HDKey from './utils/hdkey';
 import { GenericAccountUtils } from './account-utils';
@@ -86,7 +86,7 @@ export abstract class GenericAccount<
     public send(transaction: T, cb?: any, cbtype?: string): Promise<{txn, receipt}> {
         this.transactions.push( transaction );
 
-        if (transaction.status === "SIGNED") {
+        if (transaction.status === TransactionStatus.SIGNED) {
             transaction.setPending();
             return this.node.send( transaction ).then( (txndata) => {
                 transaction.setTxn( txndata );
@@ -134,5 +134,4 @@ export abstract class GenericAccount<
 
     public abstract signTransaction(transaction: T): Buffer;
     public abstract signMessage(message: string): Buffer;
-
 }

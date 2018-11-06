@@ -4,6 +4,7 @@ import { Blockchain } from "./blockchain";
 import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
+import { IBlockchainImplementation } from "./blockchain-implementation";
 
 export interface WalletExport {
     mnemonics: string;
@@ -18,10 +19,15 @@ export interface WalletExport {
 
 export default class Wallet {
 
-    public static fromJson(json: string) {
+    public static fromJson(json: string, blockchains?: IBlockchainImplementation[]) {
 
         const data: WalletExport = JSON.parse( json );
         const wallet: Wallet = new Wallet( data.mnemonics, data.mnemonicslang );
+
+        if (Array.isArray(blockchains)) {
+            blockchains.map(blockchain => wallet.loadBlockchain(blockchain));
+        }
+
         // replace mnemonic data with saved values
         wallet.mnemonics = data.mnemonics;
         wallet.mnemonicslang = data.mnemonicslang;
@@ -138,6 +144,11 @@ export default class Wallet {
 
     public getClassMapper(): DynamicClassMapper {
         return this.mapper;
+    }
+
+    public loadBlockchain(blockchainImplementation: IBlockchainImplementation) {
+        this.mapper.collectClasses(blockchainImplementation.AvailableClasses);
+        // Amount.addConfig(blockchainImplementation.config);
     }
 
     public getAccounts(blockchain: Blockchain, reference: boolean = true, filter: boolean = false, networkId?: number): GenericAccount[] {

@@ -6,6 +6,8 @@ import { GenericAccount } from "../src/core/account";
 import { GenericNode } from "../src/core/node";
 import { GenericTransaction } from "../src/core/transaction";
 import { GenericAccountUtils } from "../src/core/account-utils";
+import { Zilliqa } from "../src/blockchain/zilliqa/class.index";
+import { Ethereum } from "../src/blockchain/ethereum/class.index";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
@@ -16,6 +18,9 @@ describe("Integration", async () => {
         describe("create one Ethereum account", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
+
 
             const blockchain = Blockchains.ETHEREUM;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
@@ -51,6 +56,8 @@ describe("Integration", async () => {
         describe("create two Ethereum accounts", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
 
             const blockchain = Blockchains.ETHEREUM;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
@@ -106,6 +113,8 @@ describe("Integration", async () => {
 
         describe("create one Zilliqa accounts", async () => {
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
 
             const blockchain = Blockchains.ZILLIQA;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
@@ -139,6 +148,8 @@ describe("Integration", async () => {
 
         describe("create two Zilliqa accounts", async () => {
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
 
             const blockchain = Blockchains.ZILLIQA;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
@@ -194,6 +205,8 @@ describe("Integration", async () => {
 
         describe("create one Ethereum account & create one Zilliqa account ", async () => {
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
 
             it("should create one Ethereum account", async () => {
 

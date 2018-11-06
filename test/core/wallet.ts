@@ -1,3 +1,5 @@
+import { Zilliqa } from './../../src/blockchain/zilliqa/class.index';
+import { Ethereum } from './../../src/blockchain/ethereum/class.index';
 import { assert } from "chai";
 import mocha from "mocha";
 
@@ -13,6 +15,8 @@ describe("Core", async () => {
         describe("Wallet: constructed with parameters ( language = EN )", async () => {
 
             const wallet: Wallet = new Wallet(undefined, "EN");
+            wallet.loadBlockchain(Ethereum);
+            wallet.loadBlockchain(Zilliqa);
 
             it("should generate a new mnemonic phrase of 12 words", async () => {
                 const words = MnemonicUtils.getWordsFromMnemonic( wallet.mnemonics, wallet.mnemonicslang );
@@ -27,6 +31,8 @@ describe("Core", async () => {
         describe("Wallet: constructed with parameters ( language = JA )", async () => {
 
             const wallet: Wallet = new Wallet(undefined, "JA");
+            wallet.loadBlockchain(Ethereum);
+            wallet.loadBlockchain(Zilliqa);
 
             it("should generate a new mnemonic phrase of 12 words", async () => {
                 const words = MnemonicUtils.getWordsFromMnemonic( wallet.mnemonics, wallet.mnemonicslang );
@@ -41,6 +47,8 @@ describe("Core", async () => {
         describe("Wallet: constructed with no parameters", async () => {
 
             const wallet: Wallet = new Wallet();
+            wallet.loadBlockchain(Ethereum);
+            wallet.loadBlockchain(Zilliqa);
 
             it("should default to language 'EN'", async () => {
                 assert.equal( wallet.mnemonicslang, "EN", "Mnemonics language is not EN.");
@@ -253,6 +261,9 @@ describe("Core", async () => {
             describe("importAccount()", async () => {
 
                 const importWallet: Wallet = new Wallet();
+                importWallet.loadBlockchain(Ethereum);
+                importWallet.loadBlockchain(Zilliqa);
+
                 const EthereumBlockchain = importWallet.getBlockchain(Blockchains.ETHEREUM);
                 const DynamicClassName = GenericAccount.getImplementedClassName( Blockchains[Blockchains.ETHEREUM] );
 

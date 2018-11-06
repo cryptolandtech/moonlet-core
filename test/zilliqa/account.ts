@@ -8,6 +8,8 @@ import { GenericAccount, AccountType } from "../../src/core/account";
 import { GenericNode } from "../../src/core/node";
 import { GenericTransaction, TransactionStatus } from "../../src/core/transaction";
 import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
+import Ethereum from "../../src/blockchain/ethereum/class.index";
+import Zilliqa from "../../src/blockchain/zilliqa/class.index";
 
 // import Deployer from "./solc/deployer";
 /*
@@ -20,6 +22,8 @@ const DeployeHelper = new Deployer(
 const testReceiverAddress = "0x22537dfddb1232be8ce10c7fc4b784f61a4375a9";
 
 const mapper = new DynamicClassMapper();
+mapper.collectClasses(Zilliqa.AvailableClasses);
+mapper.collectClasses(Ethereum.AvailableClasses);
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
 describe("Core", async () => {
@@ -29,6 +33,8 @@ describe("Core", async () => {
         describe("instantiating new object", async () => {
 
             const wallet: Wallet = new Wallet();
+            wallet.loadBlockchain(Ethereum);
+            wallet.loadBlockchain(Zilliqa);
             const TestNode: GenericNode = wallet.getNode(Blockchains.ZILLIQA);
             const DynamicClassName = GenericAccount.getImplementedClassName( Blockchains[Blockchains.ZILLIQA] );
 
@@ -71,6 +77,8 @@ describe("Core", async () => {
         describe("Wallet with one Zilliqa account ( testrpc )", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
             const blockchain = Blockchains.ZILLIQA;
 
             const TestNode: GenericNode = defaultWallet.getNode( blockchain );

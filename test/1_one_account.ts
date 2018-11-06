@@ -6,6 +6,8 @@ import { GenericAccount } from "../src/core/account";
 import { GenericNode } from "../src/core/node";
 import { GenericTransaction } from "../src/core/transaction";
 import { GenericAccountUtils } from "../src/core/account-utils";
+import Ethereum from "../src/blockchain/ethereum/class.index";
+import Zilliqa from "../src/blockchain/zilliqa/class.index";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
@@ -16,6 +18,8 @@ describe("Integration", async () => {
         describe("create one Ethereum account", async () => {
 
             const defaultWallet: Wallet = new Wallet(mnemonic, "EN");
+            defaultWallet.loadBlockchain(Ethereum);
+            defaultWallet.loadBlockchain(Zilliqa);
             const blockchain = Blockchains.ETHEREUM;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );

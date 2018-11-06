@@ -14,7 +14,7 @@ testrpc_running() {
 }
 
 start_testrpc() {
-  kaya -v --f scripts/rpcs/account-fixtures.json > scripts/TestRPCData/$moduleName.output.log &
+  npx kaya -v --f scripts/rpcs/account-fixtures.json > scripts/TestRPCData/$moduleName.output.log &
   testrpc_pid=$!
   echo $testrpc_pid > scripts/TestRPCData/$moduleName.process.pid
 }

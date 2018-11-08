@@ -40,7 +40,7 @@ describe("Zilliqa", async () => {
         const TestNode: GenericNode = defaultWallet.getNode( blockchain );
         TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
         // TestNode.init( TestNode.NETWORKS[ 0 ] );
-        TestNode.setCustomNetworkUrl("https://scilla-test-api.aws.z7a.xyz/");
+        TestNode.setCustomNetworkUrl("https://dev-test-api.aws.z7a.xyz/");
 
         const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
         const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
@@ -88,7 +88,7 @@ describe("Zilliqa", async () => {
         it("Should work", async () => {
 
             const zilliqa = new Zilliqa({
-                nodeUrl: 'https://scilla-test-api.aws.z7a.xyz/',
+                nodeUrl: 'https://dev-test-api.aws.z7a.xyz/',
             });
 
             const transactionDetails = {
@@ -133,7 +133,7 @@ describe("Kaya - Moonlet Core - Wallet with one Zilliqa account", async () => {
     const TestNode: GenericNode = defaultWallet.getNode( blockchain );
     TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
     // TestNode.init( TestNode.NETWORKS[ 0 ] );
-    // TestNode.setCustomNetworkUrl("https://scilla-test-api.aws.z7a.xyz/");
+    // TestNode.setCustomNetworkUrl("https://dev-test-api.aws.z7a.xyz/");
 
     const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
     const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );

@@ -7,6 +7,10 @@ export abstract class GenericAccountUtils {
             if ( !Buffer.isBuffer( target ) ) {
                 throw new Error(method + ": parameter must be a Buffer().");
             }
+        } else if ( expected === "BigNumber") {
+            if ( !BigNumber.isBigNumber( target ) ) {
+                throw new Error(method + ": parameter must be of type BigNumber.");
+            }
         } else if ( typeof target !== expected ) {
             if ( target.constructor.name !== expected) {
                 throw new Error(method + ": parameter must be of type " + expected + ".");

@@ -55,6 +55,9 @@
   },
   "homepage": "https://github.com/cryptolandtech/moonlet-core#readme",
   "dependencies": {
+    "@zilliqa-js/core": "^0.2.6",
+    "@zilliqa-js/crypto": "^0.2.6",
+    "@zilliqa-js/util": "^0.2.6",
     "axios": "^0.16.2",
     "bignumber.js": "^7.2.1",
     "bip39": "^2.5.0",
@@ -67,7 +70,7 @@
     "https": "^1.0.0",
     "kaya": "git+https://github.com/cryptolandtech/kaya.git",
     "ts-mocha": "^1.3.0",
-    "zilliqa-js": "git+https://github.com/mickys/Zilliqa-JavaScript-Library.git#797bbb97acd6ee95653d186bc2a110fe79d34d5f"
+    "tslib": "^1.9.3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.6",

@@ -1,7 +1,9 @@
 import { assert } from "chai";
 import mocha from "mocha";
 
-import { util as OfficialUtil } from 'zilliqa-js';
+import { validation as ZilliqaJsValidation } from "@zilliqa-js/util";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+
 import { ZilliqaAccountUtils as AccountUtils } from "../../src/blockchain/zilliqa/account-utils";
 import BigNumber from "bignumber.js";
 
@@ -107,7 +109,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util getPubKeyFromPrivateKey()", async () => {
                 const mine = instance.privateToPublic( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.getPubKeyFromPrivateKey( Wallet0PrivateKey.replace("0x", "") ) ;
+                const theirs = ZilliqaJsCrypto.getPubKeyFromPrivateKey( Wallet0PrivateKey.replace("0x", "") ) ;
                 assert.equal( mine.toString("hex") , theirs, "keys do not match");
             });
 
@@ -142,7 +144,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util getAddressFromPrivateKey()", async () => {
                 const mine = instance.privateToAddress( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.getAddressFromPrivateKey( Wallet0PrivateKey.replace("0x", "") );
+                const theirs = ZilliqaJsCrypto.getAddressFromPrivateKey( Wallet0PrivateKey.replace("0x", "") );
                 assert.equal( mine.toString("hex") , theirs, "results do not match");
             });
 
@@ -204,7 +206,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util getAddressFromPublicKey()", async () => {
                 const mine = instance.publicToAddress( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.getAddressFromPublicKey( Wallet0PublicKey.replace("0x", "") );
+                const theirs = ZilliqaJsCrypto.getAddressFromPublicKey( Wallet0PublicKey.replace("0x", "") );
                 assert.equal( mine.toString("hex") , theirs, "results do not match");
             });
         });
@@ -228,7 +230,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util isValidChecksumAddress()", async () => {
                 const mine = instance.isValidChecksumAddress( Wallet0Address );
-                const theirs = OfficialUtil.isValidChecksumAddress( Wallet0Address );
+                const theirs = ZilliqaJsCrypto.isValidChecksumAddress( Wallet0Address );
                 assert.equal( mine, theirs, "results do not match");
             });
 
@@ -253,7 +255,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util isAddress() -> true", async () => {
                 const mine = instance.isValidAddress( Buffer.from(Wallet0Address.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.isAddress( Wallet0Address.replace("0x", "") );
+                const theirs = ZilliqaJsValidation.isAddress( Wallet0Address.replace("0x", "") );
 
                 assert.isTrue( theirs, "Should return true for a valid address buffer" );
                 assert.equal( mine, theirs, "results do not match");
@@ -279,7 +281,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util verifyPrivateKey()", async () => {
                 const mine = instance.isValidPrivate( Buffer.from(Wallet0PrivateKey.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.verifyPrivateKey( Wallet0PrivateKey );
+                const theirs = ZilliqaJsCrypto.verifyPrivateKey( Wallet0PrivateKey );
                 assert.equal( mine, theirs, "results do not match");
             });
 
@@ -304,7 +306,7 @@ describe("Zilliqa", async () => {
 
             it("should match the return of zilliqa-js.util isPubKey()", async () => {
                 const mine = instance.isValidPublic( Buffer.from(Wallet0PublicKey.replace("0x", ""), "hex") );
-                const theirs = OfficialUtil.isPubKey( Wallet0PublicKey.replace("0x", "") );
+                const theirs = ZilliqaJsValidation.isPubKey( Wallet0PublicKey.replace("0x", "") );
                 assert.equal( mine, theirs, "results do not match");
             });
         });

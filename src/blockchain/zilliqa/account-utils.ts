@@ -1,35 +1,34 @@
 import { GenericAccountUtils } from "../../core/account-utils";
 import { BigNumber } from "bignumber.js";
-// import { util as ZilliqaUtil } from 'zilliqa-js';
-const ZilliqaUtil = require('zilliqa-js').util;
-// const ZilliqaUtil = require('zilliqa.js');
-// const ZilliqaUtil = Zilliqa.utilszz;
+
+import { validation as ZilliqaJsValidation } from "@zilliqa-js/util";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
 
 export class ZilliqaAccountUtils extends GenericAccountUtils {
 
     public isValidChecksumAddress( address: string ): boolean {
         this.requireType(address, "string", "isValidChecksumAddress");
-        return ZilliqaUtil.isValidChecksumAddress( address );
+        return ZilliqaJsCrypto.isValidChecksumAddress( address );
     }
 
     public toChecksumAddress( address: string ): string {
         this.requireType(address, "string", "toChecksumAddress");
-        return ZilliqaUtil.toChecksumAddress( address );
+        return ZilliqaJsCrypto.toChecksumAddress( address );
     }
 
     public isValidAddress( key: Buffer ): boolean {
         this.requireType(key, "Buffer", "isValidAddress");
-        return ZilliqaUtil.isAddress( key.toString("hex") );
+        return ZilliqaJsValidation.isAddress( key.toString("hex") );
     }
 
     public isValidPrivate( key: Buffer ): boolean {
         this.requireType(key, "Buffer", "isValidPrivate");
-        return ZilliqaUtil.isPrivateKey( key.toString("hex") );
+        return ZilliqaJsValidation.isPrivateKey( key.toString("hex") );
     }
 
     public isValidPublic( key: Buffer ): boolean {
         this.requireType(key, "Buffer", "isValidPublic");
-        return ZilliqaUtil.isPubKey( key.toString("hex") );
+        return ZilliqaJsValidation.isPubKey( key.toString("hex") );
     }
 
     public publicToAddress( key: Buffer ): Buffer {
@@ -38,7 +37,7 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
         if (key.length === 32 || key.length === 33) {
             return Buffer.from(
                 // official receives string.
-                ZilliqaUtil.getAddressFromPublicKey(key.toString("hex")),
+                ZilliqaJsCrypto.getAddressFromPublicKey(key.toString("hex")),
             "hex");
         }
         throw new Error("private key length is invalid");
@@ -49,7 +48,7 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
         if (privateKey.length === 32) {
             return Buffer.from(
                 // official receives string.
-                ZilliqaUtil.getPubKeyFromPrivateKey( privateKey.toString("hex") ),
+                ZilliqaJsCrypto.getPubKeyFromPrivateKey( privateKey.toString("hex") ),
             "hex");
         }
         throw new Error("private key length is invalid");
@@ -61,7 +60,7 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
         if (privateKey.length === 32) {
             return Buffer.from(
                 // official receives string.
-                ZilliqaUtil.getAddressFromPrivateKey( privateKey.toString("hex") ),
+                ZilliqaJsCrypto.getAddressFromPrivateKey( privateKey.toString("hex") ),
             "hex");
         }
         throw new Error("private key length is invalid");

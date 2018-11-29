@@ -55,9 +55,7 @@
   },
   "homepage": "https://github.com/cryptolandtech/moonlet-core#readme",
   "dependencies": {
-    "@zilliqa-js/core": "^0.2.6",
-    "@zilliqa-js/crypto": "^0.2.6",
-    "@zilliqa-js/util": "^0.2.6",
+    "@zilliqa-js/zilliqa": "^0.2.6",
     "axios": "^0.16.2",
     "bignumber.js": "^7.2.1",
     "bip39": "^2.5.0",

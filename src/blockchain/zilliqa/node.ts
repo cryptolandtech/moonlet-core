@@ -46,36 +46,19 @@ export class ZilliqaNode extends GenericNode {
         if ( transaction.receipt !== undefined ) {
             return Promise.resolve( transaction.receipt );
         } else {
-            /*
-            // not implemented by Zilliqa yet.. returns "Hello"
-            return this.rpcCall("GetTransactionReceipt", [transaction.txn], "raw").then(data => {
-                transaction.setReceiptStatus( data );
-                return Promise.resolve( data );
-            }).catch(error => {
-                return Promise.reject( error );
-            });
-            */
-
-            const data = {
-                transactionHash: transaction.txn,
-                transactionIndex: 0,
-                blockHash: "0xDummy",
-                blockNumber: 2,
-                contractAddress: "0xDummy",
-                cumulativeGasUsed: 2,
-                gasUsed: 2,
-                logs: [],
-                status: "0x1",
-            };
-            transaction.setReceiptStatus( data );
-            return Promise.resolve( data );
+            return Promise.resolve( transaction.txn.TranID );
         }
     }
 
     public send(transaction: ZilliqaTransaction): Promise<string> {
-        // @TODO: fix this once library does. transaction.TXObject hack
-        transaction.TXObject.amount = transaction.TXObject.amount.toNumber();
-        return this.sendRaw( transaction.TXObject );
+
+        // cast properties as expected by Zilliqa Nodes.
+        const SendObject = transaction.TXObject;
+        SendObject.amount = SendObject.amount.toString();
+        SendObject.gasPrice = SendObject.gasPrice.toString();
+        SendObject.gasLimit = SendObject.gasLimit.toString();
+
+        return this.sendRaw( SendObject );
     }
 
     public sendRaw(rawTransaction: string): Promise<string> {

@@ -101,7 +101,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
             amount,                     // value in wei
             nonce,                      // account nonce
             {
-                gasLimit: txgasLimit,                          // max network allowed gas limit
+                gasLimit: txgasLimit,                       // max network allowed gas limit
                 gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
                 chainId: this.node.network.chainId,         // current network chain id
                 data: txdata,

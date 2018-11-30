@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import mocha from "mocha";
-
 import DynamicClass from "../../src/class.store";
 
 describe("Core", async () => {
@@ -11,7 +10,7 @@ describe("Core", async () => {
             it("should fail silent on collect Classes", async () => {
                 const classStore = new DynamicClass();
                 classStore.collectClasses({
-                    ClassName: false
+                    ClassName: false,
                 });
             });
 

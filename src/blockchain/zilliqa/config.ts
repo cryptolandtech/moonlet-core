@@ -3,7 +3,7 @@ import { IBlockchainConfig } from '../../core/blockchain-config';
 
 export const ZilliqaConfig: IBlockchainConfig = {
     blockchain: Blockchain.ZILLIQA,
-    mainCoin: "ZIL"
-}
+    mainCoin: "ZIL",
+};
 
 export default ZilliqaConfig;

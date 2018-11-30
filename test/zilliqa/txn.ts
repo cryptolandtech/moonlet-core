@@ -10,11 +10,15 @@ import { GenericNode } from "../../src/core/node";
 import { GenericTransaction, TransactionStatus } from "../../src/core/transaction";
 import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
 
-const BN = require( 'bn.js' );
-import { util as OfficialUtil } from 'zilliqa-js';
-
 import Ethereum from "../../src/blockchain/ethereum/class.index";
-import { Zilliqa } from "../../src/blockchain/zilliqa/class.index";
+import Zilliqa from "../../src/blockchain/zilliqa/class.index";
+
+import { Zilliqa as ZilliqaOfficial } from 'zilliqa-js';
+import { Zilliqa as OfficialZilliqa } from '@zilliqa-js/zilliqa';
+
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+import { BN, Long } from '@zilliqa-js/util';
+import Signature from 'elliptic/lib/elliptic/ec/signature';
 
 const pk = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
 
@@ -26,9 +30,9 @@ mapper.collectClasses(Zilliqa.AvailableClasses);
 mapper.collectClasses(Ethereum.AvailableClasses);
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
+/*
 describe("Zilliqa", async () => {
 
-    /*
     describe("Wallet with one Zilliqa account", async () => {
         let myNonce = 0;
 
@@ -38,9 +42,10 @@ describe("Zilliqa", async () => {
         const blockchain = Blockchains.ZILLIQA;
 
         const TestNode: GenericNode = defaultWallet.getNode( blockchain );
-        TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
+        TestNode.init( TestNode.NETWORKS[ 1 ] ); // https://api-scilla.zilliqa.com/
+
         // TestNode.init( TestNode.NETWORKS[ 0 ] );
-        TestNode.setCustomNetworkUrl("https://dev-test-api.aws.z7a.xyz/");
+        // TestNode.setCustomNetworkUrl("https://dev-test-api.aws.z7a.xyz/");
 
         const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
         const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
@@ -65,65 +70,61 @@ describe("Zilliqa", async () => {
         describe("send() signed transaction", async () => {
             it("debug", async () => {
                 const nonce = await account.getNonce();
-                const transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", "").toLowerCase(), 1000, nonce, 1, 1 ) as ZilliqaTransaction;
-                await account.signTransaction ( transaction );
+
+                const transaction = account.buildTransferTransaction(
+                    testReceiverAddress.replace("0x", "").toLowerCase(),
+                    8,      // amount
+                    nonce,  // nonce
+                    10,     // gasLimit
+                    100,    // gasPrice
+                ) as ZilliqaTransaction;
+
+                await account.signTransaction( transaction );
 
                 console.log("\n", ">>>> Moonlet txn:", transaction.TXObject);
 
                 await account.send( transaction );
 
-                console.log( transaction.toParams() );
+                // console.log( transaction.toParams() );
                 console.log( "TXN:", transaction.txn );
 
                 console.log( "PK:", account.privateKey.replace("0x", "") );
                 assert.equal( 1, 1, "Transaction Status did not match." );
-            });
-        });
 
+            }).timeout(10000);
+        });
     });
-    */
-    /*
+
     describe("Official Transaction Test", async () => {
 
         it("Should work", async () => {
 
-            const zilliqa = new Zilliqa({
-                nodeUrl: 'https://dev-test-api.aws.z7a.xyz/',
+            const { BN, Long } = require('@zilliqa-js/util');
+
+            const { Transaction } = require('@zilliqa-js/account');
+
+            const zilliqa = new OfficialZilliqa('https://api-scilla.zilliqa.com/');
+
+            zilliqa.wallet.addByPrivateKey(pk);
+
+            const newtx = zilliqa.transactions.new({
+                version: 1,
+                toAddr: testReceiverAddress.replace("0x", "").toLowerCase(),
+                amount: new BN(8),
+                gasPrice: new BN(100),
+                // can be `number` if size is <= 2^53 (i.e., window.MAX_SAFE_INTEGER)
+                gasLimit: Long.fromNumber(10),
             });
 
-            const transactionDetails = {
-                version: 0,
-                nonce: 1,
-                to: testReceiverAddress.replace("0x", "").toLowerCase(),
-                amount: new BN( 100 ) ,
-                gasPrice: 1,
-                gasLimit: 10,
-                code: '',
-                data: '',
-                pubKey: null,
-//                pubKey: zilliqa.util.getPubKeyFromPrivateKey(pk),
-            };
+            console.log("newtx", newtx);
 
-            const tx = OfficialUtil.createTransactionJson( pk, transactionDetails );
-            console.log("\n", ">>>> Official txn:", tx);
+            const tx = await zilliqa.blockchain.createTransaction(newtx);
+            console.log( tx );
 
-            console.log( "PK:", pk );
-            // return ;
-            const node = zilliqa.getNode();
-            const exec = await node.createTransaction(tx, (err, data) => {
-                if (err || data.error) {
-                    console.log('Error:', err, data);
-                } else {
-                    console.log('OK:', data.result);
-                }
-            });
-
-        });
-
+        }).timeout(10000);
     });
-    */
 });
-
+*/
 /*
 describe("Kaya - Moonlet Core - Wallet with one Zilliqa account", async () => {
 
@@ -160,6 +161,4 @@ describe("Kaya - Moonlet Core - Wallet with one Zilliqa account", async () => {
             assert.equal( 1, 1, "Transaction Status did not match." );
         });
     });
-
-});
 */

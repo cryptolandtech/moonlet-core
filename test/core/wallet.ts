@@ -2,7 +2,6 @@ import { Zilliqa } from './../../src/blockchain/zilliqa/class.index';
 import { Ethereum } from './../../src/blockchain/ethereum/class.index';
 import { assert } from "chai";
 import mocha from "mocha";
-
 import { Wallet, MnemonicUtils, Blockchains } from "../../src/index";
 import { GenericAccount, AccountType } from "../../src/core/account";
 import EthereumNetworks from "../../src/blockchain/ethereum/networks";

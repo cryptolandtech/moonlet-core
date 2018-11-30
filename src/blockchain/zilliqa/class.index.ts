@@ -3,7 +3,7 @@ import { ZilliqaNode } from "./node";
 import { ZilliqaTransaction } from "./transaction";
 
 import config from "./config";
-import networks from "./networks"
+import networks from "./networks";
 import { IBlockchainImplementation } from "../../core/blockchain-implementation";
 
 const AvailableClasses = {
@@ -15,7 +15,7 @@ const AvailableClasses = {
 export const Zilliqa: IBlockchainImplementation = {
     AvailableClasses,
     config,
-    networks
+    networks,
 };
 
 export default Zilliqa;

@@ -1,8 +1,6 @@
 import { assert } from "chai";
 import mocha from "mocha";
-
 import HDKey from "../../src/core/utils/hdkey";
-
 import { Wallet, Blockchains, AccountType, MnemonicUtils } from "../../src/index";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";

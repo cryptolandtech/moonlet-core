@@ -222,7 +222,13 @@ describe("Core", async () => {
 
                 before( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 10, 1 ) as ZilliqaTransaction;
+                    transaction = account.buildTransferTransaction(
+                        testReceiverAddress.replace("0x", ""), // to
+                        1,      // amount
+                        nonce,  // nonce
+                        1,      // gasLimit
+                        100,    // gasPrice
+                    ) as ZilliqaTransaction;
                     signed = await account.signTransaction ( transaction );
                 });
 
@@ -246,8 +252,8 @@ describe("Core", async () => {
                 let transaction;
                 let nonce;
                 const value = 1;
-                const gasLimit = 10;
-                const gasPrice = 1;
+                const gasLimit = 1;
+                const gasPrice = 100;
 
                 beforeEach( async () => {
                     nonce = await account.getNonce();
@@ -367,7 +373,13 @@ describe("Core", async () => {
 
                     it("should throw if transaction status is not SIGNED", async () => {
                         const nonce = await account.getNonce();
-                        const transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 10, 1 ) as ZilliqaTransaction;
+                        const transaction = account.buildTransferTransaction(
+                            testReceiverAddress.replace("0x", ""), // to
+                            1,      // amount
+                            nonce,  // nonce
+                            1,      // gasLimit
+                            100,    // gasPrice
+                        ) as ZilliqaTransaction;
 
                         try {
                             await account.send( transaction );
@@ -384,7 +396,13 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 10, 1 ) as ZilliqaTransaction;
+                        transaction = account.buildTransferTransaction(
+                            testReceiverAddress.replace("0x", ""), // to
+                            1,      // amount
+                            nonce,  // nonce
+                            1,      // gasLimit
+                            100,    // gasPrice
+                        ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -453,7 +471,13 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 10, 1 ) as ZilliqaTransaction;
+                        transaction = account.buildTransferTransaction(
+                            testReceiverAddress.replace("0x", ""), // to
+                            1,      // amount
+                            nonce,  // nonce
+                            1,      // gasLimit
+                            100,    // gasPrice
+                        ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -523,7 +547,13 @@ describe("Core", async () => {
 
                 beforeEach( async () => {
                     const nonce = await account.getNonce();
-                    transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), 1, nonce, 10, 1 ) as ZilliqaTransaction;
+                    transaction = account.buildTransferTransaction(
+                        testReceiverAddress.replace("0x", ""), // to
+                        1,      // amount
+                        nonce,  // nonce
+                        1,      // gasLimit
+                        100,    // gasPrice
+                    ) as ZilliqaTransaction;
                     await account.signTransaction ( transaction );
                 });
 

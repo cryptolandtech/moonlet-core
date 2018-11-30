@@ -1,8 +1,8 @@
 import { GenericNode } from "./core/node";
 
 export default class DynamicClass {
-    classStore: any = [
-        GenericNode
+    public classStore: any = [
+        GenericNode,
     ];
 
     public collectClasses( object: any ) {

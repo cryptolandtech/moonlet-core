@@ -3,7 +3,6 @@ import { Network } from "../../core/network";
 import networks from "./networks";
 import { BigNumber } from 'bignumber.js';
 import { ZilliqaTransaction } from "./transaction";
-import axios from 'axios';
 
 export class ZilliqaNode extends GenericNode {
 

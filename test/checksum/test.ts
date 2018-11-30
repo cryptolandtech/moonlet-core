@@ -1,8 +1,7 @@
 import { assert } from "chai";
 import mocha from "mocha";
-
 import { checksummedStore } from './checksum.fixtures';
-import { util  } from 'zilliqa-js';
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
 const laksaUtil = require('laksa-core-crypto');
 
 describe("Zilliqa address checksums", async () => {
@@ -11,12 +10,12 @@ describe("Zilliqa address checksums", async () => {
         for (let i = 0; i < checksummedStore.length; i++) {
             if (checksummedStore[i]) {
                 const current = checksummedStore[i].good;
-                const officialAddr = util.toChecksumAddress( current );
+                const officialAddr = ZilliqaJsCrypto.toChecksumAddress( current );
                 const laksaAddr = laksaUtil.toChecksumAddress( current );
                 assert.equal( officialAddr, laksaAddr, "Addresses do not match");
 
                 assert.isTrue( laksaUtil.isValidChecksumAddress( officialAddr ), "Laksa isChecksumAddress check failed");
-                assert.isTrue( util.isValidChecksumAddress( laksaAddr ), "Official isChecksumAddress check failed");
+                assert.isTrue( ZilliqaJsCrypto.isValidChecksumAddress( laksaAddr ), "Official isChecksumAddress check failed");
             }
         }
     });

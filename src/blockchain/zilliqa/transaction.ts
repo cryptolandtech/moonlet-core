@@ -1,5 +1,5 @@
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
-const BN = require( 'bn.js' );
+import { BN, Long } from '@zilliqa-js/util';
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
@@ -36,8 +36,8 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
             nonce: this.nonce,
             to: this.to.replace("0x", ""),  // remove 0x if present
             amount: new BN( this.amount ),
-            gasPrice: this.gasPrice,
-            gasLimit: this.gasLimit,
+            gasPrice: new BN( this.gasPrice ),
+            gasLimit: Long.fromNumber(this.gasLimit),
             code: null,
             data: null,
             pubKey: null,

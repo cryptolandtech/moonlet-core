@@ -21,7 +21,7 @@ const Wallet0Address = "7bb3b0e8a59f3f61d9bff038f4aeb42cae2ecce8";
 const Wallet0PrivateKey = "db11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3";
 
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
-const BN = require( 'bn.js' );
+import { BN, Long } from '@zilliqa-js/util';
 
 describe("Core", async () => {
 

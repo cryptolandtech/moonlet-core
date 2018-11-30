@@ -1,8 +1,8 @@
 import { Blockchain } from './blockchain';
 export interface IBlockchainConfig {
-    blockchain: Blockchain,
-    mainCoin: string,
+    blockchain: Blockchain;
+    mainCoin: string;
     units?: {
-        [unit: string]: number
-    }
+        [unit: string]: number,
+    };
 }

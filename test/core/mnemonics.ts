@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import mocha from "mocha";
-
 import { Wallet, Blockchains, AccountType, MnemonicUtils } from "../../src/index";
 
 describe("Core", async () => {

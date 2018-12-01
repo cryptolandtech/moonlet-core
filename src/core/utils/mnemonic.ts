@@ -6,7 +6,7 @@ interface WordListItem {
 
 export default class Mnemonic {
 
-    public static getAvailableWordLists(): WordListItem[] {
+    public static getAvailableWordLists(): WordListItem {
         return bip.wordlists;
     }
 

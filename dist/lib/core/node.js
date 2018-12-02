@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const bignumber_js_1 = require("bignumber.js");
 const axios_1 = __importDefault(require("axios"));
 class GenericNode {
     constructor() {
@@ -20,6 +21,7 @@ class GenericNode {
     init(network) {
         network = network || this.NETWORKS[0];
         this.customNetworkUrl = false;
+        this.blockchain = network.blockchain;
         this.network = Object.assign({}, network);
     }
     getCurrentNetworkPathString() {
@@ -40,21 +42,22 @@ class GenericNode {
             }
         }
     }
-    call(method, params, cb) {
+    rpcCall(method, params, dec) {
         const callData = this.buildCall(method, params);
         const callOptions = {};
-        try {
-            const action = axios_1.default.post(this.network.url, callData, callOptions);
-            if (cb) {
-                action.then(data => cb(null, data)).catch(error => cb(error));
+        const action = axios_1.default.post(this.network.url, callData, callOptions);
+        // console.log( "CallData: ", callData );
+        return action.then((data) => {
+            // console.log( "return result:", data );
+            if (data.data.result !== undefined) {
+                return this.resultDecoder(data.data.result, dec);
             }
             else {
-                return action;
+                return Promise.reject(data.data.error.message);
             }
-        }
-        catch (error) {
-            throw new Error("call:" + error);
-        }
+        }).catch((error) => {
+            return Promise.reject(new Error(error));
+        });
     }
     buildCall(cmethod, cparams) {
         return {
@@ -63,6 +66,21 @@ class GenericNode {
             params: cparams,
             id: ++this.callId,
         };
+    }
+    resultDecoder(data, type) {
+        if (type === "raw" || type === undefined || type === "" || type === null) {
+            return data;
+        }
+        else if (type === "BigNumber") {
+            return new bignumber_js_1.BigNumber(data);
+        }
+        else if (type === "number") {
+            return parseInt(data, 16); // radix js default = 16
+        }
+        else if (type === "Buffer") {
+            return Buffer.from(data);
+        }
+        throw new Error("type: [" + type + "] not implemented");
     }
 }
 GenericNode.NETWORKS = [];

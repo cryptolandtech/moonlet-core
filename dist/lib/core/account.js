@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const transaction_1 = require("./transaction");
 var AccountType;
 (function (AccountType) {
     AccountType["HD"] = "HD";
@@ -11,6 +12,7 @@ class GenericAccount {
         this.address = "";
         this.publicKey = "";
         this.privateKey = "";
+        this.supportsCancel = false;
         this.transactions = [];
         this.node = accountOptions.node;
         switch (accountOptions.type) {
@@ -50,6 +52,38 @@ class GenericAccount {
     }
     getTransactions() {
         return this.transactions;
+    }
+    send(transaction, cb, cbtype) {
+        this.transactions.push(transaction);
+        if (transaction.status === transaction_1.TransactionStatus.SIGNED) {
+            transaction.setPending();
+            return this.node.send(transaction).then((txndata) => {
+                transaction.setTxn(txndata);
+                if (cb !== undefined && cbtype === "txn") {
+                    cb(null, txndata);
+                }
+                // kaya does not throw this error properly..
+                if (transaction.txn === "Invalid Tx Json") {
+                    throw new Error("Invalid Tx Json");
+                }
+                // load extra transaction details
+                return this.node.getTransactionReceipt(transaction).then(receiptdata => {
+                    if (cb !== undefined && cbtype === undefined) {
+                        cb(null, receiptdata);
+                    }
+                    return Promise.resolve({ txn: txndata, receipt: receiptdata });
+                });
+            }).catch((error) => {
+                if (cb !== undefined) {
+                    cb(error);
+                }
+                return Promise.reject(new Error(error));
+            });
+        }
+        return Promise.reject(new Error("Transaction status needs to be SIGNED"));
+    }
+    buildCancelTransaction(nonce) {
+        //
     }
 }
 exports.GenericAccount = GenericAccount;

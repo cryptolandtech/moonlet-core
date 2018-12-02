@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const blockchain_1 = require("../../core/blockchain");
 const networks = [
     {
+        network_id: 0,
         name: "Main net",
         chainId: 1,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
@@ -11,6 +12,7 @@ const networks = [
         HDCoinValue: 60,
     },
     {
+        network_id: 1,
         name: "Ropsten",
         chainId: 3,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
@@ -19,6 +21,7 @@ const networks = [
         HDCoinValue: 1,
     },
     {
+        network_id: 2,
         name: "Rinkeby",
         chainId: 4,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
@@ -27,6 +30,7 @@ const networks = [
         HDCoinValue: 1,
     },
     {
+        network_id: 3,
         name: "Kovan",
         chainId: 42,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
@@ -35,12 +39,13 @@ const networks = [
         HDCoinValue: 1,
     },
     {
+        network_id: 4,
         name: "Ganache - TestRPC",
         chainId: 15,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
         mainNet: false,
         url: "http://127.0.0.1:8545/",
-        HDCoinValue: 1,
+        HDCoinValue: 60,
     },
 ];
 exports.default = networks;

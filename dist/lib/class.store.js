@@ -1,28 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = require("./core/node");
-const class_index_1 = require("./blockchain/ethereum/class.index");
-const class_index_2 = require("./blockchain/zilliqa/class.index");
-const ClassStore = [
-    node_1.GenericNode,
-];
 class DynamicClass {
     constructor() {
-        this.collectClasses(class_index_1.AvailableClasses);
-        this.collectClasses(class_index_2.AvailableClasses);
+        this.classStore = [
+            node_1.GenericNode,
+        ];
     }
     collectClasses(object) {
         for (const name in object) {
             if (object[name]) {
-                ClassStore[name] = object[name];
+                this.classStore[name] = object[name];
             }
         }
     }
     getInstance(className, opts) {
-        if (ClassStore[className] === undefined || ClassStore[className] === null) {
-            throw new Error(`Class type of \'${className}\' is not in the store`);
+        if (this.classStore[className] === undefined || this.classStore[className] === null) {
+            throw new Error(`Class type of \'${className}\' is not loaded.`);
         }
-        return new ClassStore[className](opts);
+        return new this.classStore[className](opts);
     }
 }
 exports.default = DynamicClass;

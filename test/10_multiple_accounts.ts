@@ -21,7 +21,6 @@ describe("Integration", async () => {
             defaultWallet.loadBlockchain(Ethereum);
             defaultWallet.loadBlockchain(Zilliqa);
 
-
             const blockchain = Blockchains.ETHEREUM;
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );

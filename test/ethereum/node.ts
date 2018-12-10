@@ -208,7 +208,7 @@ describe("Core", async () => {
                             assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
                             assert.equal(
                                 e.message,
-                                "Error: Request failed with status code 405",
+                                "Error: Request failed with status code 400",
                                 "Invalid message",
                             );
                         }
@@ -228,7 +228,7 @@ describe("Core", async () => {
                             assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
                             assert.equal(
                                 e.message,
-                                "Error: Request failed with status code 405",
+                                "Error: Request failed with status code 400",
                                 "Invalid message",
                             );
                         });

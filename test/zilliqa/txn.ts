@@ -20,6 +20,7 @@ import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
 import { BN, Long } from '@zilliqa-js/util';
 import Signature from 'elliptic/lib/elliptic/ec/signature';
 
+// const pk = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
 const pk = "891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13";
 
 // ionut

@@ -1,0 +1,1 @@
+{"version":3,"file":"config.js","sourceRoot":"","sources":["../../../../src/blockchain/ethereum/config.ts"],"names":[],"mappings":";;AAAA,wDAAqD;AAGxC,QAAA,cAAc,GAAsB;IAC7C,UAAU,EAAE,uBAAU,CAAC,QAAQ;IAC/B,QAAQ,EAAE,KAAK;IACf,KAAK,EAAE;QACH,GAAG,EAAE,EAAE;QACP,IAAI,EAAE,CAAC;KACV;CACJ,CAAA;AAED,kBAAe,sBAAc,CAAC"}

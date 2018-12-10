@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const blockchain_1 = require("../../core/blockchain");
 const networks = [
     {
+        network_id: 0,
         name: "Main net",
         chainId: 1,
         blockchain: blockchain_1.Blockchain.ZILLIQA,
@@ -11,6 +12,7 @@ const networks = [
         HDCoinValue: 10018,
     },
     {
+        network_id: 1,
         name: "Test net",
         chainId: 2,
         blockchain: blockchain_1.Blockchain.ZILLIQA,
@@ -19,6 +21,7 @@ const networks = [
         HDCoinValue: 1,
     },
     {
+        network_id: 2,
         name: "Kaya - TestRPC",
         chainId: 15,
         blockchain: blockchain_1.Blockchain.ZILLIQA,

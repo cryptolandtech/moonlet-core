@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const account_utils_1 = require("../../core/account-utils");
-const bignumber_js_1 = require("bignumber.js");
 const EthereumUtil = require('ethereumjs-util');
 class EthereumAccountUtils extends account_utils_1.GenericAccountUtils {
     isValidChecksumAddress(key) {
@@ -20,7 +19,7 @@ class EthereumAccountUtils extends account_utils_1.GenericAccountUtils {
         this.requireType(key, "Buffer", "isValidPrivate");
         let privateKey = key.toString();
         if (privateKey.length === 66) {
-            privateKey = privateKey.substr(2);
+            privateKey = privateKey.replace("0x", "");
         }
         return !!privateKey.match(/^[0-9a-fA-F]{64}$/);
     }
@@ -52,9 +51,7 @@ class EthereumAccountUtils extends account_utils_1.GenericAccountUtils {
         return '0x' + buf.toString('hex');
     }
     balanceToStd(input) {
-        if (typeof input === "number" || typeof input === "string") {
-            return new bignumber_js_1.BigNumber(input).div(Math.pow(10, 18)).toString();
-        }
+        this.requireType(input, "BigNumber", "balanceToStd");
         return input.div(Math.pow(10, 18)).toString();
     }
 }

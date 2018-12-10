@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = require("../../core/node");
 const networks_1 = __importDefault(require("./networks"));
-const bignumber_js_1 = require("bignumber.js");
 class EthereumNode extends node_1.GenericNode {
     constructor(network) {
         super();
@@ -13,34 +12,40 @@ class EthereumNode extends node_1.GenericNode {
         this.init(network);
     }
     getBalance(caddress) {
-        return new Promise((resolve, reject) => {
-            const result = this.call("eth_getBalance", [
-                caddress,
-                'latest',
-            ]);
-            return result.then((res) => {
-                return resolve(new bignumber_js_1.BigNumber(res.data.result));
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+        return this.rpcCall("eth_getBalance", [
+            caddress,
+            'latest',
+        ], "BigNumber");
     }
     getNonce(caddress) {
-        return new Promise((resolve, reject) => {
-            const result = this.call("eth_getTransactionCount", [
-                caddress,
-                'pending',
-            ]);
-            return result.then((res) => {
-                const num = new bignumber_js_1.BigNumber(res.data.result);
-                return resolve(num.toNumber());
-            }).catch((error) => {
-                reject(error);
-            });
-        });
+        return this.rpcCall("eth_getTransactionCount", [
+            caddress,
+            'latest',
+        ], "number");
     }
-    send(rawTransaction) {
-        throw new Error("Method not implemented.");
+    estimateGas(from, callArguments) {
+        return this.rpcCall("eth_estimateGas", [
+            callArguments,
+        ], "number");
+    }
+    getTransactionReceipt(transaction) {
+        if (transaction.receipt !== undefined) {
+            return Promise.resolve(transaction.receipt);
+        }
+        else {
+            return this.rpcCall("eth_getTransactionReceipt", [transaction.txn], "raw").then(data => {
+                transaction.setReceiptStatus(data);
+                return Promise.resolve(data);
+            }).catch(error => {
+                return Promise.reject(error);
+            });
+        }
+    }
+    send(transaction) {
+        return this.sendRaw("0x" + transaction.raw.toString("hex"));
+    }
+    sendRaw(rawTransaction) {
+        return this.rpcCall("eth_sendRawTransaction", [rawTransaction], "raw");
     }
 }
 EthereumNode.NETWORKS = networks_1.default;

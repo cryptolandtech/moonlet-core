@@ -6,8 +6,8 @@ export const EthereumConfig: IBlockchainConfig = {
     mainCoin: "ETH",
     units: {
         WEI: 18,
-        GWEI: 9
-    }
-}
+        GWEI: 9,
+    },
+};
 
 export default EthereumConfig;

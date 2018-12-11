@@ -1,11 +1,14 @@
-/// <reference types="node" />
 import { GenericNode } from "../../core/node";
 import { Network } from "../../core/network";
 import { BigNumber } from 'bignumber.js';
+import { ZilliqaTransaction } from "./transaction";
 export declare class ZilliqaNode extends GenericNode {
     static readonly NETWORKS: Network[];
     constructor(network?: Network);
-    getBalance(address: string): Promise<BigNumber>;
+    getBalance(caddress: string): Promise<BigNumber>;
     getNonce(caddress: string): Promise<number>;
-    send(rawTransaction: Buffer): Promise<string>;
+    estimateGas(from: string, callArguments: any): Promise<number>;
+    getTransactionReceipt(transaction: ZilliqaTransaction): Promise<any>;
+    send(transaction: ZilliqaTransaction): Promise<string>;
+    sendRaw(rawTransaction: string): Promise<string>;
 }

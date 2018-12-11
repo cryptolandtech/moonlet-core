@@ -14,8 +14,18 @@ export declare abstract class GenericTransaction<TO extends ITransactionOptions 
     to: string;
     nonce: number;
     options: TO;
+    data: Buffer;
+    receipt: any;
     txn: string;
     raw: Buffer;
     status: TransactionStatus;
-    constructor(from: string, to: string, amount: number, nonce: number, options: TO);
+    times: any;
+    constructor(from: string, to: string, nonce: number, options: TO);
+    setSignedResult(data: Buffer): void;
+    setPending(): void;
+    setTxn(txn: string): void;
+    setReceiptStatus(receipt: any): void;
+    getNumberToHex(num: number): string;
+    addTime(eventName: string): void;
+    abstract toParams(): any;
 }

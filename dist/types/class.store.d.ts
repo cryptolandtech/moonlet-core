@@ -1,5 +1,5 @@
 export default class DynamicClass {
-    constructor();
+    classStore: any;
     collectClasses(object: any): void;
     getInstance(className: string, opts?: any): any;
 }

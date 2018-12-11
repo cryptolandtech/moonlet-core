@@ -1,5 +1,5 @@
 #!/bin/bash
-tsc --declaration true --emitDeclarationOnly --declarationDir dist/types
+tsc --declaration true --emitDeclarationOnly --declarationDir dist/types --skipLibCheck -p .
 
 # due to some bug or bad import we need to replace all src/core/transaction
 # imports from the results to the proper path

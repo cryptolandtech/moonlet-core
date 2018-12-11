@@ -7,7 +7,7 @@
   "scripts": {
     "build": "npm run build:lib && npm run build:dec",
     "build:gulp": "gulp build",
-    "build:lib": "tsc -p .",
+    "build:lib": "tsc --skipLibCheck -p .",
     "build:dec": "scripts/declarations.sh",
     "coverage": "scripts/run_coverage.sh all",
     "coverage-reuse": "scripts/run_coverage.sh all use-existing",

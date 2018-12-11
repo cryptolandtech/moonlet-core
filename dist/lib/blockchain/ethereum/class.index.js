@@ -16,7 +16,7 @@ const AvailableClasses = {
 exports.Ethereum = {
     AvailableClasses,
     config: config_1.default,
-    networks: networks_1.default
+    networks: networks_1.default,
 };
 exports.default = exports.Ethereum;
 //# sourceMappingURL=class.index.js.map

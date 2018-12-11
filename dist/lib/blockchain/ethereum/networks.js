@@ -8,7 +8,7 @@ const networks = [
         chainId: 1,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
         mainNet: true,
-        url: "https://mainnet.infura.io/",
+        url: "https://mainnet.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 60,
     },
     {
@@ -17,7 +17,7 @@ const networks = [
         chainId: 3,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
         mainNet: false,
-        url: "https://ropsten.infura.io/",
+        url: "https://ropsten.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1,
     },
     {
@@ -26,7 +26,7 @@ const networks = [
         chainId: 4,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
         mainNet: false,
-        url: "https://rinkeby.infura.io/",
+        url: "https://rinkeby.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1,
     },
     {
@@ -35,7 +35,7 @@ const networks = [
         chainId: 42,
         blockchain: blockchain_1.Blockchain.ETHEREUM,
         mainNet: false,
-        url: "https://kovan.infura.io/",
+        url: "https://kovan.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1,
     },
     {

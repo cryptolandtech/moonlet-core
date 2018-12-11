@@ -12,5 +12,5 @@ export declare class ZilliqaAccountUtils extends GenericAccountUtils {
     privateToAddress(privateKey: Buffer): Buffer;
     addressBufferToChecksum(key: Buffer): string;
     bufferToHex(buf: Buffer): string;
-    balanceToStd(input: number | string | BigNumber): string;
+    balanceToStd(input: BigNumber): string;
 }

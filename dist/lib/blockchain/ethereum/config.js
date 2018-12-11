@@ -6,8 +6,8 @@ exports.EthereumConfig = {
     mainCoin: "ETH",
     units: {
         WEI: 18,
-        GWEI: 9
-    }
+        GWEI: 9,
+    },
 };
 exports.default = exports.EthereumConfig;
 //# sourceMappingURL=config.js.map

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { GenericTransaction, ITransactionOptions } from './transaction';
 import { GenericNode } from "./node";
 import HDKey from './utils/hdkey';
@@ -25,16 +26,22 @@ export declare abstract class GenericAccount<T extends GenericTransaction = Gene
     type: AccountType;
     hd: HDKey | any;
     utils: GenericAccountUtils | any;
+    supportsCancel: boolean;
     private transactions;
     constructor(accountOptions: IaccountOptions);
     tryHdWalletSetup(): void;
     getTransactions(): T[];
+    send(transaction: T, cb?: any, cbtype?: string): Promise<{
+        txn: any;
+        receipt: any;
+    }>;
     abstract getBalance(): Promise<BigNumber>;
     abstract getNonce(): Promise<number>;
-    abstract buildTransferTransaction(to: string, amount: number, nonce: number, options?: TO): T;
-    abstract buildCancelTransaction(nonce: number, priceInGWei: number): T;
-    abstract buildTransaction(): T;
-    abstract signTransaction(transaction: T): boolean;
-    abstract signMessage(message: string): boolean;
-    abstract send(transaction: T): Promise<string>;
+    buildCancelTransaction(nonce: number): any;
+    abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;
+    abstract buildTransferTransaction(to: string, amount: number, nonce: number, gasLimit: number, gasPrice: number): T;
+    abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer): Promise<number>;
+    abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasLimit: number, priceInGWei: number): GenericTransaction;
+    abstract signTransaction(transaction: T): Buffer;
+    abstract signMessage(message: string): Buffer;
 }

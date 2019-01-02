@@ -19,6 +19,9 @@ export class ZilliqaNode extends GenericNode {
         return call.then( (data) => {
             return new BigNumber( data.balance );
         }).catch( (error) => {
+            if (error.message === "Account is not created") {
+                return Promise.resolve(new BigNumber(0));
+            }
             return Promise.reject( new Error(error) );
         });
     }
@@ -28,6 +31,9 @@ export class ZilliqaNode extends GenericNode {
         return call.then( (data) => {
             return data.nonce;
         }).catch( (error) => {
+            if (error.message === "Account is not created") {
+                return Promise.resolve(0);
+            }
             return Promise.reject( new Error(error) );
         });
     }

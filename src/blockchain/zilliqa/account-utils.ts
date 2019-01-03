@@ -81,6 +81,6 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
 
     public balanceToStd(input: BigNumber): string {
         this.requireType(input, "BigNumber", "balanceToStd");
-        return input.toString();
+        return input.div(10 ** 12).toString();
     }
 }

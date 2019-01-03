@@ -320,13 +320,13 @@ describe("Zilliqa", async () => {
                 }, 'balanceToStd: parameter must be of type BigNumber.');
             });
 
-            it("should return 100 if input is 1 * 10 ** 2", async () => {
-                const result = instance.balanceToStd( new BigNumber( 1 * 10 ** 2 ) );
+            it("should return 100 if input is 100 * 10 ** 12", async () => {
+                const result = instance.balanceToStd( new BigNumber( 100 * 10 ** 12 ) );
                 assert.equal( result, "100", "Should return 100" );
             });
 
-            it("should return 1 if input is 1 ", async () => {
-                const result = instance.balanceToStd( new BigNumber( 1 ) );
+            it("should return 1 if input is 1 * 10 ** 12", async () => {
+                const result = instance.balanceToStd( new BigNumber( 1 * 10 ** 12) );
                 assert.equal( result, "1", "Should return 1" );
             });
         });

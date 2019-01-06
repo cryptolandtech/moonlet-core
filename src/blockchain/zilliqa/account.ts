@@ -24,7 +24,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
     }
 
     public estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number> {
-        return this.node.estimateGas(this.address,
+        return this.node.estimateGas(
             new ZilliqaTransaction(
                 this.address,               // from me
                 to,                         // to actual receiver

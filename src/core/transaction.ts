@@ -40,32 +40,57 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
         this.addTime("creation");
     }
 
+    /**
+     * Sets transaction status to signed, adds raw data and indexes event
+     * @param data
+     */
     public setSignedResult( data: Buffer ) {
         this.addTime("signed");
         this.status = TransactionStatus.SIGNED;
         this.raw = data;
     }
 
+    /**
+     * Sets transaction status to pending and indexes event
+     * @param data
+     */
     public setPending() {
         this.addTime("pending");
         this.status = TransactionStatus.PENDING;
     }
 
+    /**
+     * Sets transaction status to final, adds txn and indexes event
+     * @param data
+     */
     public setTxn( txn: string ) {
         this.addTime("final");
         this.status = TransactionStatus.FINAL;
         this.txn = txn;
     }
 
+    /**
+     * Sets transaction receipt and indexes event
+     * @param data
+     */
     public setReceiptStatus( receipt: any ) {
         this.addTime("receipt");
         this.receipt = receipt;
     }
 
+    /**
+     * Converts number to hex string
+     * @param num
+     * @returns hex representation
+     */
     public getNumberToHex( num: number ): string {
         return "0x" + num.toString(16);
     }
 
+    /**
+     * Adds time to current event
+     * @param eventName
+     */
     public addTime(eventName: string) {
         this.times.push({
             name: eventName,
@@ -73,5 +98,9 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
         });
     }
 
+    /**
+     * Converts current transaction to a parameters object required for transaction signing
+     * @returns parameters object
+     */
     public abstract toParams();
 }

@@ -8,12 +8,21 @@ export class ZilliqaNode extends GenericNode {
 
     public static readonly NETWORKS: Network[] = networks;
 
+    /**
+     * Creates an instance of zilliqa node.
+     * @param [network]
+     */
     constructor(network?: Network) {
         super();
         this.NETWORKS = networks;
         this.init(network);
     }
 
+    /**
+     * Gets balance
+     * @param caddress
+     * @returns balance
+     */
     public getBalance(caddress: string): Promise<BigNumber> {
         const call = this.rpcCall("GetBalance", [ caddress.replace("0x", "").toLowerCase() ], "") as Promise<any>;
         return call.then( (data) => {
@@ -26,6 +35,11 @@ export class ZilliqaNode extends GenericNode {
         });
     }
 
+    /**
+     * Gets nonce
+     * @param caddress
+     * @returns nonce
+     */
     public getNonce(caddress: string): Promise<number> {
         const call = this.rpcCall("GetBalance", [ caddress.replace("0x", "").toLowerCase() ], "") as Promise<any>;
         return call.then( (data) => {
@@ -38,9 +52,15 @@ export class ZilliqaNode extends GenericNode {
         });
     }
 
-    public estimateGas(from: string, callArguments: any): Promise<number> {
+    /**
+     * Estimates gas
+     * @param callArguments
+     * @returns gas estimate
+     */
+    public estimateGas(callArguments: any): Promise<number> {
         /*
-        // not implemented by Zilliqa yet.. returns "Hello"
+        // https://github.com/Zilliqa/Zilliqa/blob/db00328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
+        // not implemented yet.. returns "Hello"
         return this.rpcCall("GetGasEstimate", [
             callArguments,
         ], "number") as Promise<any>;
@@ -48,6 +68,11 @@ export class ZilliqaNode extends GenericNode {
         return Promise.resolve(99);
     }
 
+    /**
+     * Gets transaction receipt
+     * @param transaction
+     * @returns transaction receipt
+     */
     public getTransactionReceipt(transaction: ZilliqaTransaction): Promise<any> {
         if ( transaction.receipt !== undefined ) {
             return Promise.resolve( transaction.receipt );
@@ -56,6 +81,11 @@ export class ZilliqaNode extends GenericNode {
         }
     }
 
+    /**
+     * Sends a transaction to the current network
+     * @param transaction
+     * @returns result
+     */
     public send(transaction: ZilliqaTransaction): Promise<string> {
 
         // cast properties as expected by Zilliqa Nodes.
@@ -64,11 +94,15 @@ export class ZilliqaNode extends GenericNode {
         SendObject.gasPrice = SendObject.gasPrice.toString();
         SendObject.gasLimit = SendObject.gasLimit.toString();
 
-        return this.sendRaw( SendObject );
+        return this.rpcCall("CreateTransaction", [SendObject], "raw") as Promise<any>;
     }
 
-    public sendRaw(rawTransaction: string): Promise<string> {
-        return this.rpcCall("CreateTransaction", [rawTransaction], "raw") as Promise<any>;
+    /**
+     * Sends a raw transaction to the current network
+     * @param data
+     * @returns result
+     */
+    public sendRaw(data: any): Promise<string> {
+        return this.rpcCall("CreateTransaction", [data], "raw") as Promise<any>;
     }
-
 }

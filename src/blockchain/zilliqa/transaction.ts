@@ -25,6 +25,14 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
 
     public txn: any;
 
+    /**
+     * Creates an instance of a zilliqa transaction.
+     * @param from
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param options
+     */
     constructor(from: string, to: string, amount: number, nonce: number, options: IZilliqaTransactionOptions) {
         super(from, to, nonce, options);
 
@@ -36,6 +44,10 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         this.gasLimit = options.gasLimit;
     }
 
+    /**
+     * Converts current transaction to a parameters object required for transaction signing
+     * @returns parameters object
+     */
     public toParams( subPubKey?: string ) {
         return {
             version: this.version,
@@ -52,10 +64,22 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         };
     }
 
+    /**
+     * Gets proto encoded tx
+     * @param TXObject
+     * @returns proto encoded tx
+     */
     public getProtoEncodedTx(TXObject): Buffer {
         return ZilliqaJsAccountUtil.encodeTransactionProto(TXObject);
     }
 
+    /**
+     * Validates zilliqa transaction
+     * @param params
+     * @param signature
+     * @param publicKey
+     * @returns true if valid, otherwise false
+     */
     public validate(params: any, signature: string, publicKey: string ): boolean {
 
         return ZilliqaJsCrypto.schnorr.verify(

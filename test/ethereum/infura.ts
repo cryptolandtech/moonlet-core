@@ -22,6 +22,7 @@ const DynamicClassName = GenericNode.getImplementedClassName( Blockchains[Blockc
 const receiverAddress = "0x52b333c238Bf73888fDDe266E9D2A39B75752807";
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
+/*
 describe("Core", async () => {
 
     describe("EthereumNode", async () => {
@@ -51,3 +52,4 @@ describe("Core", async () => {
         });
     });
 });
+*/

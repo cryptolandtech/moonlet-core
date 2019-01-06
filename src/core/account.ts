@@ -38,9 +38,12 @@ export abstract class GenericAccount<
     public hd: HDKey | any;
     public utils: GenericAccountUtils | any;
     public supportsCancel: boolean = false;
-
     private transactions: T[] = [];
 
+    /**
+     * Creates an instance of generic account.
+     * @param accountOptions
+     */
     constructor(accountOptions: IaccountOptions) {
         this.node = accountOptions.node;
 
@@ -71,6 +74,9 @@ export abstract class GenericAccount<
         this.type = accountOptions.type;
     }
 
+    /**
+     * Trys hd wallet setup
+     */
     public tryHdWalletSetup() {
         if (this.type === AccountType.HD && this.hd !== undefined ) {
             this.privateKey = this.utils.bufferToHex( this.hd.getPrivateKey() );
@@ -79,10 +85,21 @@ export abstract class GenericAccount<
         }
     }
 
+    /**
+     * Gets transactions
+     * @returns transactions
+     */
     public getTransactions(): T[] {
         return this.transactions;
     }
 
+    /**
+     * Sends generic account
+     * @param transaction
+     * @param [cb]
+     * @param [cbtype]
+     * @returns send
+     */
     public send(transaction: T, cb?: any, cbtype?: string): Promise<{txn, receipt}> {
         this.transactions.push( transaction );
 
@@ -118,20 +135,86 @@ export abstract class GenericAccount<
         return Promise.reject( new Error("Transaction status needs to be SIGNED") );
     }
 
+    /**
+     * Gets balance
+     * @returns balance
+     */
     public abstract getBalance(): Promise<BigNumber>;
+
+    /**
+     * Gets nonce
+     * @returns nonce
+     */
     public abstract getNonce(): Promise<number>;
 
-    public buildCancelTransaction(nonce: number): any {
-        //
+    /**
+     * Builds cancel transaction if supported by the implementation
+     *
+     * @remarks
+     * Sending a transaction with the same nonce but with higher gas price
+     * will cancel an existing non mined transaction if included into a block.
+     *
+     * @param nonce         - account nonce
+     * @param txGasPrice    - gas price in lowest denominator
+     * @returns a new cancel transaction
+     */
+    public buildCancelTransaction(nonce: number, txGasPrice: number): GenericTransaction | false {
+        return false;
     }
-    // transfer transactions
+
+    /**
+     * Estimates transfer transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @returns transfer transaction
+     */
     public abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;
+
+    /**
+     * Builds transfer transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param gasLimit
+     * @param gasPrice
+     * @returns transfer transaction
+     */
     public abstract buildTransferTransaction(to: string, amount: number, nonce: number, gasLimit: number, gasPrice: number): T;
 
-    // future custom transactions
+    /**
+     * Estimates transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @returns transaction
+     */
     public abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer): Promise<number>;
+
+    /**
+     * Builds transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @param gasLimit
+     * @param priceInGWei
+     * @returns transaction
+     */
     public abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasLimit: number, priceInGWei: number): GenericTransaction;
 
+    /**
+     * Signs transaction
+     * @param transaction
+     * @returns transaction
+     */
     public abstract signTransaction(transaction: T): Buffer;
+
+    /**
+     * Signs message
+     * @param message
+     * @returns message
+     */
     public abstract signMessage(message: string): Buffer;
 }

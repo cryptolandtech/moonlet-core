@@ -6,6 +6,11 @@ import { GenericTransaction } from "./transaction";
 export abstract class GenericNode {
     public static readonly NETWORKS: Network[] = [];
 
+    /**
+     * Gets implemented class name
+     * @param name
+     * @returns class name string
+     */
     public static getImplementedClassName(name: string) {
         name = name.toLowerCase();
         return name.charAt(0).toUpperCase() + name.slice(1) + "Node";
@@ -19,6 +24,10 @@ export abstract class GenericNode {
     public HDRootKey: any = null;
     public callId: number = 0;
 
+    /**
+     * Initialises node on specified network or default if network param is not supplied
+     * @param [network]
+     */
     public init(network?: Network) {
         network = network || this.NETWORKS[0];
         this.customNetworkUrl = false;
@@ -26,19 +35,34 @@ export abstract class GenericNode {
         this.network = Object.assign({}, network);
     }
 
+    /**
+     * Gets current network path string
+     * @returns current network path string
+     */
     public getCurrentNetworkPathString(): any {
         return `m/44'/` + this.network.HDCoinValue + `'/0'/0`;
     }
 
+    /**
+     * Gets current network
+     * @returns network
+     */
     public getNetwork(): Network {
         return this.network;
     }
 
+    /**
+     * Sets custom network url
+     * @param url
+     */
     public setCustomNetworkUrl(url: string) {
         this.network.url = url;
         this.customNetworkUrl = true;
     }
 
+    /**
+     * Resets custom network url
+     */
     public resetCustomNetworkUrl() {
         for (const net in this.NETWORKS) {
             if (this.network.chainId === this.NETWORKS[net].chainId) {
@@ -48,6 +72,13 @@ export abstract class GenericNode {
         }
     }
 
+    /**
+     * Posts an RPC call to the current network
+     * @param method - RPC Method name
+     * @param params - RPC Method parameters
+     * @param [dec]  - Result decoder type
+     * @returns raw or decoded result
+     */
     public rpcCall( method: string, params: any, dec?: string ): Promise<any> {
 
         const callData = this.buildCall(method, params);
@@ -67,6 +98,12 @@ export abstract class GenericNode {
         });
     }
 
+    /**
+     * Build an RPC call
+     * @param cmethod
+     * @param cparams
+     * @returns call
+     */
     public buildCall( cmethod: string, cparams: any ): any {
         return {
             jsonrpc: '2.0',
@@ -76,6 +113,12 @@ export abstract class GenericNode {
         };
     }
 
+    /**
+     * Converts the received data into the requested type
+     * @param data
+     * @param [type]
+     * @returns decoded result
+     */
     public resultDecoder( data: any, type?: string ): any {
         if (type === "raw" || type === undefined || type === "" || type === null ) {
             return data;
@@ -93,10 +136,39 @@ export abstract class GenericNode {
         throw new Error("type: [" + type + "] not implemented" );
     }
 
+    /**
+     * Gets transaction receipt
+     * @param transaction
+     * @returns transaction receipt
+     */
     public abstract getTransactionReceipt(transaction: GenericTransaction): Promise<any>;
+
+    /**
+     * Gets balance
+     * @param address
+     * @returns balance
+     */
     public abstract getBalance(address: string): Promise<BigNumber>;
+
+    /**
+     * Gets nonce
+     * @param address
+     * @returns nonce
+     */
     public abstract getNonce(address: string): Promise<number>;
-    public abstract estimateGas(from: string, callArguments: any): Promise<number>;
-    public abstract send(callArguments: any): Promise<string>;
+
+    /**
+     * Estimates gas
+     * @param callArguments
+     * @returns gas estimate
+     */
+    public abstract estimateGas(callArguments: any): Promise<number>;
+
+    /**
+     * Sends a transaction to the current network
+     * @param transaction
+     * @returns result
+     */
+    public abstract send(transaction: GenericTransaction): Promise<string>;
 
 }

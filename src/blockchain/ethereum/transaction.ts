@@ -14,6 +14,14 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
     public gasPrice: number;
     public gasLimit: number;
 
+    /**
+     * Creates an instance of an ethereum transaction.
+     * @param from
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param options
+     */
     constructor(from: string, to: string, amount: number, nonce: number, options: IEthereumTransactionOptions) {
         super(from, to, nonce, options);
 
@@ -24,6 +32,10 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
         this.data = options.data || Buffer.from("");
     }
 
+    /**
+     * Converts current transaction to a parameters object required for transaction signing
+     * @returns parameters object
+     */
     public toParams() {
         return {
             nonce: this.getNumberToHex( this.nonce ) as any,

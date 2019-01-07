@@ -13,6 +13,7 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
     public chainId: number;
     public gasPrice: number;
     public gasLimit: number;
+    public amount: number;
 
     /**
      * Creates an instance of an ethereum transaction.
@@ -25,6 +26,7 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
     constructor(from: string, to: string, amount: number, nonce: number, options: IEthereumTransactionOptions) {
         super(from, to, nonce, options);
 
+        this.amount = amount;
         this.value = amount;
         this.chainId = options.chainId;
         this.gasPrice = options.gasPrice;

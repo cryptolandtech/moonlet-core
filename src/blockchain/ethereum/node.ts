@@ -77,7 +77,7 @@ export class EthereumNode extends GenericNode {
      * @returns result
      */
     public send(transaction: EthereumTransaction): Promise<string> {
-        return this.rpcCall("eth_sendRawTransaction", [  "0x" + transaction.raw.toString("hex") ], "raw") as Promise<any>;
+        return this.sendRaw( "0x" + transaction.raw.toString("hex") );
     }
 
     /**

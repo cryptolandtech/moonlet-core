@@ -22,6 +22,7 @@ const mapper = new DynamicClassMapper();
 mapper.collectClasses(Zilliqa.AvailableClasses);
 mapper.collectClasses(Ethereum.AvailableClasses);
 
+const txGasPrice = 1;
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
 
 describe("Core", async () => {
@@ -132,7 +133,7 @@ describe("Core", async () => {
                 });
             });
 
-            describe("estimateTransferTransaction()", async () => {
+            describe("estimateTransaction()", async () => {
 
                 let nonce;
                 const value = 0.01 * 10 ** 18;
@@ -146,7 +147,7 @@ describe("Core", async () => {
                     });
 
                     it("should return 21000 gas estimation", async () => {
-                        const accountGasTransferEstimation = await account.estimateTransferTransaction( receiverAccountAddr, value, nonce) as any;
+                        const accountGasTransferEstimation = await account.estimateTransaction( receiverAccountAddr, value, nonce, Buffer.from("") ) as any;
                         assert.equal( accountGasTransferEstimation.toString(), "21000", "Estimation should be 21000" );
                     });
 
@@ -165,7 +166,7 @@ describe("Core", async () => {
                     it("should throw since it cannot accept transfer", async () => {
 
                         try {
-                            const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                            const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce, Buffer.from("") ) as any;
                             assert.isFalse( true, "This should never be false." );
                         } catch (err) {
                             assert.equal( err.message, "VM Exception while processing transaction: revert", "VM Throw message did not match." );
@@ -185,7 +186,7 @@ describe("Core", async () => {
                     });
 
                     it("should return 21018 gas estimation", async () => {
-                        const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                        const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce, Buffer.from("") ) as any;
                         assert.equal( contractGasTransferEstimation.toString(), "21018", "Estimation should be at least 21001" );
                     });
 
@@ -202,7 +203,7 @@ describe("Core", async () => {
                     });
 
                     it("should return 37967 gas estimation", async () => {
-                        const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                        const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce, Buffer.from("") ) as any;
                         assert.equal( contractGasTransferEstimation.toString(), "37967", "Estimation should be at least 21001" );
                     });
 
@@ -218,7 +219,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
                     signed = await account.signTransaction ( transaction );
                 });
 
@@ -247,7 +248,7 @@ describe("Core", async () => {
 
                 beforeEach( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildTransferTransaction( testDeployerAddress, value, nonce, gasLimit, gasPrice ) as any;
+                    transaction = account.buildTransferTransaction( testDeployerAddress, value, nonce, gasPrice, gasLimit ) as any;
                 });
 
                 it("transaction.txn should be an empty string", async () => {
@@ -279,8 +280,8 @@ describe("Core", async () => {
                     assert.equal( typeof transaction.gasPrice, "number", "transaction gasPrice is not a number" );
                 });
 
-                it("transaction.gasLimit should be 21000", async () => {
-                    assert.isAtLeast( transaction.gasPrice, 0, "transaction gasPrice issue" );
+                it("transaction.gasLimit should be at least 21000", async () => {
+                    assert.isAtLeast( transaction.gasLimit, 21000, "transaction gasLimit issue" );
                 });
 
                 it("transaction.nonce should be current account.nonce + 1", async () => {
@@ -313,7 +314,7 @@ describe("Core", async () => {
 
                 before( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
                 });
 
                 it("transaction.txn should be an empty string", async () => {
@@ -345,8 +346,8 @@ describe("Core", async () => {
                     assert.equal( typeof transaction.gasPrice, "number", "transaction gasPrice is not a number" );
                 });
 
-                it("transaction.gasLimit should be 21000", async () => {
-                    assert.isAtLeast( transaction.gasPrice, 0, "transaction gasPrice issue" );
+                it("transaction.gasLimit should be at least 21000", async () => {
+                    assert.isAtLeast( transaction.gasLimit, 21000, "transaction gasLimit issue" );
                 });
 
                 it("transaction.nonce should be current account.nonce", async () => {
@@ -361,7 +362,7 @@ describe("Core", async () => {
 
                     it("should throw if transaction status is not SIGNED", async () => {
                         const nonce = await account.getNonce();
-                        const transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        const transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
 
                         try {
                             await account.send( transaction );
@@ -378,7 +379,7 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -410,7 +411,7 @@ describe("Core", async () => {
                         await account.send( transaction );
 
                         const nonce = await account.getNonce();
-                        const transactionTwo = account.buildCancelTransaction( nonce - 1 ) as EthereumTransaction;
+                        const transactionTwo = account.buildCancelTransaction( nonce - 1, txGasPrice ) as EthereumTransaction;
                         await account.signTransaction ( transactionTwo );
 
                         try {
@@ -444,7 +445,7 @@ describe("Core", async () => {
 
                     beforeEach( async () => {
                         const nonce = await account.getNonce();
-                        transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                        transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
                         await account.signTransaction ( transaction );
                     });
 
@@ -512,7 +513,7 @@ describe("Core", async () => {
 
                 beforeEach( async () => {
                     const nonce = await account.getNonce();
-                    transaction = account.buildCancelTransaction( nonce ) as EthereumTransaction;
+                    transaction = account.buildCancelTransaction( nonce, txGasPrice ) as EthereumTransaction;
                     await account.signTransaction ( transaction );
                 });
 
@@ -520,14 +521,6 @@ describe("Core", async () => {
                     const t = account.getTransactions();
                     assert.isAtLeast( t.length, 1, "Transaction length did not match." );
                 });
-                //
-            });
-
-            describe("buildTransaction()", async () => {
-                //
-            });
-
-            describe("signMessage()", async () => {
                 //
             });
         });

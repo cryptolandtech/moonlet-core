@@ -11,6 +11,7 @@ export interface IZilliqaTransactionOptions extends ITransactionOptions {
     chainId: number;
     pubKey?: string;
     code?: Buffer;
+    data?: Buffer;
 }
 
 export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOptions> {
@@ -53,7 +54,7 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
     public toParams( subPubKey?: string ) {
 
         return {
-            version: (( this.chainId << 16 ) + this.version).toString(), // add replay protection
+            version: ( this.chainId << 16 ) + this.version, // add replay protection
             toAddr: this.to.replace("0x", ""),
             nonce: this.nonce,
             pubKey: subPubKey || "",
@@ -73,24 +74,5 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      */
     public getProtoEncodedTx(TXObject): Buffer {
         return ZilliqaJsAccountUtil.encodeTransactionProto(TXObject);
-    }
-
-    /**
-     * Validates zilliqa transaction
-     * @param params
-     * @param signature
-     * @param publicKey
-     * @returns true if valid, otherwise false
-     */
-    public validate(params: any, signature: string, publicKey: string ): boolean {
-
-        return ZilliqaJsCrypto.schnorr.verify(
-            this.getProtoEncodedTx( params ),
-            new Signature({
-                r: new BN(signature.slice(0, 64), 16),
-                s: new BN(signature.slice(64), 16),
-            }),
-            Buffer.from(publicKey.replace("0x", ""), 'hex'),
-        );
     }
 }

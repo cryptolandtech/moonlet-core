@@ -10,6 +10,7 @@ import { GenericTransaction, TransactionStatus } from "../../src/core/transactio
 import { ZilliqaTransaction } from "../../src/blockchain/zilliqa/transaction";
 import Ethereum from "../../src/blockchain/ethereum/class.index";
 import Zilliqa from "../../src/blockchain/zilliqa/class.index";
+import json5 = require("json5");
 
 // import Deployer from "./solc/deployer";
 /*
@@ -25,6 +26,11 @@ const mapper = new DynamicClassMapper();
 mapper.collectClasses(Zilliqa.AvailableClasses);
 mapper.collectClasses(Ethereum.AvailableClasses);
 const mnemonic = "exchange neither monster ethics bless cancel ghost excite business record warfare invite";
+
+const gasLimit = 1;
+const gasPrice = 100;
+
+const txGasPrice = gasPrice;
 
 describe("Core", async () => {
 
@@ -83,7 +89,6 @@ describe("Core", async () => {
 
             const TestNode: GenericNode = defaultWallet.getNode( blockchain );
             TestNode.init( TestNode.NETWORKS[ TestNode.NETWORKS.length - 1 ] );
-            // TestNode.init( TestNode.NETWORKS[ 0 ] );
 
             const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchains[blockchain] );
             const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchains[blockchain] );
@@ -130,7 +135,7 @@ describe("Core", async () => {
                 });
             });
 
-            describe("estimateTransferTransaction()", async () => {
+            describe("estimateTransaction()", async () => {
 
                 let nonce;
                 const value = 10;
@@ -139,16 +144,17 @@ describe("Core", async () => {
 
                     const receiverAccountAddr = "0x7839919b879250910e8646f3b46ebbca8438be32";
 
-                    // const LivetNode: GenericNode = defaultWallet.getNode( blockchain );
-                    // TestNode.init( TestNode.NETWORKS[ 0 ] );
-
                     before( async () => {
                         nonce = await account.getNonce();
                     });
 
-                    it("should return 99 gas estimation ( 99 = not implemented by zilliqa yet )", async () => {
-                        const accountGasTransferEstimation = await account.estimateTransferTransaction( receiverAccountAddr, value, nonce) as any;
-                        assert.equal( accountGasTransferEstimation.toString(), "99", "Estimation should be 99" );
+                    it("should throw ( not implemented by zilliqa yet )", async () => {
+                        try {
+                            const accountGasTransferEstimation = await account.estimateTransaction( receiverAccountAddr, value, nonce, Buffer.from("") ) as any;
+                            assert.isFalse( true, "This should never be false." );
+                        } catch (err) {
+                            assert.equal( err.message, "Method not implemented.", "Error message did not match." );
+                        }
                     });
 
                 });
@@ -168,7 +174,7 @@ describe("Core", async () => {
                     it("should throw since it cannot accept transfer", async () => {
 
                         try {
-                            const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                            const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce) as any;
                             assert.isFalse( true, "This should never be false." );
                         } catch (err) {
                             assert.equal( err.message, "VM Exception while processing transaction: revert", "VM Throw message did not match." );
@@ -188,7 +194,7 @@ describe("Core", async () => {
                     });
 
                     it("should return 21018 gas estimation", async () => {
-                        const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                        const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce) as any;
                         assert.equal( contractGasTransferEstimation.toString(), "21018", "Estimation should be at least 21001" );
                     });
 
@@ -205,7 +211,7 @@ describe("Core", async () => {
                     });
 
                     it("should return 37967 gas estimation", async () => {
-                        const contractGasTransferEstimation = await account.estimateTransferTransaction( contractAddress, value, nonce) as any;
+                        const contractGasTransferEstimation = await account.estimateTransaction( contractAddress, value, nonce) as any;
                         assert.equal( contractGasTransferEstimation.toString(), "37967", "Estimation should be at least 21001" );
                     });
 
@@ -224,10 +230,10 @@ describe("Core", async () => {
                     nonce = await account.getNonce();
                     transaction = account.buildTransferTransaction(
                         testReceiverAddress.replace("0x", ""), // to
-                        1,      // amount
-                        nonce,  // nonce
-                        1,      // gasLimit
-                        100,    // gasPrice
+                        1,        // amount
+                        nonce,    // nonce
+                        gasPrice, // gasPrice
+                        gasLimit, // gasLimit
                     ) as ZilliqaTransaction;
                     signed = await account.signTransaction ( transaction );
                 });
@@ -252,12 +258,10 @@ describe("Core", async () => {
                 let transaction;
                 let nonce;
                 const value = 1;
-                const gasLimit = 1;
-                const gasPrice = 100;
 
                 beforeEach( async () => {
                     nonce = await account.getNonce();
-                    transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), value, nonce, gasLimit, gasPrice ) as any;
+                    transaction = account.buildTransferTransaction( testReceiverAddress.replace("0x", ""), value, nonce, gasPrice, gasLimit ) as any;
                 });
 
                 it("transaction.txn should be an empty string", async () => {
@@ -290,7 +294,7 @@ describe("Core", async () => {
                 });
 
                 it("transaction.gasLimit should be at least 0", async () => {
-                    assert.isAtLeast( transaction.gasPrice, 0, "transaction gasPrice issue" );
+                    assert.isAtLeast( transaction.gasLimit, 0, "transaction gasLimit issue" );
                 });
 
                 it("transaction.nonce should be current account.nonce + 1", async () => {
@@ -316,6 +320,20 @@ describe("Core", async () => {
 
             });
 
+            describe("buildCancelTransaction()", async () => {
+
+                let nonce;
+                let transaction;
+
+                before( async () => {
+                    nonce = await account.getNonce();
+                    transaction = account.buildCancelTransaction( nonce, txGasPrice ) as ZilliqaTransaction;
+                });
+
+                it("transaction should be false", async () => {
+                    assert.isFalse( transaction, "transaction value issue" );
+                });
+            });
             /*
             describe("buildCancelTransaction()", async () => {
 
@@ -356,8 +374,8 @@ describe("Core", async () => {
                     assert.equal( typeof transaction.gasPrice, "number", "transaction gasPrice is not a number" );
                 });
 
-                it("transaction.gasLimit should be 21000", async () => {
-                    assert.isAtLeast( transaction.gasPrice, 0, "transaction gasPrice issue" );
+                it("transaction.gasLimit should be at least 0", async () => {
+                    assert.isAtLeast( transaction.gasLimit, 0, "transaction gasLimit issue" );
                 });
 
                 it("transaction.nonce should be current account.nonce", async () => {
@@ -377,8 +395,8 @@ describe("Core", async () => {
                             testReceiverAddress.replace("0x", ""), // to
                             1,      // amount
                             nonce,  // nonce
-                            1,      // gasLimit
-                            100,    // gasPrice
+                            gasPrice, // gasPrice
+                            gasLimit, // gasLimit
                         ) as ZilliqaTransaction;
 
                         try {
@@ -400,8 +418,8 @@ describe("Core", async () => {
                             testReceiverAddress.replace("0x", ""), // to
                             1,      // amount
                             nonce,  // nonce
-                            1,      // gasLimit
-                            100,    // gasPrice
+                            gasPrice, // gasPrice
+                            gasLimit, // gasLimit
                         ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
@@ -475,8 +493,8 @@ describe("Core", async () => {
                             testReceiverAddress.replace("0x", ""), // to
                             1,      // amount
                             nonce,  // nonce
-                            1,      // gasLimit
-                            100,    // gasPrice
+                            gasPrice, // gasPrice
+                            gasLimit, // gasLimit   
                         ) as ZilliqaTransaction;
                         await account.signTransaction ( transaction );
                     });
@@ -551,8 +569,8 @@ describe("Core", async () => {
                         testReceiverAddress.replace("0x", ""), // to
                         1,      // amount
                         nonce,  // nonce
-                        1,      // gasLimit
-                        100,    // gasPrice
+                        gasPrice, // gasPrice
+                        gasLimit, // gasLimit
                     ) as ZilliqaTransaction;
                     await account.signTransaction ( transaction );
                 });
@@ -561,14 +579,6 @@ describe("Core", async () => {
                     const t = account.getTransactions();
                     assert.isAtLeast( t.length, 1, "Transaction length did not match." );
                 });
-                //
-            });
-
-            describe("buildTransaction()", async () => {
-                //
-            });
-
-            describe("signMessage()", async () => {
                 //
             });
 

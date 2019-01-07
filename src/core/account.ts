@@ -158,29 +158,18 @@ export abstract class GenericAccount<
      * @param txGasPrice    - gas price in lowest denominator
      * @returns a new cancel transaction
      */
-    public buildCancelTransaction(nonce: number, txGasPrice: number): GenericTransaction | false {
-        return false;
-    }
-
-    /**
-     * Estimates transfer transaction
-     * @param to
-     * @param amount
-     * @param nonce
-     * @returns transfer transaction
-     */
-    public abstract estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number>;
+    public abstract buildCancelTransaction(nonce: number, txGasPrice: number): GenericTransaction | false;
 
     /**
      * Builds transfer transaction
      * @param to
      * @param amount
      * @param nonce
-     * @param gasLimit
-     * @param gasPrice
+     * @param txGasLimit
+     * @param txGasPrice
      * @returns transfer transaction
      */
-    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, gasLimit: number, gasPrice: number): T;
+    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): T;
 
     /**
      * Estimates transaction
@@ -188,9 +177,11 @@ export abstract class GenericAccount<
      * @param amount
      * @param nonce
      * @param txdata
-     * @returns transaction
+     * @param [txGasPrice]
+     * @param [txGasLimit]
+     * @returns a cost estimate
      */
-    public abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer): Promise<number>;
+    public abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice?: number, txGasLimit?: number): Promise<number>;
 
     /**
      * Builds transaction
@@ -199,22 +190,16 @@ export abstract class GenericAccount<
      * @param nonce
      * @param txdata
      * @param gasLimit
-     * @param priceInGWei
+     * @param gasPrice
      * @returns transaction
      */
-    public abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasLimit: number, priceInGWei: number): GenericTransaction;
+    public abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasPrice: number, gasLimit: number): GenericTransaction;
 
     /**
      * Signs transaction
      * @param transaction
-     * @returns transaction
+     * @returns serialized data
      */
     public abstract signTransaction(transaction: T): Buffer;
 
-    /**
-     * Signs message
-     * @param message
-     * @returns message
-     */
-    public abstract signMessage(message: string): Buffer;
 }

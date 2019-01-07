@@ -358,8 +358,6 @@ describe("Core", async () => {
                     const importedWalletBlockchain = importedWallet.getBlockchain(Blockchains.ZILLIQA);
                     const getAllAccounts = importedWalletBlockchain.getAllAccounts();
 
-                    console.log( getAllAccounts );
-
                     it("should have 3 accounts on network 0", async () => {
                         const getAccounts = importedWalletBlockchain.getAccounts();
                         assert.equal( getAccounts.length, 3, "getAccounts length does not match" );

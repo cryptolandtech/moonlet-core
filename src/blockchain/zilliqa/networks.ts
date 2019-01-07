@@ -17,7 +17,7 @@ const networks: Network[] = [
         chainId: 2,
         blockchain: Blockchain.ZILLIQA,
         mainNet: false,
-        url: "https://api-scilla.zilliqa.com/",
+        url: "https://api.testnet.zilliqa.com/",
         HDCoinValue: 1, // testnet
     },
     {

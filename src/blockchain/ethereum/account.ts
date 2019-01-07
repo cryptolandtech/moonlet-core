@@ -5,7 +5,6 @@ import { BigNumber } from "bignumber.js";
 import EthereumJsTx from 'ethereumjs-tx';
 
 export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthereumTransactionOptions> {
-    public defaultGasPriceInGwei: number = 30;
     public supportsCancel: boolean = true;
 
     /**
@@ -35,15 +34,6 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
     }
 
     /**
-     * Gweis to wei
-     * @param input
-     * @returns to wei
-     */
-    public GWeiToWei(input: number): number {
-        return input * 10 ** 9; // 10^9
-    }
-
-    /**
      * Builds cancel transaction
      *
      * @remarks
@@ -51,45 +41,11 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * will cancel an existing non mined transaction if included into a block.
      *
      * @param nonce         - account nonce
-     * @param tGasPrice     - gas price in lowest denominator ( wei )
+     * @param txGasPrice     - gas price in lowest denominator ( wei )
      * @returns a new cancel transaction
      */
     public buildCancelTransaction(nonce: number, txGasPrice: number): EthereumTransaction {
-
-        return new EthereumTransaction(
-            this.address,                           // from me
-            this.address,                           // to me
-            0,                                      // value zero
-            nonce,                                  // account nonce
-            {
-                gasLimit: 21000,                    // default transfer gas limit
-                gasPrice: txGasPrice,               // price in wei
-                chainId: this.node.network.chainId, // current network chain id
-            },
-        );
-    }
-
-    /**
-     * Estimates transfer transaction
-     * @param to
-     * @param amount
-     * @param nonce
-     * @returns a cost estimate
-     */
-    public estimateTransferTransaction(to: string, amount: number, nonce: number): Promise<number> {
-        return this.node.estimateGas(
-            new EthereumTransaction(
-                this.address,               // from me
-                to,                         // to actual receiver
-                amount,                     // value in wei
-                nonce,                      // account nonce
-                {
-                    gasLimit: 6700000,                                      // max network allowed gas limit
-                    gasPrice: this.GWeiToWei( this.defaultGasPriceInGwei ), // price in gwei
-                    chainId: this.node.network.chainId,                     // current network chain id
-                },
-            ).toParams(),
-        );
+        return this.buildTransferTransaction(this.address, 0, nonce, txGasPrice, 21000);
     }
 
     /**
@@ -97,53 +53,28 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param to
      * @param amount
      * @param nonce
-     * @param gasLimit
-     * @param gasPrice
+     * @param txGasPrice
+     * @param txGasLimit
      * @returns transfer transaction
      */
-    public buildTransferTransaction(to: string, amount: number, nonce: number, priceInGWei?: number): EthereumTransaction {
-        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
-
-        return new EthereumTransaction(
-            this.address,               // from me
-            to,                         // to receiver
-            amount,                     // value in wei
-            nonce,                      // account nonce
-            {
-                gasLimit: 21000,                            // default transfer gas limit
-                gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
-                chainId: this.node.network.chainId,         // current network chain id
-            },
-        );
-
+    public buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): EthereumTransaction {
+        return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
 
     /**
-     * Estimates transaction
+     * Params ethereum account
      * @param to
      * @param amount
      * @param nonce
      * @param txdata
-     * @param [priceInGWei]
-     * @returns transaction
+     * @param [txGasPrice]
+     * @param [txGasLimit]
+     * @returns a cost estimate
      */
-    public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, priceInGWei?: number): Promise<number> {
-        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
-
-        const GasEstimationTransaction = new EthereumTransaction(
-            this.address,               // from me
-            to,                         // to actual receiver
-            amount,                     // value in wei
-            nonce,                      // account nonce
-            {
-                gasLimit: 6700000,                          // max network allowed gas limit
-                gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
-                chainId: this.node.network.chainId,         // current network chain id
-                data: txdata,
-            },
+    public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): Promise<number> {
+        return this.node.estimateGas( 
+            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams() 
         );
-
-        return this.node.estimateGas( GasEstimationTransaction.toParams() );
     }
 
     /**
@@ -152,20 +83,20 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param amount
      * @param nonce
      * @param txdata
-     * @param txgasLimit
-     * @param priceInGWei
+     * @param txGasPrice
+     * @param txGasLimit
      * @returns transaction
      */
-    public buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txgasLimit: number, priceInGWei: number): EthereumTransaction {
+    public buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): EthereumTransaction {
         return new EthereumTransaction(
             this.address,               // from me
             to,                         // to actual receiver
             amount,                     // value in wei
             nonce,                      // account nonce
             {
-                gasLimit: txgasLimit,                       // max network allowed gas limit
-                gasPrice: this.GWeiToWei( priceInGWei ),    // price in gwei
-                chainId: this.node.network.chainId,         // current network chain id
+                gasPrice: txGasPrice,   // price in gwei
+                gasLimit: txGasLimit,   // max network allowed gas limit
+                chainId: this.node.network.chainId, // current network chain id
                 data: txdata,
             },
         );
@@ -174,7 +105,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
     /**
      * Signs transaction
      * @param transaction
-     * @returns transaction
+     * @returns serialized data
      */
     public signTransaction(transaction: EthereumTransaction): Buffer {
         const tx = new EthereumJsTx( transaction.toParams() );
@@ -182,15 +113,6 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
         const serialized = tx.serialize();
         transaction.setSignedResult( serialized );
         return serialized;
-    }
-
-    /**
-     * Signs message
-     * @param message
-     * @returns message
-     */
-    public signMessage(message: string): Buffer {
-        throw new Error("Method not implemented.");
     }
 
 }

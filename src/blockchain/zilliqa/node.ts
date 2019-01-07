@@ -58,6 +58,7 @@ export class ZilliqaNode extends GenericNode {
      * @returns gas estimate
      */
     public estimateGas(callArguments: any): Promise<number> {
+        throw new Error("Method not implemented.");
         /*
         // https://github.com/Zilliqa/Zilliqa/blob/db00328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
         // not implemented yet.. returns "Hello"
@@ -65,7 +66,6 @@ export class ZilliqaNode extends GenericNode {
             callArguments,
         ], "number") as Promise<any>;
         */
-        return Promise.resolve(99);
     }
 
     /**
@@ -94,7 +94,7 @@ export class ZilliqaNode extends GenericNode {
         SendObject.gasPrice = SendObject.gasPrice.toString();
         SendObject.gasLimit = SendObject.gasLimit.toString();
 
-        return this.rpcCall("CreateTransaction", [SendObject], "raw") as Promise<any>;
+        return this.sendRaw(SendObject);
     }
 
     /**

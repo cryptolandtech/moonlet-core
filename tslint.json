@@ -33,7 +33,8 @@
         "no-var-requires": false,
         "prefer-for-of": false,
         "ordered-imports": false,
-        "no-empty-interface": false
+        "no-empty-interface": false,
+        "no-bitwise": false,
     },
     "rulesDirectory": []
 }

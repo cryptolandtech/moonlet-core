@@ -23,7 +23,7 @@ const networks: Network[] = [
     {
         network_id: 2,
         name: "Kaya - TestRPC",
-        chainId: 15,
+        chainId: 2,
         blockchain: Blockchain.ZILLIQA,
         mainNet: false,
         url: "http://127.0.0.1:4200/",

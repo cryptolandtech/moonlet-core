@@ -60,6 +60,56 @@ describe("Core", async () => {
                 assert.equal( getAccounts.length, 1, "getAccounts length does not match" );
             });
 
+            describe("create a new zilliqa transaction, chainId = 1 (MainNet)", async () => {
+
+                const txOptions = [
+                    account.address,    // from me
+                    account.address,    // to receiver
+                    1,                  // value in qa
+                    1,                  // account nonce
+                    {
+                        gasLimit: 1,    // default transfer gas limit
+                        gasPrice: 1,    // price in qa
+                        chainId: account.node.network.chainId, // current network chain id
+                    },
+                ];
+                const Transaction: GenericTransaction = mapper.getInstance( TransactionClassTypeString, txOptions  );
+
+                describe("toParams()", async () => {
+                    const params = Transaction.toParams();
+
+                    it("version should be correct", async () => {
+                        assert.equal( params.version, 65537, "params version does not match" );
+                    });
+                });
+
+            });
+
+            describe("create a new zilliqa transaction, chainId = 2 (TestNet)", async () => {
+
+                const txOptions = [
+                    account.address,    // from me
+                    account.address,    // to receiver
+                    1,                  // value in qa
+                    1,                  // account nonce
+                    {
+                        gasLimit: 1,    // default transfer gas limit
+                        gasPrice: 1,    // price in qa
+                        chainId: 2,     // current network chain id
+                    },
+                ];
+                const Transaction: GenericTransaction = mapper.getInstance( TransactionClassTypeString, txOptions  );
+
+                describe("toParams()", async () => {
+                    const params = Transaction.toParams();
+
+                    it("version should be correct", async () => {
+                        assert.equal( params.version, 131073, "params version does not match" );
+                    });
+                });
+
+            });
+
         });
 
     });

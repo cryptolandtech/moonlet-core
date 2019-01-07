@@ -8,6 +8,7 @@ import Signature from 'elliptic/lib/elliptic/ec/signature';
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
     gasLimit: number;
+    chainId: number;
     pubKey?: string;
     code?: Buffer;
 }
@@ -37,9 +38,10 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         super(from, to, nonce, options);
 
         this.amount = amount;
-        this.pubKey = options.pubKey;
+        this.pubKey = options.pubKey || "";
         this.code = options.code || Buffer.from("");
 
+        this.chainId = options.chainId;
         this.gasPrice = options.gasPrice;
         this.gasLimit = options.gasLimit;
     }
@@ -49,8 +51,9 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      * @returns parameters object
      */
     public toParams( subPubKey?: string ) {
+
         return {
-            version: this.version,
+            version: (( this.chainId << 16 ) + this.version).toString(), // add replay protection
             toAddr: this.to.replace("0x", ""),
             nonce: this.nonce,
             pubKey: subPubKey || "",
@@ -60,7 +63,6 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
             code: '',
             data: '',
             signature: "",
-            // chainId: this.getNumberToHex( this.chainId ),
         };
     }
 

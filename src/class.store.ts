@@ -27,6 +27,17 @@ export default class DynamicClass {
         if (this.classStore[className] === undefined || this.classStore[className] === null) {
             throw new Error(`Class type of \'${className}\' is not loaded.`);
         }
-        return new this.classStore[className](opts);
+
+        if ( opts === undefined ) {
+            return new this.classStore[className]();
+        } else if (typeof opts === "object" ) {
+            if ( opts[0] !== undefined ) {
+                return new this.classStore[className](...opts);
+            } else {
+                return new this.classStore[className](opts);
+            }
+        } else {
+            throw new Error(`Class type of \'${className}\' is not loaded.`);
+        }
     }
 }

@@ -33,6 +33,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
                 {
                     gasLimit: this.minGasLimit,         // max network allowed gas limit
                     gasPrice: this.minGasPriceInZil,    // price in zil
+                    chainId: this.node.network.chainId, // current network chain id
                 },
             ).toParams(),
         );
@@ -52,6 +53,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
             {
                 gasLimit: txgasLimit,   // default transfer gas limit
                 gasPrice: priceInZil,   // price in zil
+                chainId: this.node.network.chainId, // current network chain id
             },
         );
     }

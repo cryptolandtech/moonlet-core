@@ -100,7 +100,6 @@
     "nyc": "^13.1.0",
     "safe-buffer": "^5.1.2",
     "source-map-support": "^0.5.9",
-    "ts-docs-gen": "^0.2.0",
     "tsify": "^4.0.0",
     "typedoc": "^0.14.0",
     "typescript": "^3.2.1",

@@ -11,7 +11,20 @@ export declare class EthereumTransaction extends GenericTransaction<IEthereumTra
     chainId: number;
     gasPrice: number;
     gasLimit: number;
+    amount: number;
+    /**
+     * Creates an instance of an ethereum transaction.
+     * @param from
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param options
+     */
     constructor(from: string, to: string, amount: number, nonce: number, options: IEthereumTransactionOptions);
+    /**
+     * Converts current transaction to a parameters object required for transaction signing
+     * @returns parameters object
+     */
     toParams(): {
         nonce: any;
         gasPrice: string;

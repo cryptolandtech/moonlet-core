@@ -10,6 +10,12 @@ const node_1 = require("./node");
 const account_1 = require("./account");
 const class_store_1 = __importDefault(require("../class.store"));
 class Wallet {
+    /**
+     * Creates an instance of wallet.
+     * @param [mnemonics]
+     * @param [language]
+     * @param [mnemonicPassword]
+     */
     constructor(mnemonics, language, mnemonicPassword) {
         this.nodes = new Map();
         this.accounts = new Map();
@@ -24,6 +30,11 @@ class Wallet {
         // setup seed
         this.seed = mnemonic_1.default.mnemonicToSeed(mnemonics, mnemonicslang, mnemonicPassword);
     }
+    /**
+     * Instantiate wallet using a serialised data
+     * @param json
+     * @param [blockchains]
+     */
     static fromJson(json, blockchains) {
         const data = JSON.parse(json);
         const wallet = new Wallet(data.mnemonics, data.mnemonicslang);
@@ -93,13 +104,29 @@ class Wallet {
         }
         return wallet;
     }
+    /**
+     * Gets class mapper
+     * @returns class mapper
+     */
     getClassMapper() {
         return this.mapper;
     }
+    /**
+     * Loads blockchain implementation
+     * @param blockchainImplementation
+     */
     loadBlockchain(blockchainImplementation) {
         this.mapper.collectClasses(blockchainImplementation.AvailableClasses);
         // Amount.addConfig(blockchainImplementation.config);
     }
+    /**
+     * Gets accounts
+     * @param blockchain
+     * @param [reference]
+     * @param [filter]
+     * @param [networkId]
+     * @returns accounts
+     */
     getAccounts(blockchain, reference = true, filter = false, networkId) {
         this.requireImplementation(blockchain, "getAccounts");
         networkId = networkId || this.getCurrentNetwork(blockchain);
@@ -129,9 +156,18 @@ class Wallet {
             return ReturnData;
         }
     }
+    /**
+     * Gets accounts map
+     * @returns accounts map
+     */
     getAccountsMap() {
         return this.accounts;
     }
+    /**
+     * Gets blockchain
+     * @param blockchain
+     * @returns an object containing all methods required to use this implementation
+     */
     getBlockchain(blockchain) {
         return {
             getNode: () => this.getNode(blockchain),
@@ -145,19 +181,40 @@ class Wallet {
             getInitializedNodes: () => this.nodes.get(blockchain),
         };
     }
+    /**
+     * Gets networks
+     * @param blockchain
+     * @returns networks
+     */
     getNetworks(blockchain) {
         return this.getNode(blockchain, this.currentNetwork[blockchain]).NETWORKS;
     }
+    /**
+     * Gets current network for specified blockchain
+     * @param blockchain
+     * @returns current network
+     */
     getCurrentNetwork(blockchain) {
         if (this.currentNetwork[blockchain] === undefined) {
             this.currentNetwork[blockchain] = 0;
         }
         return this.currentNetwork[blockchain];
     }
+    /**
+     * Switches network for specified blockchain
+     * @param blockchain
+     * @param networkId
+     */
     switchNetwork(blockchain, networkId) {
         this.currentNetwork[blockchain] = networkId;
         return this.getNode(blockchain, networkId);
     }
+    /**
+     * Gets existing node or initialises a new one for specified blockchain
+     * @param blockchain
+     * @param [networkId]
+     * @returns node
+     */
     getNode(blockchain, networkId) {
         this.requireImplementation(blockchain, "getNode");
         networkId = networkId || this.getCurrentNetwork(blockchain);
@@ -178,6 +235,12 @@ class Wallet {
         }
         return byNetwork;
     }
+    /**
+     * Creates an account on specified blockchain and network
+     * @param blockchain
+     * @param [networkId]
+     * @returns account
+     */
     createAccount(blockchain, networkId) {
         this.requireImplementation(blockchain, "createAccount");
         networkId = networkId || this.getCurrentNetwork(blockchain);
@@ -194,27 +257,28 @@ class Wallet {
         this.getAccounts(blockchain).push(account);
         return account;
     }
+    /**
+     * Requires implementation
+     * @param blockchain
+     * @param method
+     * @returns true if implementation is found, otherwise false
+     */
     requireImplementation(blockchain, method) {
         if (!blockchain_1.Blockchain[blockchain]) {
             throw new Error(method + ": Blockchain \"" + blockchain + "\" does not have an implementation. Make sure it's indexed in the class store.");
         }
         return true;
     }
+    /**
+     * Imports account
+     * @param account
+     * @returns account
+     */
     importAccount(account) {
         if (account.type === account_1.AccountType.HD) {
             throw new Error("importAccount: you cannot import HD Wallets.");
         }
         const accountStore = this.getAccounts(account.node.blockchain);
-        /*
-        // map account's custom node network and replace with wallet's initialized node
-        const customNetworkUrl = account.node.network.url;
-        account.node = this.getNode(account.node.blockchain, account.node.network.network_id );
-
-        // if we're importing an account with a custom url, we set it up for all accounts under that network.
-        if (account.node.customNetworkUrl) {
-            account.node.setCustomNetworkUrl( customNetworkUrl );
-        }
-        */
         // generate address for loose imports
         if (account.type === account_1.AccountType.LOOSE) {
             account.publicKey = account.utils.bufferToHex(account.utils.privateToPublic(Buffer.from(account.privateKey, "hex")));
@@ -223,6 +287,10 @@ class Wallet {
         accountStore.push(account);
         return accountStore[accountStore.length - 1];
     }
+    /**
+     * Serialises wallet and returns a json string
+     * @returns json
+     */
     toJSON() {
         const data = {
             // we should probably not store mnemonics, but metamask does.. do we want them ?

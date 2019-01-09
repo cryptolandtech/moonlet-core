@@ -13,7 +13,7 @@ describe("Zilliqa", async () => {
 
         const instance = new AccountUtils();
 
-        const Wallet0Address = "0x7bB3b0E8A59f3f61d9BFf038f4AEB42Cae2eccE8";
+        const Wallet0Address = "0x7bb3B0E8A59f3f61d9Bff038f4AEb42cAE2ECce8";
         const Wallet0PrivateKey = "0xdb11cfa086b92497c8ed5a4cc6edb3a5bfe3a640c43ffb9fc6aa0873c56f2ee3";
         const Wallet0PublicKey = "0x03d8e6450e260f80983bcd4fadb6cbc132ae7feb552dda45f94b48c80b86c6c3be";
 
@@ -225,7 +225,7 @@ describe("Zilliqa", async () => {
             });
 
             it("should return true if supplied string contains a valid address", async () => {
-                assert.isTrue( instance.isValidChecksumAddress( "0x7bB3b0E8A59f3f61d9BFf038f4AEB42Cae2eccE8" ), "Should return true for a valid address string" );
+                assert.isTrue( instance.isValidChecksumAddress( Wallet0Address ), "Should return true for a valid address string" );
             });
 
             it("should match the return of zilliqa-js.util isValidChecksumAddress()", async () => {

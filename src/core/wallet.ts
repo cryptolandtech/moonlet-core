@@ -21,9 +21,8 @@ export default class Wallet {
 
     /**
      * Instantiate wallet using a serialised data
-     * @param json 
-     * @param [blockchains] 
-     * @returns  
+     * @param json
+     * @param [blockchains]
      */
     public static fromJson(json: string, blockchains?: IBlockchainImplementation[]) {
 
@@ -134,9 +133,9 @@ export default class Wallet {
 
     /**
      * Creates an instance of wallet.
-     * @param [mnemonics] 
-     * @param [language] 
-     * @param [mnemonicPassword] 
+     * @param [mnemonics]
+     * @param [language]
+     * @param [mnemonicPassword]
      */
     constructor(mnemonics?: string, language?: string, mnemonicPassword?: string) {
         this.mapper = new DynamicClassMapper();
@@ -153,33 +152,30 @@ export default class Wallet {
         this.seed = Mnemonic.mnemonicToSeed(mnemonics, mnemonicslang, mnemonicPassword);
     }
 
-
     /**
      * Gets class mapper
-     * @returns class mapper 
+     * @returns class mapper
      */
     public getClassMapper(): DynamicClassMapper {
         return this.mapper;
     }
 
-
     /**
      * Loads blockchain implementation
-     * @param blockchainImplementation 
+     * @param blockchainImplementation
      */
     public loadBlockchain(blockchainImplementation: IBlockchainImplementation) {
         this.mapper.collectClasses(blockchainImplementation.AvailableClasses);
         // Amount.addConfig(blockchainImplementation.config);
     }
 
-
     /**
      * Gets accounts
-     * @param blockchain 
-     * @param [reference] 
-     * @param [filter] 
-     * @param [networkId] 
-     * @returns accounts 
+     * @param blockchain
+     * @param [reference]
+     * @param [filter]
+     * @param [networkId]
+     * @returns accounts
      */
     public getAccounts(blockchain: Blockchain, reference: boolean = true, filter: boolean = false, networkId?: number): GenericAccount[] {
         this.requireImplementation(blockchain, "getAccounts");
@@ -214,7 +210,7 @@ export default class Wallet {
 
     /**
      * Gets accounts map
-     * @returns accounts map 
+     * @returns accounts map
      */
     public getAccountsMap(): Map<Blockchain, GenericAccount[]> {
         return this.accounts;
@@ -222,8 +218,8 @@ export default class Wallet {
 
     /**
      * Gets blockchain
-     * @param blockchain 
-     * @returns  
+     * @param blockchain
+     * @returns an object containing all methods required to use this implementation
      */
     public getBlockchain(blockchain: Blockchain) {
         return {
@@ -241,8 +237,8 @@ export default class Wallet {
 
     /**
      * Gets networks
-     * @param blockchain 
-     * @returns  
+     * @param blockchain
+     * @returns networks
      */
     public getNetworks(blockchain: Blockchain) {
         return this.getNode(blockchain, this.currentNetwork[blockchain] ).NETWORKS;
@@ -250,8 +246,8 @@ export default class Wallet {
 
     /**
      * Gets current network for specified blockchain
-     * @param blockchain 
-     * @returns current network 
+     * @param blockchain
+     * @returns current network
      */
     public getCurrentNetwork(blockchain: Blockchain): number {
         if (this.currentNetwork[blockchain] === undefined) {
@@ -262,9 +258,8 @@ export default class Wallet {
 
     /**
      * Switches network for specified blockchain
-     * @param blockchain 
-     * @param networkId 
-     * @returns  
+     * @param blockchain
+     * @param networkId
      */
     public switchNetwork(blockchain: Blockchain, networkId: number) {
         this.currentNetwork[blockchain] = networkId;
@@ -273,9 +268,9 @@ export default class Wallet {
 
     /**
      * Gets existing node or initialises a new one for specified blockchain
-     * @param blockchain 
-     * @param [networkId] 
-     * @returns  
+     * @param blockchain
+     * @param [networkId]
+     * @returns node
      */
     public getNode(blockchain: Blockchain, networkId?: number) {
         this.requireImplementation(blockchain, "getNode");
@@ -304,9 +299,9 @@ export default class Wallet {
 
     /**
      * Creates an account on specified blockchain and network
-     * @param blockchain 
-     * @param [networkId] 
-     * @returns account 
+     * @param blockchain
+     * @param [networkId]
+     * @returns account
      */
     public createAccount(blockchain: Blockchain, networkId?: number): GenericAccount {
         this.requireImplementation(blockchain, "createAccount");
@@ -332,8 +327,8 @@ export default class Wallet {
 
     /**
      * Requires implementation
-     * @param blockchain 
-     * @param method 
+     * @param blockchain
+     * @param method
      * @returns true if implementation is found, otherwise false
      */
     public requireImplementation( blockchain: Blockchain, method: string ): boolean {
@@ -345,7 +340,7 @@ export default class Wallet {
 
     /**
      * Imports account
-     * @param account 
+     * @param account
      * @returns account
      */
     public importAccount(account: GenericAccount): GenericAccount {
@@ -363,10 +358,9 @@ export default class Wallet {
         return accountStore[accountStore.length - 1];
     }
 
-
     /**
      * Serialises wallet and returns a json string
-     * @returns json 
+     * @returns json
      */
     public toJSON(): string {
 

@@ -78,7 +78,7 @@ describe("Core", async () => {
                 describe("toParams()", async () => {
                     const params = Transaction.toParams();
 
-                    it("version should be correct", async () => {
+                    it("version should be 65537", async () => {
                         assert.equal( params.version, 65537, "params version does not match" );
                     });
                 });
@@ -103,7 +103,7 @@ describe("Core", async () => {
                 describe("toParams()", async () => {
                     const params = Transaction.toParams();
 
-                    it("version should be correct", async () => {
+                    it("version should be 131073", async () => {
                         assert.equal( params.version, 131073, "params version does not match" );
                     });
                 });

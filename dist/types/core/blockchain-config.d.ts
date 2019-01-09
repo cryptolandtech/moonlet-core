@@ -5,4 +5,7 @@ export interface IBlockchainConfig {
     units?: {
         [unit: string]: number;
     };
+    unitsExtra?: {
+        [unit: string]: number;
+    };
 }

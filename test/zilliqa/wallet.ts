@@ -17,11 +17,11 @@ describe("Zilliqa", async () => {
 
         describe("Wallet: constructed with parameters ( mnemonic, language = EN )", async () => {
 
-            const Wallet0Address = "0x17f343a7A13BaC8026D6C84e2Ee2925aEba1FA61";
+            const Wallet0Address = "0x17f343A7a13bAC8026D6C84E2eE2925AEBa1Fa61";
             const Wallet0PrivateKey = "0xed50e832ef7722239de17e49cd40d86c16df4649275452af470e9b84ef14eea8";
             const Wallet0PublicKey = "0x03b51541a4e231517740ec9bc5dda5647bc5ef560f849f95a4f7d9eaa118fba131";
 
-            const Wallet1Address = "0x693e20469bFFde10dD4d252d5f907Cebbd201BB6";
+            const Wallet1Address = "0x693E20469BfFDE10dD4d252D5F907CebbD201BB6";
             const Wallet1PrivateKey = "0x195adc169bab9b6ed6c858089a42e47692b2c7fbe5a1b109c7225bcbd1ca89b9";
             const Wallet1PublicKey = "0x038cc9c4a58a5e8e6f99c5909b4b8c87e6ef8344cbf21d7ecb240ba88a11d0ec82";
 

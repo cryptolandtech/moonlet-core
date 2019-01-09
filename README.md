@@ -18,25 +18,25 @@ See [moonlet-core-usage repository](https://github.com/cryptolandtech/moonlet-co
 
 Run the whole testing suite
 
-```doc
+```bash
 npm run test
 ```
 
 Single test run
 
-```doc
+```bash
 npm run test-single test/testfile.ts
 ```
 
 Run tests in specific path
 
-```doc
+```bash
 npm run test-single "test/1.core/*.ts"
 ```
 
 Test Coverage
 
-```doc
+```bash
 npm run coverage
 ```
 
@@ -44,7 +44,7 @@ npm run coverage
 
 Example:
 
-```doc
+```bash
 npm run test-reuse
 npm run test-single-reuse test/testfile.ts
 npm run coverage-reuse
@@ -54,13 +54,13 @@ npm run coverage-reuse
 
 Start All test rpcs
 
-```doc
+```bash
 npm run start-all-rpcs
 ```
 
 Stop all running test rpcs ( that have pids stored )
 
-```doc
+```bash
 npm run stop-all-rpcs
 ```
 

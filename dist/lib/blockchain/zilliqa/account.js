@@ -12,50 +12,94 @@ const transaction_1 = require("./transaction");
 const account_utils_1 = require("./account-utils");
 const ZilliqaJsCrypto = __importStar(require("@zilliqa-js/crypto"));
 class ZilliqaAccount extends account_1.GenericAccount {
+    /**
+     * Creates an instance of zilliqa account.
+     * @param accountOptions
+     */
     constructor(accountOptions) {
         super(accountOptions);
-        this.minGasPriceInZil = 100;
-        this.minGasLimit = 10;
         this.utils = new account_utils_1.ZilliqaAccountUtils();
         this.tryHdWalletSetup();
     }
+    /**
+     * Gets balance
+     * @returns a promise of a balance
+     */
     getBalance() {
         return this.node.getBalance(this.address);
     }
+    /**
+     * Gets nonce
+     * @returns a promise of a nonce
+     */
     getNonce() {
         return this.node.getNonce(this.address);
     }
-    estimateTransferTransaction(to, amount, nonce) {
-        return this.node.estimateGas(this.address, new transaction_1.ZilliqaTransaction(this.address, // from me
-        to, // to actual receiver
-        amount, // value in wei
-        nonce + 1, // account nonce
-        {
-            gasLimit: this.minGasLimit,
-            gasPrice: this.minGasPriceInZil,
-        }).toParams());
+    /**
+     * Builds transfer transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txGasLimit
+     * @param txGasPrice
+     * @returns transfer transaction
+     */
+    buildTransferTransaction(to, amount, nonce, txGasLimit, txGasPrice) {
+        return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
-    buildTransferTransaction(to, amount, nonce, txgasLimit, priceInZil) {
-        if (priceInZil < this.minGasPriceInZil) {
-            throw Error("Minimum gas limit for a ZIL transaction is: " + this.minGasPriceInZil + " supplied gas was: " + priceInZil);
-        }
+    /**
+     * Estimates transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @param [txGasPrice]
+     * @param [txGasLimit]
+     * @returns a cost estimate
+     */
+    estimateTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit) {
+        throw new Error("Method not implemented.");
+        /*
+        can be used once GetGasEstimate is implemented in the LookupNode
+        // https://github.com/Zilliqa/Zilliqa/blob/db00328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
+        // not implemented yet.. returns "Hello"
+
+        return this.node.estimateGas(
+            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams()
+        );
+        */
+    }
+    /**
+     * Builds transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @param txGasPrice
+     * @param txGasLimit
+     * @returns transaction
+     */
+    buildTransaction(to, amount, nonce, txdata, txGasPrice = 0, txGasLimit = 8000000) {
         return new transaction_1.ZilliqaTransaction(this.address, // from me
-        to, // to receiver
-        amount, // value in wei
-        nonce + 1, // account nonce
+        to, // to actual receiver
+        amount, // value in qa
+        nonce, // account nonce
         {
-            gasLimit: txgasLimit,
-            gasPrice: priceInZil,
+            gasPrice: txGasPrice,
+            gasLimit: txGasLimit,
+            chainId: this.node.network.chainId,
+            data: txdata,
         });
     }
-    estimateTransaction(to, amount, nonce, txdata, priceInGWei) {
-        throw new Error("Method not implemented.");
-    }
-    buildTransaction() {
-        throw new Error("Method not implemented.");
-    }
+    /**
+     * Signs transaction
+     * @param transaction
+     * @returns serialized data
+     */
     signTransaction(transaction) {
         const TXObject = transaction.toParams(this.publicKey.replace("0x", ""));
+        // the address should be checksummed and we need to lowercase it for signing
+        TXObject.toAddr = TXObject.toAddr.toLowerCase();
         const bytes = transaction.getProtoEncodedTx(TXObject);
         const signature = ZilliqaJsCrypto.sign(bytes, this.privateKey.replace("0x", ""), this.publicKey.replace("0x", ""));
         TXObject.signature = signature;
@@ -64,8 +108,11 @@ class ZilliqaAccount extends account_1.GenericAccount {
         transaction.setSignedResult(serialized);
         return serialized;
     }
-    signMessage(message) {
-        throw new Error("Method not implemented.");
+    /**
+     * not supported
+     */
+    buildCancelTransaction(nonce, txGasPrice) {
+        return false;
     }
 }
 exports.ZilliqaAccount = ZilliqaAccount;

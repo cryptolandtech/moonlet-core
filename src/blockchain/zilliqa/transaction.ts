@@ -2,9 +2,6 @@ import { GenericTransaction, ITransactionOptions } from '../../core/transaction'
 import { BN, Long } from '@zilliqa-js/util';
 import { util as ZilliqaJsAccountUtil } from "@zilliqa-js/account";
 
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
-import Signature from 'elliptic/lib/elliptic/ec/signature';
-
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
     gasLimit: number;

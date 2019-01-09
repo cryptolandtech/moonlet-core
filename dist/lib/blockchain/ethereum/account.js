@@ -8,92 +8,102 @@ const transaction_1 = require("./transaction");
 const account_utils_1 = require("./account-utils");
 const ethereumjs_tx_1 = __importDefault(require("ethereumjs-tx"));
 class EthereumAccount extends account_1.GenericAccount {
+    /**
+     * Creates an instance of ethereum account.
+     * @param accountOptions
+     */
     constructor(accountOptions) {
         super(accountOptions);
-        this.defaultGasPriceInGwei = 30;
         this.supportsCancel = true;
         this.utils = new account_utils_1.EthereumAccountUtils();
         this.tryHdWalletSetup();
     }
+    /**
+     * Gets balance
+     * @returns a promise of a balance
+     */
     getBalance() {
         return this.node.getBalance(this.address);
     }
+    /**
+     * Gets nonce
+     * @returns a promise of a nonce
+     */
     getNonce() {
         return this.node.getNonce(this.address);
     }
-    GWeiToWei(input) {
-        return input * Math.pow(10, 9); // 10^9
+    /**
+     * Builds cancel transaction
+     *
+     * @remarks
+     * Sending a transaction with the same nonce but with higher gas price
+     * will cancel an existing non mined transaction if included into a block.
+     *
+     * @param nonce         - account nonce
+     * @param txGasPrice     - gas price in lowest denominator ( wei )
+     * @returns a new cancel transaction
+     */
+    buildCancelTransaction(nonce, txGasPrice) {
+        return this.buildTransferTransaction(this.address, 0, nonce, txGasPrice, 21000);
     }
-    buildCancelTransaction(nonce, priceInGWei) {
-        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
-        return new transaction_1.EthereumTransaction(this.address, // from me
-        this.address, // to me
-        0, // value zero
-        nonce, // account nonce
-        {
-            gasLimit: 21000,
-            gasPrice: this.GWeiToWei(priceInGWei),
-            chainId: this.node.network.chainId,
-        });
+    /**
+     * Builds transfer transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txGasPrice
+     * @param txGasLimit
+     * @returns transfer transaction
+     */
+    buildTransferTransaction(to, amount, nonce, txGasPrice, txGasLimit) {
+        return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
-    estimateTransferTransaction(to, amount, nonce) {
-        return this.node.estimateGas(this.address, new transaction_1.EthereumTransaction(this.address, // from me
-        to, // to actual receiver
-        amount, // value in wei
-        nonce, // account nonce
-        {
-            gasLimit: 6700000,
-            gasPrice: this.GWeiToWei(this.defaultGasPriceInGwei),
-            chainId: this.node.network.chainId,
-        }).toParams());
+    /**
+     * Params ethereum account
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @param [txGasPrice]
+     * @param [txGasLimit]
+     * @returns a cost estimate
+     */
+    estimateTransaction(to, amount, nonce, txdata, txGasPrice = 1, txGasLimit = 6700000) {
+        return this.node.estimateGas(this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams());
     }
-    buildTransferTransaction(to, amount, nonce, priceInGWei) {
-        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
-        return new transaction_1.EthereumTransaction(this.address, // from me
-        to, // to receiver
-        amount, // value in wei
-        nonce, // account nonce
-        {
-            gasLimit: 21000,
-            gasPrice: this.GWeiToWei(priceInGWei),
-            chainId: this.node.network.chainId,
-        });
-    }
-    estimateTransaction(to, amount, nonce, txdata, priceInGWei) {
-        priceInGWei = priceInGWei || this.defaultGasPriceInGwei;
-        const GasEstimationTransaction = new transaction_1.EthereumTransaction(this.address, // from me
-        to, // to actual receiver
-        amount, // value in wei
-        nonce, // account nonce
-        {
-            gasLimit: 6700000,
-            gasPrice: this.GWeiToWei(priceInGWei),
-            chainId: this.node.network.chainId,
-            data: txdata,
-        });
-        return this.node.estimateGas(this.address, GasEstimationTransaction.toParams());
-    }
-    buildTransaction(to, amount, nonce, txdata, txgasLimit, priceInGWei) {
+    /**
+     * Builds transaction
+     * @param to
+     * @param amount
+     * @param nonce
+     * @param txdata
+     * @param txGasPrice
+     * @param txGasLimit
+     * @returns transaction
+     */
+    buildTransaction(to, amount, nonce, txdata, txGasPrice = 1, txGasLimit = 6700000) {
         return new transaction_1.EthereumTransaction(this.address, // from me
         to, // to actual receiver
         amount, // value in wei
         nonce, // account nonce
         {
-            gasLimit: txgasLimit,
-            gasPrice: this.GWeiToWei(priceInGWei),
+            gasPrice: txGasPrice,
+            gasLimit: txGasLimit,
             chainId: this.node.network.chainId,
             data: txdata,
         });
     }
+    /**
+     * Signs transaction
+     * @param transaction
+     * @returns serialized data
+     */
     signTransaction(transaction) {
         const tx = new ethereumjs_tx_1.default(transaction.toParams());
         tx.sign(Buffer.from(this.privateKey.replace("0x", ""), "hex"));
         const serialized = tx.serialize();
         transaction.setSignedResult(serialized);
         return serialized;
-    }
-    signMessage(message) {
-        throw new Error("Method not implemented.");
     }
 }
 exports.EthereumAccount = EthereumAccount;

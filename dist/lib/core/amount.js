@@ -5,6 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = __importDefault(require("bignumber.js"));
 class Amount {
+    /**
+     * Creates an instance of amount.
+     * @param value
+     * @param coin
+     * @param [unit]
+     */
     constructor(value, coin, unit) {
         if (typeof value === 'number') {
             value = new bignumber_js_1.default(value);
@@ -12,33 +18,16 @@ class Amount {
         this.value = value;
         this.coin = coin;
         this.withUnit(unit, () => {
-            this.value = this.value.multipliedBy(Math.pow(10, -Amount.config.get(coin)[unit]));
+            this.value.multipliedBy(Math.pow(10, -Amount.config.get(coin)[unit]));
         });
     }
+    /**
+     * Add configuration
+     * @param config
+     */
     static addConfig(config) {
-        if (config && config.mainCoin && config.units) {
-            Amount.config.set(config.mainCoin, config.units);
-        }
-    }
-    withUnit(unit, cb) {
-        if (unit) {
-            if (Amount.config.get(this.coin)) {
-                if (Amount.config.get(this.coin)[unit]) {
-                    return cb();
-                }
-                else {
-                    throw new Error(`${unit} is not a unit of ${this.coin}.`);
-                }
-            }
-            else {
-                throw new Error(`No config for ${this.coin} coin.`);
-            }
-        }
-    }
-    ;
-    assertSameCoins(coin1, coin2) {
-        if (coin1 !== coin2) {
-            throw new Error('Cannot add two amounts with different coins');
+        if (config && config.blockchain && config.units) {
+            Amount.config.set(config.blockchain, config.units || {});
         }
     }
     plus(amount) {
@@ -69,6 +58,21 @@ class Amount {
     }
     toString(unit) {
         return this.toBigNumber(unit).toString();
+    }
+    withUnit(unit, cb) {
+        if (unit) {
+            if (Amount.config.get(this.coin)[unit]) {
+                return cb();
+            }
+            else {
+                throw new Error(`${unit} is not a unit of ${this.coin}`);
+            }
+        }
+    }
+    assertSameCoins(coin1, coin2) {
+        if (coin1 !== coin2) {
+            throw new Error('Cannot add two amounts with different coins');
+        }
     }
 }
 Amount.config = new Map();

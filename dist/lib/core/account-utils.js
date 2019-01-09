@@ -2,6 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bignumber_js_1 = require("bignumber.js");
 class GenericAccountUtils {
+    /**
+     * Parameter type validation
+     * @param target
+     * @param expected
+     * @param method
+     * @returns true if type matches
+     */
     requireType(target, expected, method) {
         if (expected === "Buffer") {
             if (!Buffer.isBuffer(target)) {

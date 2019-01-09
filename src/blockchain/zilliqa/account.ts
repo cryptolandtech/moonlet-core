@@ -64,8 +64,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         // https://github.com/Zilliqa/Zilliqa/blob/db00328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
         // not implemented yet.. returns "Hello"
 
-        return this.node.estimateGas( 
-            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams() 
+        return this.node.estimateGas(
+            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams()
         );
         */
     }
@@ -97,12 +97,15 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
 
     /**
      * Signs transaction
-     * @param transaction 
-     * @returns serialized data 
+     * @param transaction
+     * @returns serialized data
      */
     public signTransaction(transaction: ZilliqaTransaction): Buffer {
 
         const TXObject = transaction.toParams( this.publicKey.replace("0x", "") );
+
+        // the address should be checksummed and we need to lowercase it for signing
+        TXObject.toAddr = TXObject.toAddr.toLowerCase();
 
         const bytes = transaction.getProtoEncodedTx(TXObject);
         const signature = ZilliqaJsCrypto.sign(
@@ -119,9 +122,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         return serialized;
     }
 
-
     /**
-    not supported
+     * not supported
      */
     public buildCancelTransaction(nonce: number, txGasPrice: number): ZilliqaTransaction | false {
         return false;

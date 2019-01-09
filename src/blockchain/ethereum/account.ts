@@ -72,8 +72,8 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @returns a cost estimate
      */
     public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): Promise<number> {
-        return this.node.estimateGas( 
-            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams() 
+        return this.node.estimateGas(
+            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams(),
         );
     }
 

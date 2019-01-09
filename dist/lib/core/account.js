@@ -8,6 +8,10 @@ var AccountType;
     AccountType["HARDWARE"] = "HARDWARE";
 })(AccountType = exports.AccountType || (exports.AccountType = {}));
 class GenericAccount {
+    /**
+     * Creates an instance of generic account.
+     * @param accountOptions
+     */
     constructor(accountOptions) {
         this.address = "";
         this.publicKey = "";
@@ -43,6 +47,9 @@ class GenericAccount {
         name = name.toLowerCase();
         return name.charAt(0).toUpperCase() + name.slice(1) + "Account";
     }
+    /**
+     * Trys hd wallet setup
+     */
     tryHdWalletSetup() {
         if (this.type === AccountType.HD && this.hd !== undefined) {
             this.privateKey = this.utils.bufferToHex(this.hd.getPrivateKey());
@@ -50,9 +57,20 @@ class GenericAccount {
             this.address = this.utils.toChecksumAddress(this.utils.privateToAddress(this.hd.getPrivateKey()).toString("hex"));
         }
     }
+    /**
+     * Gets transactions
+     * @returns transactions
+     */
     getTransactions() {
         return this.transactions;
     }
+    /**
+     * Sends generic account
+     * @param transaction
+     * @param [cb]
+     * @param [cbtype]
+     * @returns send
+     */
     send(transaction, cb, cbtype) {
         this.transactions.push(transaction);
         if (transaction.status === transaction_1.TransactionStatus.SIGNED) {
@@ -81,9 +99,6 @@ class GenericAccount {
             });
         }
         return Promise.reject(new Error("Transaction status needs to be SIGNED"));
-    }
-    buildCancelTransaction(nonce) {
-        //
     }
 }
 exports.GenericAccount = GenericAccount;

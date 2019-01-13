@@ -94,7 +94,7 @@ export abstract class GenericAccount<
     }
 
     /**
-     * Sends generic account
+     * Sends transaction
      * @param transaction
      * @param [cb]
      * @param [cbtype]

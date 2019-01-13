@@ -1,6 +1,7 @@
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
 import { BN, Long } from '@zilliqa-js/util';
 import { util as ZilliqaJsAccountUtil } from "@zilliqa-js/account";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
@@ -49,10 +50,9 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      * @returns parameters object
      */
     public toParams( subPubKey?: string ) {
-
         return {
             version: ( this.chainId << 16 ) + this.version, // add replay protection
-            toAddr: this.to.replace("0x", ""),
+            toAddr: ZilliqaJsCrypto.toChecksumAddress( this.to  ).replace("0x", ""),
             nonce: this.nonce,
             pubKey: subPubKey || "",
             amount: new BN( this.amount ),

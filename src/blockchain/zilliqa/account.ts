@@ -105,6 +105,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         const TXObject = transaction.toParams( this.publicKey.replace("0x", "") );
 
         // the address should be checksummed and we need to lowercase it for signing
+        // add 0x back to signing payload
         TXObject.toAddr = TXObject.toAddr.toLowerCase();
 
         const bytes = transaction.getProtoEncodedTx(TXObject);

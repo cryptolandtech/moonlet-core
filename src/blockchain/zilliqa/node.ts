@@ -3,6 +3,7 @@ import { Network } from "../../core/network";
 import networks from "./networks";
 import { BigNumber } from 'bignumber.js';
 import { ZilliqaTransaction } from "./transaction";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
 
 export class ZilliqaNode extends GenericNode {
 
@@ -93,6 +94,9 @@ export class ZilliqaNode extends GenericNode {
         SendObject.amount = SendObject.amount.toString();
         SendObject.gasPrice = SendObject.gasPrice.toString();
         SendObject.gasLimit = SendObject.gasLimit.toString();
+
+        // remove once core accepts 0x
+        SendObject.toAddr = ZilliqaJsCrypto.toChecksumAddress( SendObject.toAddr ).replace("0x", "");
 
         return this.sendRaw(SendObject);
     }

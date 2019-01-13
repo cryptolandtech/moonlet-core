@@ -1,0 +1,53 @@
+const { Transaction } = require('@zilliqa-js/account');
+const { BN, Long, bytes, units } = require('@zilliqa-js/util');
+const { Zilliqa } = require('@zilliqa-js/zilliqa');
+const CP = require ('@zilliqa-js/crypto');
+
+const zilliqa = new Zilliqa('https://api.zilliqa.com');
+
+// These are set by the core protocol, and may vary per-chain.
+// These numbers are JUST AN EXAMPLE. They will NOT WORK on the public testnet
+// or mainnet. Please check what they are before proceeding, or your
+// transactions will simply be rejected.
+const CHAIN_ID = 62;
+const MSG_VERSION = 1;
+const VER = bytes.pack(CHAIN_ID, MSG_VERSION);
+
+// Populate the wallet with an account
+const privkey = '891E98DBEF714F120958405F5CF1FA4F47496D0B287E514C1A7EC02805DA3C13';
+const testReceiverAddress = "0x99959F33842946AeF50A7573b8c3cBf04Df339c7";
+const receiverAddr = CP.toChecksumAddress( testReceiverAddress ).replace("0x", "");
+zilliqa.wallet.addByPrivateKey(privkey);
+
+const add = CP.getAddressFromPrivateKey(privkey);
+console.log('Your account address is:');
+console.log(`0x${add}`);
+
+async function testBlockchain() {
+  try {
+    // GetBalance
+    const balance = await zilliqa.blockchain.getBalance(add);
+    console.log('Your account balance is:');
+    console.log(balance.result);
+    let tx = zilliqa.transactions.new({
+        version: VER,
+        toAddr: receiverAddr,
+        // Note all transactional values has to be converted to Qa (the smallest accounting unit) when using the Zilliqa protocol.
+        // 1 Qa is 10^-12 Zil.
+        amount: units.toQa('10', units.Units.Zil),  // Sending an amount in Zil and converting the amount to Qa.
+        gasPrice: units.toQa('1000', units.Units.Li), // gasPrice is measured in Li. 1 Li is 10^-6 Zil.
+        gasLimit: Long.fromNumber(1),
+      });
+
+    console.log("Params: \n", tx.txParams);
+    console.log("Object:  \n", tx);
+    // Send a transaction to the network
+    tx = await zilliqa.blockchain.createTransaction(tx, 35, 1000);
+    console.log("The transaction status is:");
+    console.log(tx.receipt);
+} catch (err) {
+    console.log(err);
+  }
+}
+
+testBlockchain();

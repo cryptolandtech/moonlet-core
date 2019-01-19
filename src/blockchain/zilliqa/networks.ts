@@ -5,7 +5,7 @@ const networks: Network[] = [
     {
         network_id: 0,
         name: "Main net",
-        chainId: 1,
+        chainId: 2,
         blockchain: Blockchain.ZILLIQA,
         mainNet: true,
         url: "https://api.zilliqa.com/",

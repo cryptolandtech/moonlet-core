@@ -197,6 +197,8 @@ describe("Core", async () => {
 
                     it("error can be caught using a try/catch statement", async () => {
 
+                        let error;
+
                         try {
                             const test = await TestNode.rpcCall(
                                 "eth_badMethod", [
@@ -204,15 +206,19 @@ describe("Core", async () => {
                                     'latest',
                                 ], "",
                             );
+
+                            assert.isTrue( false, "Should never get here!" );
+
                         } catch (e) {
-                            assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
-                            assert.equal(
-                                e.message,
-                                "Error: Request failed with status code 400",
-                                "Invalid message",
-                            );
+                            error = e;
                         }
 
+                        assert.equal( error.constructor.name, "Error", "Should have returned an Error object" );
+                        assert.equal(
+                            error.message,
+                            "The method eth_badMethod does not exist/is not available", // "Error: Request failed with status code 400",
+                            "Invalid message",
+                        );
                     });
 
                     it("error can be caught using a then().catch() statement", async () => {
@@ -228,7 +234,7 @@ describe("Core", async () => {
                             assert.equal( e.constructor.name, "Error", "Should have returned an Error object" );
                             assert.equal(
                                 e.message,
-                                "Error: Request failed with status code 400",
+                                "The method eth_badMethod does not exist/is not available", // "Error: Request failed with status code 400",
                                 "Invalid message",
                             );
                         });

@@ -200,7 +200,6 @@ describe("Core", async () => {
                         }
 
                     });
-
                     it("error can be caught using a then().catch() statement", async () => {
                         const test = TestNode.rpcCall(
                             "getNetworkId", [], "",

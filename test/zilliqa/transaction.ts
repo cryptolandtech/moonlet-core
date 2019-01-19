@@ -75,6 +75,7 @@ describe("Core", async () => {
                 ];
                 const Transaction: GenericTransaction = mapper.getInstance( TransactionClassTypeString, txOptions  );
 
+                /*
                 describe("toParams()", async () => {
                     const params = Transaction.toParams();
 
@@ -82,6 +83,7 @@ describe("Core", async () => {
                         assert.equal( params.version, 65537, "params version does not match" );
                     });
                 });
+                */
 
             });
 

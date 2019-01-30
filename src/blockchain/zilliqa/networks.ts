@@ -5,19 +5,19 @@ const networks: Network[] = [
     {
         network_id: 0,
         name: "Main net",
-        chainId: 2,
+        chainId: 1,
         blockchain: Blockchain.ZILLIQA,
         mainNet: true,
         url: "https://api.zilliqa.com/",
-        HDCoinValue: 10018, // 10018 = Proposed as Zilliqa Main Network!
+        HDCoinValue: 313,
     },
     {
         network_id: 1,
         name: "Test net",
-        chainId: 2,
+        chainId: 333,
         blockchain: Blockchain.ZILLIQA,
         mainNet: false,
-        url: "https://api.testnet.zilliqa.com/",
+        url: "https://dev-api.zilliqa.com/",
         HDCoinValue: 1, // testnet
     },
     {

@@ -224,7 +224,7 @@ export default class Wallet {
     public getBlockchain(blockchain: Blockchain) {
         return {
             getNode: () => this.getNode(blockchain),
-            getAccounts: () => this.getAccounts(blockchain, false, true),
+            getAccounts: (networkId) => this.getAccounts(blockchain, false, true, networkId),
             getAllAccounts: () => this.getAccounts(blockchain, false, false),
             createAccount: () => this.createAccount(blockchain),
             importAccount: (account: GenericAccount) => this.importAccount(account),

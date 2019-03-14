@@ -307,7 +307,7 @@ export default class Wallet {
         this.requireImplementation(blockchain, "createAccount");
         networkId = networkId || this.getCurrentNetwork(blockchain);
 
-        const existingAccounts = this.getAccounts( blockchain );
+        const existingAccounts = this.getAccounts( blockchain, false, true, networkId);
 
         const accountNode = this.getNode(blockchain, networkId);
         const hdkey = accountNode.HDRootKey.deriveChild( existingAccounts.length );

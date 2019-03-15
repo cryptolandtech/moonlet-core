@@ -30,6 +30,7 @@ export abstract class GenericAccount<
         return name.charAt(0).toUpperCase() + name.slice(1) + "Account";
     }
 
+    public name: string;
     public node: GenericNode;
     public address: string = "";
     public publicKey: string = "";

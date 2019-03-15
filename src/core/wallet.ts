@@ -18,7 +18,6 @@ export interface WalletExport {
 }
 
 export default class Wallet {
-
     /**
      * Instantiate wallet using a serialised data
      * @param json
@@ -228,6 +227,7 @@ export default class Wallet {
             getAllAccounts: () => this.getAccounts(blockchain, false, false),
             createAccount: () => this.createAccount(blockchain),
             importAccount: (account: GenericAccount) => this.importAccount(account),
+            importAccountByPrivateKey: (privateKey: string) => this.importAccountByPrivateKey(blockchain, privateKey),
             getNetworks: () => this.getNetworks(blockchain),
             getCurrentNetwork: () => this.getCurrentNetwork(blockchain),
             switchNetwork: (networkId) => this.switchNetwork(blockchain, networkId),
@@ -356,6 +356,19 @@ export default class Wallet {
         }
         accountStore.push( account ) ;
         return accountStore[accountStore.length - 1];
+    }
+
+    public importAccountByPrivateKey(blockchain: Blockchain, privateKey: string): any {
+        privateKey = privateKey.toLocaleLowerCase().replace(/^0x/, '');
+
+        const AccountClassTypeString = GenericAccount.getImplementedClassName( blockchain );
+        return this.importAccount(
+            this.mapper.getInstance( AccountClassTypeString, {
+                node: this.getNode(blockchain),
+                type: AccountType.LOOSE,
+                privateKey: privateKey,
+            }),
+        );
     }
 
     /**

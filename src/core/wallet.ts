@@ -178,7 +178,7 @@ export default class Wallet {
      */
     public getAccounts(blockchain: Blockchain, reference: boolean = true, filter: boolean = false, networkId?: number): GenericAccount[] {
         this.requireImplementation(blockchain, "getAccounts");
-        networkId = networkId || this.getCurrentNetwork(blockchain);
+        networkId = typeof networkId === 'number' ? networkId : this.getCurrentNetwork(blockchain);
 
         let Results = this.accounts.get(blockchain);
         if (!Results) {
@@ -274,7 +274,7 @@ export default class Wallet {
      */
     public getNode(blockchain: Blockchain, networkId?: number) {
         this.requireImplementation(blockchain, "getNode");
-        networkId = networkId || this.getCurrentNetwork(blockchain);
+        networkId = typeof networkId === 'number' ? networkId : this.getCurrentNetwork(blockchain);
 
         let initialisedNodesMap = this.nodes.get( blockchain );
         if (initialisedNodesMap === undefined) {
@@ -305,7 +305,7 @@ export default class Wallet {
      */
     public createAccount(blockchain: Blockchain, networkId?: number): GenericAccount {
         this.requireImplementation(blockchain, "createAccount");
-        networkId = networkId || this.getCurrentNetwork(blockchain);
+        networkId = typeof networkId === 'number' ? networkId : this.getCurrentNetwork(blockchain);
 
         const existingAccounts = this.getAccounts( blockchain, false, true, networkId);
 

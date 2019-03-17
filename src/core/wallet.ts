@@ -113,6 +113,8 @@ export default class Wallet {
                     // import transactions
                     importedAccount.transactions = account.transactions;
 
+                    // import account name
+                    importedAccount.name = account.name;
                 }
             }
         }

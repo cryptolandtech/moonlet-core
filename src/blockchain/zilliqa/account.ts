@@ -42,7 +42,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @param txGasPrice
      * @returns transfer transaction
      */
-    public buildTransferTransaction(to: string, amount: number, nonce: number, txGasLimit: number, txGasPrice: number): ZilliqaTransaction {
+    public buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): ZilliqaTransaction {
         return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
 

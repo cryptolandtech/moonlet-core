@@ -31,7 +31,12 @@ export class EthereumAccountUtils extends GenericAccountUtils {
      */
     public isValidAddress( key: Buffer ): boolean {
         this.requireType(key, "Buffer", "isValidAddress");
-        return EthereumUtil.isValidAddress( key );
+        let address = key.toString('hex');
+
+        if (address.indexOf('0x') !== 0) {
+            address = '0x' + address;
+        }
+        return EthereumUtil.isValidAddress(address);
     }
 
     /**

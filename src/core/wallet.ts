@@ -5,6 +5,7 @@ import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
 import { IBlockchainImplementation } from "./blockchain-implementation";
+import { Account } from "@zilliqa-js/account";
 
 export interface WalletExport {
     mnemonics: string;
@@ -217,6 +218,30 @@ export default class Wallet {
         return this.accounts;
     }
 
+    public removeAccount(blockchain: Blockchain, address: string, networkId?: number) {
+        this.requireImplementation(blockchain, "getAccounts");
+        networkId = typeof networkId === 'number' ? networkId : this.getCurrentNetwork(blockchain);
+
+        const accounts = this.accounts.get(blockchain);
+        if (accounts) {
+            for(let i=0; i < accounts.length; i++) {
+                const account = accounts[i];
+                if (accounts[i].address.toLowerCase() === address.toLowerCase() && account.node.network.network_id === networkId) {
+                     switch (account.type) {
+                         case AccountType.HD:
+                            account.disabled = true;
+                            break;
+                         case AccountType.HARDWARE:
+                         case AccountType.LOOSE:
+                            accounts.splice(i, 1);
+                            break;
+                     }
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Gets blockchain
      * @param blockchain
@@ -234,6 +259,7 @@ export default class Wallet {
             getCurrentNetwork: () => this.getCurrentNetwork(blockchain),
             switchNetwork: (networkId) => this.switchNetwork(blockchain, networkId),
             getInitializedNodes: () => this.nodes.get(blockchain),
+            removeAccount: (address: string, networkId?: number) => this.removeAccount(blockchain, address, networkId)
         };
     }
 

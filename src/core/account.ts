@@ -40,6 +40,7 @@ export abstract class GenericAccount<
     public utils: GenericAccountUtils | any;
     public supportsCancel: boolean = false;
     private transactions: T[] = [];
+    public disabled = false;
 
     /**
      * Creates an instance of generic account.

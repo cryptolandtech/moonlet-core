@@ -39,7 +39,7 @@ export abstract class GenericAccount<
     public hd: HDKey | any;
     public utils: GenericAccountUtils | any;
     public supportsCancel: boolean = false;
-    private transactions: T[] = [];
+    public transactions: T[] = [];
     public disabled = false;
 
     /**

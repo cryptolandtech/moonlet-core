@@ -5,7 +5,7 @@ import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
 import { IBlockchainImplementation } from "./blockchain-implementation";
-import { Account } from "@zilliqa-js/account";
+import { WalletEventEmitter, WalletEventType, WalletEventData } from "./wallet-event-emiter";
 
 export interface WalletExport {
     mnemonics: string;
@@ -63,7 +63,7 @@ export default class Wallet {
                     const accountNetworkId = account.node.network.network_id;
                     let currentNode = bc.getNode();
 
-                    let importedAccount;
+                    let importedAccount: GenericAccount;
 
                     if ( account.type === AccountType.HD) {
 
@@ -116,6 +116,7 @@ export default class Wallet {
 
                     // import account name
                     importedAccount.name = account.name;
+                    importedAccount.disabled = account.disabled;
                 }
             }
         }
@@ -261,6 +262,10 @@ export default class Wallet {
             getInitializedNodes: () => this.nodes.get(blockchain),
             removeAccount: (address: string, networkId?: number) => this.removeAccount(blockchain, address, networkId)
         };
+    }
+
+    subscribe(callback: (type: WalletEventType, data: WalletEventData) => any): () => any {
+        return WalletEventEmitter.subscribe(callback);
     }
 
     /**

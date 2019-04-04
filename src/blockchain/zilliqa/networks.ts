@@ -9,15 +9,17 @@ const networks: Network[] = [
         blockchain: Blockchain.ZILLIQA,
         mainNet: true,
         url: "https://api.zilliqa.com/",
+        explorerTxPattern: "https://viewblock.io/zilliqa/tx/{txn}",
         HDCoinValue: 313,
     },
     {
         network_id: 1,
-        name: "Test net",
+        name: "Dev",
         chainId: 333,
         blockchain: Blockchain.ZILLIQA,
         mainNet: false,
         url: "https://dev-api.zilliqa.com/",
+        explorerTxPattern: "https://viewblock.io/zilliqa/tx/{txn}?network=testnet",
         HDCoinValue: 1, // testnet
     },
     {

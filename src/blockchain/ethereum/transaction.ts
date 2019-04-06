@@ -1,5 +1,7 @@
+import { TransactionStatus } from './../../core/transaction';
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
-import BigNumber from 'bignumber.js';
+import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emitter';
+import { Blockchain } from '../../core/blockchain';
 
 export interface IEthereumTransactionOptions extends ITransactionOptions {
     gasPrice: number;
@@ -9,11 +11,10 @@ export interface IEthereumTransactionOptions extends ITransactionOptions {
 }
 
 export class EthereumTransaction extends GenericTransaction<IEthereumTransactionOptions> {
-    public value: number;
     public chainId: number;
     public gasPrice: number;
     public gasLimit: number;
-    public amount: number;
+    public usedGas: number;
 
     /**
      * Creates an instance of an ethereum transaction.
@@ -27,7 +28,6 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
         super(from, to, nonce, options);
 
         this.amount = amount;
-        this.value = amount;
         this.chainId = options.chainId;
         this.gasPrice = options.gasPrice;
         this.gasLimit = options.gasLimit;
@@ -44,9 +44,31 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
             gasPrice: this.getNumberToHex( this.gasPrice ),
             gasLimit: this.getNumberToHex( this.gasLimit ),
             to: this.to,
-            value: this.getNumberToHex( this.value ),
+            value: this.getNumberToHex( this.amount ),
             data: "0x" + this.data,
             chainId: this.getNumberToHex( this.chainId ),
         };
+    }
+
+    public setTxn(data: any) {
+        super.setTxn(data);
+        if (data) {
+            this.id = data;
+        }
+    }
+
+    public updateData(data: any) {
+        if (data.transactionHash.toLowerCase() === this.id.toLowerCase()) {
+            if (parseInt(data.status, 16) === 1) {
+                this.usedGas = parseInt(data.gasUsed, 16);
+                this.setStatus(TransactionStatus.SUCCESS);
+
+                WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
+                    blockchain: Blockchain.ETHEREUM,
+                    address: this.from,
+                    transactionId: this.id
+                });
+            }
+        }
     }
 }

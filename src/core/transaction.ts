@@ -1,15 +1,17 @@
+import { BigNumber } from 'bignumber.js';
 import { ITransactionOptions } from './transaction';
-import BigNumber from 'bignumber.js';
 
 export interface ITransactionOptions {
     //
 }
 
 export enum TransactionStatus {
-    NEW = "NEW",
+    CREATED = "CREATED",
     SIGNED = "SIGNED",
+    SUBMITTED = "SUBMITTED",
     PENDING = "PENDING",
-    FINAL = "FINAL",
+    SUCCESS = "SUCCESS",
+    DROPPED = "DROPPED"
 }
 
 export abstract class GenericTransaction<TO extends ITransactionOptions = ITransactionOptions> {
@@ -19,16 +21,17 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
         return name.charAt(0).toUpperCase() + name.slice(1) + "Transaction";
     }
 
+    public id: string = "";
     public from: string;
     public to: string;
     public nonce: number;
+    public amount: number;
     public options: TO;
     public data: Buffer;
 
-    public receipt: any;
-    public txn: string = "";
+    // public receipt: any;
     public raw: Buffer = Buffer.from("");
-    public status: TransactionStatus = TransactionStatus.NEW;
+    public status: TransactionStatus = TransactionStatus.CREATED;
     public times: any = [];
 
     constructor(from: string, to: string, nonce: number, options: TO) {
@@ -37,7 +40,7 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
         this.nonce = nonce;
         this.options = options;
 
-        this.addTime("creation");
+        this.addTime(TransactionStatus.CREATED);
     }
 
     /**
@@ -45,7 +48,7 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
      * @param data
      */
     public setSignedResult( data: Buffer ) {
-        this.addTime("signed");
+        this.addTime(TransactionStatus.SIGNED);
         this.status = TransactionStatus.SIGNED;
         this.raw = data;
     }
@@ -55,27 +58,22 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
      * @param data
      */
     public setPending() {
-        this.addTime("pending");
+        this.addTime(TransactionStatus.PENDING);
         this.status = TransactionStatus.PENDING;
     }
 
-    /**
+    public setStatus(status: TransactionStatus) {
+        this.addTime(status);
+        this.status = status;
+    };
+
+      /**
      * Sets transaction status to final, adds txn and indexes event
      * @param data
      */
     public setTxn( txn: string ) {
-        this.addTime("final");
-        this.status = TransactionStatus.FINAL;
-        this.txn = txn;
-    }
-
-    /**
-     * Sets transaction receipt and indexes event
-     * @param data
-     */
-    public setReceiptStatus( receipt: any ) {
-        this.addTime("receipt");
-        this.receipt = receipt;
+        this.addTime(TransactionStatus.SUBMITTED);
+        this.status = TransactionStatus.PENDING;
     }
 
     /**
@@ -83,7 +81,7 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
      * @param num
      * @returns hex representation
      */
-    public getNumberToHex( num: number ): string {
+    public getNumberToHex( num: number | BigNumber ): string {
         return "0x" + num.toString(16);
     }
 
@@ -103,4 +101,6 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
      * @returns parameters object
      */
     public abstract toParams();
+
+    public abstract updateData(data: any);
 }

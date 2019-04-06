@@ -1,4 +1,6 @@
-import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
+import { Blockchain } from './../../core/blockchain';
+import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emitter';
+import { GenericTransaction, ITransactionOptions, TransactionStatus } from '../../core/transaction';
 import { BN, Long } from '@zilliqa-js/util';
 import { util as ZilliqaJsAccountUtil } from "@zilliqa-js/account";
 import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
@@ -16,14 +18,14 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
     public version: number = 1;
     public pubKey: string;
     public code: Buffer;
-    public amount: number;
 
     public chainId: number;
     public gasPrice: number;
     public gasLimit: number;
+    public usedGas: number;
+
     public TXObject: any;
 
-    public txn: any;
 
     /**
      * Creates an instance of a zilliqa transaction.
@@ -71,5 +73,26 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      */
     public getProtoEncodedTx(TXObject): Buffer {
         return ZilliqaJsAccountUtil.encodeTransactionProto(TXObject);
+    }
+
+    public setTxn(data: any) {
+        super.setTxn(data);
+        if (data.TranID) {
+            this.id = data.TranID;
+        }
+    }
+
+    public updateData(data: any) {
+        if (data.ID === this.id) {
+            if (data.receipt && data.receipt.success) {
+                this.usedGas = data.receipt.cumulative_gas;
+                this.setStatus(TransactionStatus.SUCCESS);
+                WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
+                    blockchain: Blockchain.ZILLIQA,
+                    address: this.from,
+                    transactionId: this.id
+                });
+            }
+        }
     }
 }

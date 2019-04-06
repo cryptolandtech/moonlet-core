@@ -61,7 +61,7 @@ export class ZilliqaNode extends GenericNode {
     public estimateGas(callArguments: any): Promise<number> {
         throw new Error("Method not implemented.");
         /*
-        // https://github.com/Zilliqa/Zilliqa/blob/db00328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
+        // https://github.com/Zilliqa/Zilliqa/blob/db0 0328e78364c5ae6049f483d8f5bc696027d79/src/libServer/Server.cpp#L580
         // not implemented yet.. returns "Hello"
         return this.rpcCall("GetGasEstimate", [
             callArguments,
@@ -75,10 +75,10 @@ export class ZilliqaNode extends GenericNode {
      * @returns transaction receipt
      */
     public getTransactionReceipt(transaction: ZilliqaTransaction): Promise<any> {
-        if ( transaction.receipt !== undefined ) {
-            return Promise.resolve( transaction.receipt );
+        if (transaction.id) {
+            return this.rpcCall("GetTransaction", [ transaction.id.replace("0x", "").toLowerCase() ], "") as Promise<any>;
         } else {
-            return Promise.resolve( transaction.txn.TranID );
+            return Promise.reject('No transaction id available.');
         }
     }
 

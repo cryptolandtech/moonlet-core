@@ -1,3 +1,4 @@
+import { TransactionTracker } from './transactions-tracker';
 import { GenericTransaction, ITransactionOptions, TransactionStatus } from './transaction';
 import { GenericNode } from "./node";
 import HDKey from './utils/hdkey';
@@ -102,34 +103,28 @@ export abstract class GenericAccount<
      * @param [cbtype]
      * @returns send
      */
-    public send(transaction: T, cb?: any, cbtype?: string): Promise<{txn, receipt}> {
+    public send(transaction: T): Promise<{txn, receipt}> {
         this.transactions.push( transaction );
 
         if (transaction.status === TransactionStatus.SIGNED) {
             transaction.setPending();
             return this.node.send( transaction ).then( (txndata) => {
                 transaction.setTxn( txndata );
-                if (cb !== undefined && cbtype === "txn") {
-                    cb(null, txndata);
-                }
-
+                TransactionTracker.register(this, transaction);
+                
                 // kaya does not throw this error properly..
-                if (transaction.txn === "Invalid Tx Json") {
+                if (txndata === "Invalid Tx Json") {
                     throw new Error("Invalid Tx Json");
                 }
 
                 // load extra transaction details
                 return this.node.getTransactionReceipt( transaction ).then(receiptdata => {
-                    if (cb !== undefined && cbtype === undefined) {
-                        cb(null, receiptdata);
-                    }
                     return Promise.resolve( { txn: txndata, receipt: receiptdata} );
+                }).catch(error => {
+                    return Promise.resolve( { txn: txndata, receipt: undefined } );
                 });
 
             }).catch( (error) => {
-                if (cb !== undefined) {
-                    cb(error);
-                }
                 return Promise.reject( new Error(error) );
             });
 

@@ -5,7 +5,7 @@ import { GenericNode } from "./node";
 import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
 import { IBlockchainImplementation } from "./blockchain-implementation";
-import { WalletEventEmitter, WalletEventType, WalletEventData } from "./wallet-event-emiter";
+import { WalletEventEmitter, WalletEventType, WalletEventData } from "./wallet-event-emitter";
 
 export interface WalletExport {
     mnemonics: string;

@@ -83,17 +83,17 @@ export abstract class GenericNode {
 
         const callData = this.buildCall(method, params);
         const callOptions = {};
-
         const action = axios.post( this.network.url, callData, callOptions );
-        // console.log( "CallData: ", callData );
+        //console.log( "CallData: ", callData );
         return action.then( (data) => {
-            // console.log( "return result:", data );
+            //console.log( "return result:", data );
             if ( data.data.result !== undefined ) {
                 return this.resultDecoder( data.data.result, dec );
             } else {
                 return Promise.reject( data.data.error.message );
             }
         }).catch( (error) => {
+            // console.log( "return error:", method, params, error );
             return Promise.reject( new Error(error) );
         });
     }

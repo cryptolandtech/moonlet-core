@@ -1,3 +1,4 @@
+import { TransactionStatus } from './transaction';
 import { Blockchain } from './blockchain';
 export enum WalletEventType {
     TRANSACTION_UPDATE = 'TRANSACTION_UPDATE'
@@ -8,7 +9,8 @@ export type WalletEventData = IWalletTransactionUpdate;
 export interface IWalletTransactionUpdate {
     blockchain: Blockchain,
     address: string,
-    transactionId: string
+    transactionId: string,
+    status: TransactionStatus
 }
 
 export class WalletEventEmitter {

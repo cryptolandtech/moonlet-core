@@ -90,7 +90,8 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
                 WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
                     blockchain: Blockchain.ZILLIQA,
                     address: this.from,
-                    transactionId: this.id
+                    transactionId: this.id,
+                    status: this.status
                 });
             }
         }

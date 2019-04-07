@@ -66,7 +66,8 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
                 WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
                     blockchain: Blockchain.ETHEREUM,
                     address: this.from,
-                    transactionId: this.id
+                    transactionId: this.id,
+                    status: this.status
                 });
             }
         }

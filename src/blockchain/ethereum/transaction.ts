@@ -59,17 +59,18 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
 
     public updateData(data: any) {
         if (data.transactionHash.toLowerCase() === this.id.toLowerCase()) {
-            if (parseInt(data.status, 16) === 1) {
-                this.usedGas = parseInt(data.gasUsed, 16);
-                this.setStatus(TransactionStatus.SUCCESS);
+            let status = parseInt(data.status, 16);
+            
+            this.usedGas = parseInt(data.gasUsed, 16);
+            this.setStatus(status === 1 ? TransactionStatus.SUCCESS : TransactionStatus.FAILED);
 
-                WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
-                    blockchain: Blockchain.ETHEREUM,
-                    address: this.from,
-                    transactionId: this.id,
-                    status: this.status
-                });
-            }
+            WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
+                blockchain: Blockchain.ETHEREUM,
+                address: this.from,
+                transactionId: this.id,
+                status: this.status
+            });
+            
         }
     }
 }

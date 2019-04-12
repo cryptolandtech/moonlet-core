@@ -6,6 +6,7 @@ import { GenericAccount, AccountType } from "./account";
 import DynamicClassMapper from "../class.store";
 import { IBlockchainImplementation } from "./blockchain-implementation";
 import { WalletEventEmitter, WalletEventType, WalletEventData } from "./wallet-event-emitter";
+import { GenericTransaction } from "./transaction";
 
 export interface WalletExport {
     mnemonics: string;
@@ -51,6 +52,7 @@ export default class Wallet {
                 const currentBlockchain = Blockchain[currentBlockchainEnum];
 
                 const AccountClassTypeString = GenericAccount.getImplementedClassName( Blockchain[currentBlockchain] );
+                const TransactionClassTypeString = GenericTransaction.getImplementedClassName( Blockchain[currentBlockchain] );
                 const NodeClassTypeString = GenericNode.getImplementedClassName( Blockchain[currentBlockchain] );
 
                 const bc = wallet.getBlockchain(Blockchain[currentBlockchainEnum]);
@@ -112,7 +114,25 @@ export default class Wallet {
                     }
 
                     // import transactions
-                    importedAccount.transactions = account.transactions;
+                    importedAccount.transactions = account.transactions.map((tx: GenericTransaction) => {
+                        let t = wallet.mapper.getInstance( TransactionClassTypeString, [
+                            tx.from,
+                            tx.to,
+                            tx.amount,
+                            tx.nonce,
+                            tx.options
+                        ]);
+
+                        t.id = tx.id;
+                        t.status = tx.status;
+                        t.times = tx.times;
+
+                        if ((tx as any).usedGas) {
+                            t.usedGas = (tx as any).usedGas;
+                        }
+
+                        return t;
+                    });
 
                     // import account name
                     importedAccount.name = account.name;

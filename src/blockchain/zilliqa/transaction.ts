@@ -84,9 +84,9 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
 
     public updateData(data: any) {
         if (data.ID === this.id) {
-            if (data.receipt && data.receipt.success) {
+            if (data.receipt) {
                 this.usedGas = data.receipt.cumulative_gas;
-                this.setStatus(TransactionStatus.SUCCESS);
+                this.setStatus(data.receipt.success ? TransactionStatus.SUCCESS : TransactionStatus.FAILED);
                 WalletEventEmitter.emit(WalletEventType.TRANSACTION_UPDATE, {
                     blockchain: Blockchain.ZILLIQA,
                     address: this.from,

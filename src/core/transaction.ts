@@ -11,7 +11,7 @@ export enum TransactionStatus {
     SUBMITTED = "SUBMITTED",
     PENDING = "PENDING",
     SUCCESS = "SUCCESS",
-    DROPPED = "DROPPED"
+    FAILED = "FAILED"
 }
 
 export abstract class GenericTransaction<TO extends ITransactionOptions = ITransactionOptions> {

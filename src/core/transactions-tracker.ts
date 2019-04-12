@@ -8,7 +8,7 @@ export class TransactionTracker {
     private static transactions: {account: GenericAccount, transaction: GenericTransaction}[] = []; 
 
     static register(account: GenericAccount, transaction: GenericTransaction) {
-        if (transaction.status !== TransactionStatus.SUCCESS && transaction.status !== TransactionStatus.DROPPED) {
+        if (transaction.status !== TransactionStatus.SUCCESS && transaction.status !== TransactionStatus.FAILED) {
             TransactionTracker.transactions.push({account, transaction});
             TransactionTracker.run();
         }
@@ -26,8 +26,9 @@ export class TransactionTracker {
         TransactionTracker.timeoutRef = setTimeout(() => {
             TransactionTracker.transactions.map(async (tx) => {
                 try {
-                    if (tx.transaction.status !== TransactionStatus.SUCCESS && tx.transaction.status !== TransactionStatus.DROPPED) {
+                    if (tx.transaction.status !== TransactionStatus.SUCCESS && tx.transaction.status !== TransactionStatus.FAILED) {
                         let receipt = await tx.account.node.getTransactionReceipt(tx.transaction);
+                        //console.log(receipt);
                         tx.transaction.updateData(receipt);
                     } else {
                         let index = TransactionTracker.transactions.indexOf(tx);

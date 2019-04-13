@@ -360,7 +360,7 @@ export default class Wallet {
         this.requireImplementation(blockchain, "createAccount");
         networkId = typeof networkId === 'number' ? networkId : this.getCurrentNetwork(blockchain);
 
-        const existingAccounts = this.getAccounts( blockchain, false, true, networkId);
+        const existingAccounts = this.getAccounts( blockchain, false, true, networkId).filter(acc => acc.type === AccountType.HD);
 
         const accountNode = this.getNode(blockchain, networkId);
         const hdkey = accountNode.HDRootKey.deriveChild( existingAccounts.length );
@@ -368,7 +368,7 @@ export default class Wallet {
         const accountOptions = {
             node: accountNode,
             type: AccountType.HD,
-            hd: hdkey,
+            hd: hdkey, 
         };
         const DynamicClassName = GenericAccount.getImplementedClassName( blockchain );
         const account: GenericAccount = this.mapper.getInstance( DynamicClassName, accountOptions );

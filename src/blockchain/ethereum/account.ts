@@ -45,7 +45,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @returns a new cancel transaction
      */
     public buildCancelTransaction(nonce: number, txGasPrice: number): EthereumTransaction {
-        return this.buildTransferTransaction(this.address, 0, nonce, txGasPrice, 21000);
+        return this.buildTransferTransaction(this.address, '0', nonce, txGasPrice, 21000);
     }
 
     /**
@@ -57,7 +57,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param txGasLimit
      * @returns transfer transaction
      */
-    public buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): EthereumTransaction {
+    public buildTransferTransaction(to: string, amount: string, nonce: number, txGasPrice: number, txGasLimit: number): EthereumTransaction {
         return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
 
@@ -71,7 +71,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param [txGasLimit]
      * @returns a cost estimate
      */
-    public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): Promise<number> {
+    public estimateTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): Promise<number> {
         return this.node.estimateGas(
             this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams(),
         );
@@ -87,7 +87,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param txGasLimit
      * @returns transaction
      */
-    public buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): EthereumTransaction {
+    public buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): EthereumTransaction {
         return new EthereumTransaction(
             this.address,               // from me
             to,                         // to actual receiver

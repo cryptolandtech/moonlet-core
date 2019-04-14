@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js';
 import { TransactionStatus } from './../../core/transaction';
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
 import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emitter';
@@ -24,10 +25,9 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
      * @param nonce
      * @param options
      */
-    constructor(from: string, to: string, amount: number, nonce: number, options: IEthereumTransactionOptions) {
-        super(from, to, nonce, options);
+    constructor(from: string, to: string, amount: string, nonce: number, options: IEthereumTransactionOptions) {
+        super(from, to, amount, nonce, options);
 
-        this.amount = amount;
         this.chainId = options.chainId;
         this.gasPrice = options.gasPrice;
         this.gasLimit = options.gasLimit;
@@ -44,7 +44,7 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
             gasPrice: this.getNumberToHex( this.gasPrice ),
             gasLimit: this.getNumberToHex( this.gasLimit ),
             to: this.to,
-            value: this.getNumberToHex( this.amount ),
+            value: this.getNumberToHex( new BigNumber(this.amount) ),
             data: "0x" + this.data,
             chainId: this.getNumberToHex( this.chainId ),
         };

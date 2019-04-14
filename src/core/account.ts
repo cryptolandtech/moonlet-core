@@ -166,7 +166,7 @@ export abstract class GenericAccount<
      * @param txGasPrice
      * @returns transfer transaction
      */
-    public abstract buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): T;
+    public abstract buildTransferTransaction(to: string, amount: string, nonce: number, txGasPrice: number, txGasLimit: number): T;
 
     /**
      * Estimates transaction
@@ -178,7 +178,7 @@ export abstract class GenericAccount<
      * @param [txGasLimit]
      * @returns a cost estimate
      */
-    public abstract estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice?: number, txGasLimit?: number): Promise<number>;
+    public abstract estimateTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice?: number, txGasLimit?: number): Promise<number>;
 
     /**
      * Builds transaction
@@ -190,7 +190,7 @@ export abstract class GenericAccount<
      * @param gasPrice
      * @returns transaction
      */
-    public abstract buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, gasPrice: number, gasLimit: number): GenericTransaction;
+    public abstract buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, gasPrice: number, gasLimit: number): GenericTransaction;
 
     /**
      * Signs transaction

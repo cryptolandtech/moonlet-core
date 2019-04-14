@@ -35,10 +35,9 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      * @param nonce
      * @param options
      */
-    constructor(from: string, to: string, amount: number, nonce: number, options: IZilliqaTransactionOptions) {
-        super(from, to, nonce, options);
+    constructor(from: string, to: string, amount: string, nonce: number, options: IZilliqaTransactionOptions) {
+        super(from, to, amount, nonce, options);
 
-        this.amount = amount;
         this.pubKey = options.pubKey || "";
         this.code = options.code || Buffer.from("");
 

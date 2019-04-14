@@ -25,7 +25,7 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
     public from: string;
     public to: string;
     public nonce: number;
-    public amount: number;
+    public amount: string;
     public options: TO;
     public data: Buffer;
 
@@ -34,11 +34,12 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
     public status: TransactionStatus = TransactionStatus.CREATED;
     public times: any = [];
 
-    constructor(from: string, to: string, nonce: number, options: TO) {
+    constructor(from: string, to: string, amount: string, nonce: number, options: TO) {
         this.from = from;
         this.to = to;
         this.nonce = nonce;
         this.options = options;
+        this.amount = amount;
 
         this.addTime(TransactionStatus.CREATED);
     }

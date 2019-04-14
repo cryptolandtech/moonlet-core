@@ -42,7 +42,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @param txGasPrice
      * @returns transfer transaction
      */
-    public buildTransferTransaction(to: string, amount: number, nonce: number, txGasPrice: number, txGasLimit: number): ZilliqaTransaction {
+    public buildTransferTransaction(to: string, amount: string, nonce: number, txGasPrice: number, txGasLimit: number): ZilliqaTransaction {
         return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
     }
 
@@ -56,7 +56,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @param [txGasLimit]
      * @returns a cost estimate
      */
-    public estimateTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice?: number, txGasLimit?: number): Promise<number> {
+    public estimateTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice?: number, txGasLimit?: number): Promise<number> {
 
         throw new Error("Method not implemented.");
         /*
@@ -80,7 +80,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @param txGasLimit
      * @returns transaction
      */
-    public buildTransaction(to: string, amount: number, nonce: number, txdata: Buffer, txGasPrice: number = 0, txGasLimit: number = 8000000): ZilliqaTransaction {
+    public buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 0, txGasLimit: number = 8000000): ZilliqaTransaction {
         return new ZilliqaTransaction(
             this.address,               // from me
             to,                         // to actual receiver

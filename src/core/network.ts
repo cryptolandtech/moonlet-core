@@ -8,5 +8,6 @@ export interface Network {
     url: string;
     mainNet: boolean;
     explorerTxPattern?: string;
+    explorerAccountPattern?: string;
     HDCoinValue: number;
 }

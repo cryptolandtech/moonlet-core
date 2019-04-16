@@ -9,6 +9,7 @@ const networks: Network[] = [
         blockchain: Blockchain.ETHEREUM,
         mainNet: true,
         explorerTxPattern: "https://etherscan.io/tx/0x{txn}",
+        explorerAccountPattern: "https://etherscan.io/address/0x{txn}",
         url: "https://mainnet.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 60, // 60 = Ethereum Main Network!
     },
@@ -19,6 +20,7 @@ const networks: Network[] = [
         blockchain: Blockchain.ETHEREUM,
         mainNet: false,
         explorerTxPattern: "https://ropsten.etherscan.io/tx/0x{txn}",
+        explorerAccountPattern: "https://ropsten.etherscan.io/address/0x{txn}",
         url: "https://ropsten.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1, // Test Net
     },
@@ -29,6 +31,7 @@ const networks: Network[] = [
         blockchain: Blockchain.ETHEREUM,
         mainNet: false,
         explorerTxPattern: "https://rinkeby.etherscan.io/tx/0x{txn}",
+        explorerAccountPattern: "https://rinkeby.etherscan.io/address/0x{txn}",
         url: "https://rinkeby.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1, // Test Net
     },
@@ -39,6 +42,7 @@ const networks: Network[] = [
         blockchain: Blockchain.ETHEREUM,
         mainNet: false,
         explorerTxPattern: "https://kovan.etherscan.io/tx/0x{txn}",
+        explorerAccountPattern: "https://kovan.etherscan.io/address/0x{txn}",
         url: "https://kovan.infura.io/v3/1fc164b9a9054e4bab0f54e3d8d312b8",
         HDCoinValue: 1, // Test Net
     },

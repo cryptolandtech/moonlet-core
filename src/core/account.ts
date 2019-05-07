@@ -18,6 +18,9 @@ export interface IaccountOptions {
     address?: string;
     type: AccountType;
     hd?: any;
+    //hw specifics to identify an account
+    accountIndex?: string;
+    derivationIndex?: string;
     // TODO: need to clarify fields for each account type
 }
 
@@ -38,6 +41,8 @@ export abstract class GenericAccount<
     public privateKey: string = "";
     public type: AccountType;
     public hd: HDKey | any;
+    public accountIndex: string = "";
+    public derivationIndex: string = "";
     public utils: GenericAccountUtils | any;
     public supportsCancel: boolean = false;
     public transactions: T[] = [];
@@ -68,6 +73,14 @@ export abstract class GenericAccount<
                     throw new Error("accountOptions.address parameter missing");
                 }
                 this.address = accountOptions.address;
+                if (!accountOptions.accountIndex) {
+                    throw new Error("accountOptions.accountIndex parameter missing");
+                }               
+                this.accountIndex = accountOptions.accountIndex;
+                if (!accountOptions.derivationIndex) {
+                    throw new Error("accountOptions.derivationIndex parameter missing");
+                }
+                this.derivationIndex = accountOptions.derivationIndex;
                 break;
 
             default:

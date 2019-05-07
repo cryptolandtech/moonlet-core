@@ -411,6 +411,25 @@ export default class Wallet {
         return accountStore[accountStore.length - 1];
     }
 
+    /**
+     * Imports account
+     * @param account
+     * @returns account
+     */
+    public importHWAccount(blockchain: Blockchain, address: string, accountIndex: string, derivationIndex: string): GenericAccount {
+        const AccountClassTypeString = GenericAccount.getImplementedClassName( blockchain );
+
+        return this.importAccount(
+            this.mapper.getInstance( AccountClassTypeString, {
+                node: this.getNode(blockchain),
+                type: AccountType.HARDWARE,
+                address: address,
+                accountIndex: accountIndex,
+                derivationIndex: derivationIndex
+            }),
+        );
+    }    
+
     public importAccountByPrivateKey(blockchain: Blockchain, privateKey: string): any {
         privateKey = privateKey.toLocaleLowerCase().replace(/^0x/, '');
 

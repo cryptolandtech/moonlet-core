@@ -11,6 +11,10 @@ export enum AccountType {
     HARDWARE = "HARDWARE",
 }
 
+export enum HWDevice {
+    LEDGER = 'LEDGER'
+}
+
 export interface IaccountOptions {
     node: GenericNode;
     privateKey?: string;
@@ -19,8 +23,10 @@ export interface IaccountOptions {
     type: AccountType;
     hd?: any;
     //hw specifics to identify an account
+    deviceType?: HWDevice;
     accountIndex?: string;
     derivationIndex?: string;
+    derivationPath?: string;
     // TODO: need to clarify fields for each account type
 }
 
@@ -41,8 +47,10 @@ export abstract class GenericAccount<
     public privateKey: string = "";
     public type: AccountType;
     public hd: HDKey | any;
+    public deviceType: HWDevice;
     public accountIndex: string = "";
     public derivationIndex: string = "";
+    public derivationPath: string = "";
     public utils: GenericAccountUtils | any;
     public supportsCancel: boolean = false;
     public transactions: T[] = [];
@@ -69,6 +77,10 @@ export abstract class GenericAccount<
                 this.privateKey = accountOptions.privateKey;
                 break;
             case AccountType.HARDWARE:
+                if (!accountOptions.deviceType) {
+                    throw new Error("accountOptions.address parameter missing");
+                }
+                this.deviceType = accountOptions.deviceType;
                 if (!accountOptions.address) {
                     throw new Error("accountOptions.address parameter missing");
                 }
@@ -81,6 +93,7 @@ export abstract class GenericAccount<
                     throw new Error("accountOptions.derivationIndex parameter missing");
                 }
                 this.derivationIndex = accountOptions.derivationIndex;
+                this.derivationPath = accountOptions.derivationPath;
                 break;
 
             default:

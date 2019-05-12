@@ -420,29 +420,48 @@ export default class Wallet {
     public importHWAccount(deviceType: HWDevice, blockchain: Blockchain, derivationPath: string, address: string, accountIndex: string, derivationIndex: string): GenericAccount {
         const AccountClassTypeString = GenericAccount.getImplementedClassName( blockchain );
 
-        return this.importAccount(
-            this.mapper.getInstance( AccountClassTypeString, {
-                node: this.getNode(blockchain),
-                type: AccountType.HARDWARE,
-                address,
-                accountIndex,
-                derivationIndex,
-                derivationPath,
-                deviceType
-            }),
-        );
+        const account = this.mapper.getInstance( AccountClassTypeString, {
+            node: this.getNode(blockchain),
+            type: AccountType.HARDWARE,
+            address,
+            accountIndex,
+            derivationIndex,
+            derivationPath,
+            deviceType
+        });
+
+       // prevent account duplication
+       const existingAccount = this.getAccounts(blockchain, true, true).filter(a => a.address === account.address)[0];
+       if (existingAccount) {
+           return existingAccount;
+       }
+
+       return this.importAccount(
+           account
+       );
     }    
 
     public importAccountByPrivateKey(blockchain: Blockchain, privateKey: string): any {
         privateKey = privateKey.toLocaleLowerCase().replace(/^0x/, '');
 
         const AccountClassTypeString = GenericAccount.getImplementedClassName( blockchain );
+        const account = this.mapper.getInstance( AccountClassTypeString, {
+            node: this.getNode(blockchain),
+            type: AccountType.LOOSE,
+            privateKey: privateKey,
+        });
+
+        account.publicKey = account.utils.bufferToHex( account.utils.privateToPublic( Buffer.from( account.privateKey, "hex" ) ) );
+        account.address = account.utils.toChecksumAddress( account.utils.privateToAddress( Buffer.from( account.privateKey, "hex" ) ).toString("hex") );
+
+        // prevent account duplication
+        const existingAccount = this.getAccounts(blockchain, true, true).filter(a => a.address === account.address)[0];
+        if (existingAccount) {
+            return existingAccount;
+        }
+
         return this.importAccount(
-            this.mapper.getInstance( AccountClassTypeString, {
-                node: this.getNode(blockchain),
-                type: AccountType.LOOSE,
-                privateKey: privateKey,
-            }),
+            account
         );
     }
 

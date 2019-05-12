@@ -1,3 +1,4 @@
+import { ZilliqaAccountUtils } from './account-utils';
 import { ZilliqaAccount } from "./account";
 import { ZilliqaNode } from "./node";
 import { ZilliqaTransaction } from "./transaction";
@@ -10,6 +11,7 @@ const AvailableClasses = {
     ZilliqaAccount,
     ZilliqaNode,
     ZilliqaTransaction,
+    ZilliqaAccountUtils
 };
 
 export const Zilliqa: IBlockchainImplementation = {

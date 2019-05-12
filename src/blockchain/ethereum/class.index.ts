@@ -6,11 +6,13 @@ import { EthereumTransaction } from "./transaction";
 
 import config from "./config";
 import networks from "./networks";
+import { EthereumAccountUtils } from "./account-utils";
 
 const AvailableClasses = {
     EthereumAccount,
     EthereumNode,
     EthereumTransaction,
+    EthereumAccountUtils
 };
 
 export const Ethereum: IBlockchainImplementation = {

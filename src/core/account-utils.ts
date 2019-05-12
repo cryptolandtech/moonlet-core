@@ -2,6 +2,11 @@ import { BigNumber } from "bignumber.js";
 
 export abstract class GenericAccountUtils {
 
+    public static getImplementedClassName(name: string) {
+        name = name.toLowerCase();
+        return name.charAt(0).toUpperCase() + name.slice(1) + "AccountUtils";
+    }
+
     /**
      * Parameter type validation
      * @param target

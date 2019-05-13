@@ -104,4 +104,5 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
     public abstract toParams();
 
     public abstract updateData(data: any);
+    public abstract serialize();
 }

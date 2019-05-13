@@ -1,3 +1,4 @@
+import EthereumJsTx from 'ethereumjs-tx';
 import { BigNumber } from 'bignumber.js';
 import { TransactionStatus } from './../../core/transaction';
 import { GenericTransaction, ITransactionOptions } from '../../core/transaction';
@@ -48,6 +49,11 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
             data: "0x" + this.data,
             chainId: this.getNumberToHex( this.chainId ),
         };
+    }
+
+    public serialize() {
+        const tx = new EthereumJsTx( this.toParams() );
+        return tx.serialize().toString('hex');
     }
 
     public setTxn(data: any) {

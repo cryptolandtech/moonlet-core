@@ -65,6 +65,10 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         };
     }
 
+    public serialize() {
+        throw new Error('moonlet-core:ZilliqaTransaction.serialize() not implemented');
+    }
+
     /**
      * Gets proto encoded tx
      * @param TXObject

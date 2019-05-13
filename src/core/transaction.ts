@@ -105,4 +105,5 @@ export abstract class GenericTransaction<TO extends ITransactionOptions = ITrans
 
     public abstract updateData(data: any);
     public abstract serialize();
+    public abstract setLedgerSignResult(params);
 }

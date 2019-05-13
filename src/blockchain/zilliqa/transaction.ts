@@ -69,6 +69,10 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
         throw new Error('moonlet-core:ZilliqaTransaction.serialize() not implemented');
     }
 
+    public setLedgerSignResult() {
+        throw new Error('moonlet-core:ZilliqaTransaction.setLedgerSignResult() not implemented');
+    }
+
     /**
      * Gets proto encoded tx
      * @param TXObject

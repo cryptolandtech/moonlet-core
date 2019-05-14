@@ -48,6 +48,10 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
             value: this.getNumberToHex( new BigNumber(this.amount) ),
             data: "0x" + this.data,
             chainId: this.getNumberToHex( this.chainId ),
+
+            v: this.getNumberToHex( this.chainId ),
+            r: "0x00",
+            s: "0x00"
         };
     }
 

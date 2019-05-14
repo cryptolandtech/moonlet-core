@@ -81,18 +81,25 @@ export abstract class GenericAccount<
                     throw new Error("accountOptions.deviceType parameter missing");
                 }
                 this.deviceType = accountOptions.deviceType;
+
                 if (!accountOptions.address) {
                     throw new Error("accountOptions.address parameter missing");
                 }
                 this.address = accountOptions.address;
+
                 if (!accountOptions.accountIndex) {
                     throw new Error("accountOptions.accountIndex parameter missing");
                 }               
                 this.accountIndex = accountOptions.accountIndex;
+
                 if (!accountOptions.derivationIndex) {
                     throw new Error("accountOptions.derivationIndex parameter missing");
                 }
                 this.derivationIndex = accountOptions.derivationIndex;
+
+                if (!accountOptions.derivationPath) {
+                    throw new Error("accountOptions.derivationPath parameter missing");
+                }
                 this.derivationPath = accountOptions.derivationPath;
                 break;
 

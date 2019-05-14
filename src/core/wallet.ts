@@ -100,9 +100,9 @@ export default class Wallet {
                         // HW account setup
                         importedAccount = wallet.importAccount(
                             wallet.mapper.getInstance( AccountClassTypeString, {
-                                node: currentNode,
-                                type: AccountType.HARDWARE,
                                 ...account,
+                                node: currentNode,
+                                type: AccountType.HARDWARE
                             }),
                         );
 

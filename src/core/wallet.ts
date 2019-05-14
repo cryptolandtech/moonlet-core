@@ -102,7 +102,7 @@ export default class Wallet {
                             wallet.mapper.getInstance( AccountClassTypeString, {
                                 node: currentNode,
                                 type: AccountType.HARDWARE,
-                                address: account.address,
+                                ...account,
                             }),
                         );
 

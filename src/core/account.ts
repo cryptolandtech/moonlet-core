@@ -78,7 +78,7 @@ export abstract class GenericAccount<
                 break;
             case AccountType.HARDWARE:
                 if (!accountOptions.deviceType) {
-                    throw new Error("accountOptions.address parameter missing");
+                    throw new Error("accountOptions.deviceType parameter missing");
                 }
                 this.deviceType = accountOptions.deviceType;
                 if (!accountOptions.address) {

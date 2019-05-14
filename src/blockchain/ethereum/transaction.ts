@@ -61,7 +61,7 @@ export class EthereumTransaction extends GenericTransaction<IEthereumTransaction
     }
 
     public setLedgerSignResult(params) {
-        const tx = new EthereumJsTx( params );
+        const tx = new EthereumJsTx( Object.assign(this.toParams(), params) );
         this.setSignedResult(tx.serialize());
     }
 

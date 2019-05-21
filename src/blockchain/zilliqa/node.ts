@@ -5,6 +5,8 @@ import { BigNumber } from 'bignumber.js';
 import { ZilliqaTransaction } from "./transaction";
 import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
 
+import { fromBech32Address, toBech32Address } from "@zilliqa-js/crypto/dist/bech32"
+
 export class ZilliqaNode extends GenericNode {
 
     public static readonly NETWORKS: Network[] = networks;
@@ -25,7 +27,7 @@ export class ZilliqaNode extends GenericNode {
      * @returns balance
      */
     public getBalance(caddress: string): Promise<BigNumber> {
-        const call = this.rpcCall("GetBalance", [ caddress.replace("0x", "").toLowerCase() ], "") as Promise<any>;
+        const call = this.rpcCall("GetBalance", [ fromBech32Address(caddress).replace("0x", "").toLowerCase() ], "") as Promise<any>;
         return call.then( (data) => {
             return new BigNumber( data.balance );
         }).catch( (error) => {
@@ -42,7 +44,7 @@ export class ZilliqaNode extends GenericNode {
      * @returns nonce
      */
     public getNonce(caddress: string): Promise<number> {
-        const call = this.rpcCall("GetBalance", [ caddress.replace("0x", "").toLowerCase() ], "") as Promise<any>;
+        const call = this.rpcCall("GetBalance", [ fromBech32Address(caddress).replace("0x", "").toLowerCase() ], "") as Promise<any>;
         return call.then( (data) => {
             return data.nonce;
         }).catch( (error) => {
@@ -76,7 +78,10 @@ export class ZilliqaNode extends GenericNode {
      */
     public getTransactionReceipt(transaction: ZilliqaTransaction): Promise<any> {
         if (transaction.id) {
-            return this.rpcCall("GetTransaction", [ transaction.id.replace("0x", "").toLowerCase() ], "") as Promise<any>;
+            return this.rpcCall("GetTransaction", [ transaction.id.replace("0x", "").toLowerCase() ], "").then(data => {
+                data.toAddr = toBech32Address(data.toAddr);
+                return data;
+            }) as Promise<any>;
         } else {
             return Promise.reject('No transaction id available.');
         }
@@ -97,7 +102,7 @@ export class ZilliqaNode extends GenericNode {
 
         // remove once core accepts 0x
         SendObject.toAddr = ZilliqaJsCrypto.toChecksumAddress( SendObject.toAddr ).replace("0x", "");
-
+        
         return this.sendRaw(SendObject);
     }
 

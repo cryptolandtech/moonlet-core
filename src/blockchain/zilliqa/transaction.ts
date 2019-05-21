@@ -3,7 +3,7 @@ import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emi
 import { GenericTransaction, ITransactionOptions, TransactionStatus } from '../../core/transaction';
 import { BN, Long } from '@zilliqa-js/util';
 import * as ZilliqaJsAccountUtil from "@zilliqa-js/account/dist/util";
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
+import { fromBech32Address } from "@zilliqa-js/crypto/dist/bech32"
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;
@@ -53,7 +53,7 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
     public toParams( subPubKey?: string ) {
         return {
             version: ( this.chainId << 16 ) + this.version, // add replay protection
-            toAddr: ZilliqaJsCrypto.toChecksumAddress( this.to  ).replace("0x", ""),
+            toAddr: fromBech32Address(this.to).replace("0x", ""),
             nonce: this.nonce,
             pubKey: subPubKey || "",
             amount: new BN( this.amount ),

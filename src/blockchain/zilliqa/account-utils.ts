@@ -3,6 +3,7 @@ import { BigNumber } from "bignumber.js";
 
 import * as ZilliqaJsValidation from "@zilliqa-js/util/dist/validation";
 import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
+import { isBech32 } from "@zilliqa-js/util/dist/validation"
 
 export class ZilliqaAccountUtils extends GenericAccountUtils {
 
@@ -13,7 +14,7 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
      */
     public isValidChecksumAddress( address: string ): boolean {
         this.requireType(address, "string", "isValidChecksumAddress");
-        return ZilliqaJsCrypto.isValidChecksumAddress( address );
+        return isBech32( address );
     }
 
     /**

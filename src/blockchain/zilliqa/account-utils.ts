@@ -1,8 +1,8 @@
 import { GenericAccountUtils } from "../../core/account-utils";
 import { BigNumber } from "bignumber.js";
 
-import { validation as ZilliqaJsValidation } from "@zilliqa-js/util";
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+import * as ZilliqaJsValidation from "@zilliqa-js/util/dist/validation";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
 
 export class ZilliqaAccountUtils extends GenericAccountUtils {
 

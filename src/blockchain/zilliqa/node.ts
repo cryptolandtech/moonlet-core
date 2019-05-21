@@ -3,7 +3,7 @@ import { Network } from "../../core/network";
 import networks from "./networks";
 import { BigNumber } from 'bignumber.js';
 import { ZilliqaTransaction } from "./transaction";
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
 
 export class ZilliqaNode extends GenericNode {
 

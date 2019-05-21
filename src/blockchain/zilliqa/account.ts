@@ -3,7 +3,7 @@ import { ZilliqaTransaction, IZilliqaTransactionOptions } from "./transaction";
 import { ZilliqaAccountUtils } from "./account-utils";
 import { BigNumber } from "bignumber.js";
 
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+import * as schnorr from "@zilliqa-js/crypto/dist/schnorr";
 
 export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaTransactionOptions> {
 
@@ -15,6 +15,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         super(accountOptions);
         this.utils = new ZilliqaAccountUtils();
         this.tryHdWalletSetup();
+
+        //TODO: transform address in bech32 format
     }
 
     /**
@@ -95,6 +97,25 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         );
     }
 
+    private sign(msg: Buffer,privateKey: string,pubKey: string): string {
+        const sig = schnorr.sign(
+          msg,
+          Buffer.from(privateKey, 'hex'),
+          Buffer.from(pubKey, 'hex'),
+        );
+      
+        let r = sig.r.toString('hex');
+        let s = sig.s.toString('hex');
+        while (r.length < 64) {
+          r = '0' + r;
+        }
+        while (s.length < 64) {
+          s = '0' + s;
+        }
+      
+        return r + s;
+      }
+
     /**
      * Signs transaction
      * @param transaction
@@ -109,7 +130,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
         TXObject.toAddr = TXObject.toAddr.toLowerCase();
 
         const bytes = transaction.getProtoEncodedTx(TXObject);
-        const signature = ZilliqaJsCrypto.sign(
+        const signature = this.sign(
             bytes,
             this.privateKey.replace("0x", ""),
             this.publicKey.replace("0x", ""),

@@ -2,8 +2,8 @@ import { Blockchain } from './../../core/blockchain';
 import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emitter';
 import { GenericTransaction, ITransactionOptions, TransactionStatus } from '../../core/transaction';
 import { BN, Long } from '@zilliqa-js/util';
-import { util as ZilliqaJsAccountUtil } from "@zilliqa-js/account";
-import * as ZilliqaJsCrypto from "@zilliqa-js/crypto";
+import * as ZilliqaJsAccountUtil from "@zilliqa-js/account/dist/util";
+import * as ZilliqaJsCrypto from "@zilliqa-js/crypto/dist/util";
 
 export interface IZilliqaTransactionOptions extends ITransactionOptions {
     gasPrice: number;

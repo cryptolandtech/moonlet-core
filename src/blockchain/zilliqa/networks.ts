@@ -10,7 +10,7 @@ const networks: Network[] = [
         mainNet: true,
         url: "https://api.zilliqa.com/",
         explorerTxPattern: "https://viewblock.io/zilliqa/tx/0x{txn}",
-        explorerAccountPattern: 'https://viewblock.io/zilliqa/address/0x{addr}',
+        explorerAccountPattern: 'https://viewblock.io/zilliqa/address/{addr}',
         HDCoinValue: 313,
     },
     {
@@ -21,7 +21,7 @@ const networks: Network[] = [
         mainNet: false,
         url: "https://dev-api.zilliqa.com/",
         explorerTxPattern: "https://viewblock.io/zilliqa/tx/0x{txn}?network=testnet",
-        explorerAccountPattern: 'https://viewblock.io/zilliqa/address/0x{addr}?network=testnet',
+        explorerAccountPattern: 'https://viewblock.io/zilliqa/address/{addr}?network=testnet',
         HDCoinValue: 1, // testnet
     },
     {

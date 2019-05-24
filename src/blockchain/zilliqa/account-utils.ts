@@ -14,7 +14,7 @@ export class ZilliqaAccountUtils extends GenericAccountUtils {
      */
     public isValidChecksumAddress( address: string ): boolean {
         this.requireType(address, "string", "isValidChecksumAddress");
-        return isBech32( address );
+        return ZilliqaJsCrypto.isValidChecksumAddress(address) || isBech32( address );
     }
 
     /**

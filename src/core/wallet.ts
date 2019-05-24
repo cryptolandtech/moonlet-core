@@ -402,12 +402,6 @@ export default class Wallet {
             throw new Error("importAccount: you cannot import HD Wallets.");
         }
         const accountStore = this.getAccounts( account.node.blockchain );
-
-        // generate address for loose imports
-        if (account.type === AccountType.LOOSE) {
-            account.publicKey = account.utils.bufferToHex( account.utils.privateToPublic( Buffer.from( account.privateKey, "hex" ) ) );
-            account.address = account.utils.toChecksumAddress( account.utils.privateToAddress( Buffer.from( account.privateKey, "hex" ) ).toString("hex") );
-        }
         accountStore.push( account ) ;
         return accountStore[accountStore.length - 1];
     }
@@ -450,9 +444,6 @@ export default class Wallet {
             type: AccountType.LOOSE,
             privateKey: privateKey,
         });
-
-        account.publicKey = account.utils.bufferToHex( account.utils.privateToPublic( Buffer.from( account.privateKey, "hex" ) ) );
-        account.address = account.utils.toChecksumAddress( account.utils.privateToAddress( Buffer.from( account.privateKey, "hex" ) ).toString("hex") );
 
         // prevent account duplication
         const existingAccount = this.getAccounts(blockchain, true, true).filter(a => a.address === account.address)[0];

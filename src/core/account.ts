@@ -55,6 +55,7 @@ export abstract class GenericAccount<
     public supportsCancel: boolean = false;
     public transactions: T[] = [];
     public disabled = false;
+    public addressFormats: {[format:string]: string};
 
     /**
      * Creates an instance of generic account.
@@ -108,17 +109,24 @@ export abstract class GenericAccount<
         }
 
         this.type = accountOptions.type;
+        this.addressFormats = {
+            default: this.address
+        };
     }
 
     /**
      * Trys hd wallet setup
      */
-    public tryHdWalletSetup() {
+    public tryWalletSetup() {
         if (this.type === AccountType.HD && this.hd !== undefined ) {
             this.privateKey = this.utils.bufferToHex( this.hd.getPrivateKey() );
             this.publicKey = this.utils.bufferToHex( this.utils.privateToPublic( this.hd.getPrivateKey() ) );
             this.address = this.utils.toChecksumAddress( this.utils.privateToAddress( this.hd.getPrivateKey() ).toString("hex") );
+        } else if (this.type === AccountType.LOOSE) {
+            this.publicKey = this.utils.bufferToHex( this.utils.privateToPublic( Buffer.from( this.privateKey, "hex" ) ) );
+            this.address = this.utils.toChecksumAddress( this.utils.privateToAddress( Buffer.from( this.privateKey, "hex" ) ).toString("hex") );
         }
+        this.addressFormats.default = this.address;
     }
 
     /**

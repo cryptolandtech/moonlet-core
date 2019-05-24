@@ -1,3 +1,4 @@
+import { isBech32 } from '@zilliqa-js/util/dist/validation';
 import { Blockchain } from './../../core/blockchain';
 import { WalletEventEmitter, WalletEventType } from '../../core/wallet-event-emitter';
 import { GenericTransaction, ITransactionOptions, TransactionStatus } from '../../core/transaction';
@@ -51,9 +52,10 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
      * @returns parameters object
      */
     public toParams( subPubKey?: string ) {
+        let toAddr = isBech32(this.to) ? fromBech32Address(this.to) : this.to;
         return {
             version: ( this.chainId << 16 ) + this.version, // add replay protection
-            toAddr: fromBech32Address(this.to).replace("0x", ""),
+            toAddr: toAddr.replace("0x", ""),
             nonce: this.nonce,
             pubKey: subPubKey || "",
             amount: new BN( this.amount ),

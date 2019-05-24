@@ -4,7 +4,7 @@ import { ZilliqaAccountUtils } from "./account-utils";
 import { BigNumber } from "bignumber.js";
 
 import * as schnorr from "@zilliqa-js/crypto/dist/schnorr";
-import { toBech32Address } from "@zilliqa-js/crypto/dist/bech32"
+import { toBech32Address, fromBech32Address } from "@zilliqa-js/crypto/dist/bech32"
 import { isBech32 } from "@zilliqa-js/util/dist/validation"
 
 export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaTransactionOptions> {
@@ -16,11 +16,21 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
     constructor(accountOptions: IaccountOptions) {
         super(accountOptions);
         this.utils = new ZilliqaAccountUtils();
-        this.tryHdWalletSetup();
+        this.tryWalletSetup();
 
         // transform address in bech32 format
         if (!isBech32(this.address)) {
             this.address = toBech32Address(this.address);
+        }
+
+        // todo add t in front for testnet addresses
+        // if (!this.node.network.mainNet && !this.address.startsWith('t')) {
+        //     this.address = 't' + this.address;
+        // }
+
+        this.addressFormats = {
+            default: this.address,
+            base16: fromBech32Address(this.address) 
         }
     }
 

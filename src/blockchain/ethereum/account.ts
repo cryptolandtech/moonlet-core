@@ -14,7 +14,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
     constructor(accountOptions: IaccountOptions) {
         super(accountOptions);
         this.utils = new EthereumAccountUtils();
-        this.tryHdWalletSetup();
+        this.tryWalletSetup();
     }
 
     /**

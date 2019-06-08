@@ -4,7 +4,7 @@ import { Network } from '../../core/network';
 const networks: Network[] = [
     {
         network_id: 0,
-        name: "Main net",
+        name: "Main Network",
         chainId: 1,
         blockchain: Blockchain.ZILLIQA,
         mainNet: true,

@@ -72,6 +72,17 @@ export abstract class GenericNode {
         }
     }
 
+    public rpcCallRaw( method: string, params: any): Promise<any> {
+        const callData = this.buildCall(method, params);
+        const callOptions = {};
+        const action = axios.post( this.network.url, callData, callOptions );
+        //console.log( "CallData: ", callData );
+        return action.then( (data) => {
+            //console.log( "return result:", data );
+            Promise.resolve(data);
+        });
+    }
+
     /**
      * Posts an RPC call to the current network
      * @param method - RPC Method name
@@ -80,12 +91,7 @@ export abstract class GenericNode {
      * @returns raw or decoded result
      */
     public rpcCall( method: string, params: any, dec?: string ): Promise<any> {
-
-        const callData = this.buildCall(method, params);
-        const callOptions = {};
-        const action = axios.post( this.network.url, callData, callOptions );
-        //console.log( "CallData: ", callData );
-        return action.then( (data) => {
+        return this.rpcCallRaw(method, params).then( (data) => {
             //console.log( "return result:", data );
             if ( data.data.result !== undefined ) {
                 return this.resultDecoder( data.data.result, dec );

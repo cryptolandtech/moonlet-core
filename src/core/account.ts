@@ -226,12 +226,11 @@ export abstract class GenericAccount<
      * @param to
      * @param amount
      * @param nonce
-     * @param txdata
      * @param gasLimit
      * @param gasPrice
      * @returns transaction
      */
-    public abstract buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, gasPrice: number, gasLimit: number): GenericTransaction;
+    public abstract buildTransaction(to: string, amount: string, nonce: number, gasPrice: number, gasLimit: number, extra: {}): GenericTransaction;
 
     /**
      * Signs transaction

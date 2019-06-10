@@ -61,8 +61,8 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
             amount: new BN( this.amount ),
             gasPrice: new BN( this.gasPrice ),
             gasLimit: Long.fromNumber(this.gasLimit),
-            code: '',
-            data: '',
+            code: this.options.code.toString(),
+            data: this.options.data.toString(),
             signature: "",
         };
     }

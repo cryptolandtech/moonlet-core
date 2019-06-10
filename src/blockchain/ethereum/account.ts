@@ -58,7 +58,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @returns transfer transaction
      */
     public buildTransferTransaction(to: string, amount: string, nonce: number, txGasPrice: number, txGasLimit: number): EthereumTransaction {
-        return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
+        return this.buildTransaction(to, amount, nonce, txGasPrice, txGasLimit, {data: Buffer.from("")});
     }
 
     /**
@@ -73,7 +73,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      */
     public estimateTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): Promise<number> {
         return this.node.estimateGas(
-            this.buildTransaction(to, amount, nonce, txdata, txGasPrice, txGasLimit).toParams(),
+            this.buildTransaction(to, amount, nonce, txGasPrice, txGasLimit, {data: txdata}).toParams(),
         );
     }
 
@@ -87,7 +87,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
      * @param txGasLimit
      * @returns transaction
      */
-    public buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 1, txGasLimit: number = 6700000): EthereumTransaction {
+    public buildTransaction(to: string, amount: string, nonce: number, txGasPrice: number = 1, txGasLimit: number = 6700000, extra: any = {}): EthereumTransaction {
         return new EthereumTransaction(
             this.address,               // from me
             to,                         // to actual receiver
@@ -97,7 +97,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
                 gasPrice: txGasPrice,   // price in gwei
                 gasLimit: txGasLimit,   // max network allowed gas limit
                 chainId: this.node.network.chainId, // current network chain id
-                data: txdata,
+                data: extra.data,
             },
         );
     }

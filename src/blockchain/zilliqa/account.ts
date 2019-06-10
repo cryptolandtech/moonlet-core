@@ -60,7 +60,7 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @returns transfer transaction
      */
     public buildTransferTransaction(to: string, amount: string, nonce: number, txGasPrice: number, txGasLimit: number): ZilliqaTransaction {
-        return this.buildTransaction(to, amount, nonce, Buffer.from(""), txGasPrice, txGasLimit);
+        return this.buildTransaction(to, amount, nonce, txGasPrice, txGasLimit, {data: Buffer.from("")});
     }
 
     /**
@@ -97,7 +97,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
      * @param txGasLimit
      * @returns transaction
      */
-    public buildTransaction(to: string, amount: string, nonce: number, txdata: Buffer, txGasPrice: number = 0, txGasLimit: number = 8000000): ZilliqaTransaction {
+    public buildTransaction(to: string, amount: string, nonce: number, txGasPrice: number = 0, txGasLimit: number = 8000000, extra: any = {}): ZilliqaTransaction {
+        const {code, data} = extra;
         return new ZilliqaTransaction(
             this.address,               // from me
             to,                         // to actual receiver
@@ -107,7 +108,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
                 gasPrice: txGasPrice,   // price in qa
                 gasLimit: txGasLimit,   // max network allowed gas limit
                 chainId: this.node.network.chainId, // current network chain id
-                data: txdata,
+                data: Buffer.from(data || ""),
+                code: Buffer.from(code || "")
             },
         );
     }

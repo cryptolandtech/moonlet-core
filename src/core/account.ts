@@ -239,4 +239,6 @@ export abstract class GenericAccount<
      */
     public abstract signTransaction(transaction: T): Buffer;
 
+    public abstract signMessage(msg: Buffer | string): string;
+
 }

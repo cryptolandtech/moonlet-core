@@ -115,4 +115,7 @@ export class EthereumAccount extends GenericAccount<EthereumTransaction, IEthere
         return serialized;
     }
 
+    public signMessage(msg: Buffer): string {
+        throw new Error('NOT_IMPLEMENTED');
+    }
 }

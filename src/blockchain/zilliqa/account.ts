@@ -167,4 +167,16 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
     public buildCancelTransaction(nonce: number, txGasPrice: number): ZilliqaTransaction | false {
         return false;
     }
+
+    public signMessage(msg: Buffer | string): string {
+        if (typeof msg === 'string') {
+            msg = Buffer.from(msg);
+        }
+
+        return this.sign(
+            msg,
+            this.privateKey.replace("0x", ""),
+            this.publicKey.replace("0x", ""),
+        );
+    }
 }

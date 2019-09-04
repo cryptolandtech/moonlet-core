@@ -98,10 +98,6 @@ export abstract class GenericAccount<
                 }
                 this.derivationIndex = accountOptions.derivationIndex;
 
-                if (!accountOptions.derivationPath) {
-                    throw new Error("accountOptions.derivationPath parameter missing");
-                }
-                this.derivationPath = accountOptions.derivationPath;
                 break;
 
             default:

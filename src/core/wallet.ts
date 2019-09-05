@@ -276,7 +276,7 @@ export default class Wallet {
             createAccount: () => this.createAccount(blockchain),
             importAccount: (account: GenericAccount) => this.importAccount(account),
             importAccountByPrivateKey: (privateKey: string) => this.importAccountByPrivateKey(blockchain, privateKey),
-            importHWAccount: (deviceType: HWDevice, derivationPath: string, address: string, accountIndex: string, derivationIndex: string) => this.importHWAccount(deviceType, blockchain, derivationPath, address, accountIndex, derivationIndex),
+            importHWAccount: (deviceType: HWDevice, derivationPath: string, address: string, publicKey: string, accountIndex: string, derivationIndex: string) => this.importHWAccount(deviceType, blockchain, derivationPath, address, publicKey, accountIndex, derivationIndex),
             getNetworks: () => this.getNetworks(blockchain),
             getCurrentNetwork: () => this.getCurrentNetwork(blockchain),
             switchNetwork: (networkId) => this.switchNetwork(blockchain, networkId),
@@ -411,13 +411,14 @@ export default class Wallet {
      * @param account
      * @returns account
      */
-    public importHWAccount(deviceType: HWDevice, blockchain: Blockchain, derivationPath: string, address: string, accountIndex: string, derivationIndex: string): GenericAccount {
+    public importHWAccount(deviceType: HWDevice, blockchain: Blockchain, derivationPath: string, address: string, publicKey: string, accountIndex: string, derivationIndex: string): GenericAccount {
         const AccountClassTypeString = GenericAccount.getImplementedClassName( blockchain );
 
         const account = this.mapper.getInstance( AccountClassTypeString, {
             node: this.getNode(blockchain),
             type: AccountType.HARDWARE,
             address,
+            publicKey,
             accountIndex,
             derivationIndex,
             derivationPath,

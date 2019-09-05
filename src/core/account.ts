@@ -98,6 +98,8 @@ export abstract class GenericAccount<
                 }
                 this.derivationIndex = accountOptions.derivationIndex;
 
+                this.publicKey = accountOptions.publicKey;
+                this.derivationPath = accountOptions.derivationPath;
                 break;
 
             default:

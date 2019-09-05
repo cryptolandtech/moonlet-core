@@ -109,7 +109,8 @@ export class ZilliqaAccount extends GenericAccount<ZilliqaTransaction, IZilliqaT
                 gasLimit: txGasLimit,   // max network allowed gas limit
                 chainId: this.node.network.chainId, // current network chain id
                 data: Buffer.from(data || ""),
-                code: Buffer.from(code || "")
+                code: Buffer.from(code || ""),
+                pubKey: this.publicKey
             },
         );
     }

@@ -57,7 +57,7 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
             version: ( this.chainId << 16 ) + this.version, // add replay protection
             toAddr: toAddr.replace("0x", ""),
             nonce: this.nonce,
-            pubKey: subPubKey || "",
+            pubKey: subPubKey || this.pubKey || "",
             amount: new BN( this.amount ),
             gasPrice: new BN( this.gasPrice ),
             gasLimit: Long.fromNumber(this.gasLimit),
@@ -68,11 +68,28 @@ export class ZilliqaTransaction extends GenericTransaction<IZilliqaTransactionOp
     }
 
     public serialize() {
-        throw new Error('moonlet-core:ZilliqaTransaction.serialize() not implemented');
+        const params = this.toParams();
+
+        return {
+            ...params,
+            amount: params.amount.toString(),
+            gasPrice: params.gasPrice.toString(),
+            gasLimit: params.gasLimit.toString()
+        }
     }
 
-    public setLedgerSignResult() {
-        throw new Error('moonlet-core:ZilliqaTransaction.setLedgerSignResult() not implemented');
+    public setLedgerSignResult(params) {
+        const TXObject = this.toParams( this.pubKey.replace("0x", "") );
+
+        // the address should be checksummed and we need to lowercase it for signing
+        // add 0x back to signing payload
+        TXObject.toAddr = TXObject.toAddr.toLowerCase();
+
+        TXObject.signature = params.sig;
+
+        const serialized = Buffer.from(JSON.stringify(TXObject));
+        this.TXObject = TXObject;
+        this.setSignedResult(serialized);
     }
 
     /**
